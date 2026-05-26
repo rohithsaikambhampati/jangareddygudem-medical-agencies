@@ -29,11 +29,11 @@ export default function LoginPage() {
 
     let result;
     if (mode === 'owner-login') {
-      result = login(form.username, form.password, true);
+      result = await login(form.username, form.password, true);
     } else if (mode === 'user-login') {
-      result = login(form.username, form.password, false);
+      result = await login(form.username, form.password, false);
     } else {
-      result = register(form.username, form.password, form.name, form.phone);
+      result = await register(form.username, form.password, form.name, form.phone);
     }
 
     setLoading(false);

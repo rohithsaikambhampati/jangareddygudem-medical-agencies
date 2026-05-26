@@ -396,9 +396,9 @@ export default function UserPage() {
     setShowAddrModal(true);
   };
 
-  const handleConfirmAddress = (address) => {
+  const handleConfirmAddress = async (address) => {
     setShowAddrModal(false);
-    const res = checkoutCart({ ...currentUser, deliveryAddress: address });
+    const res = await checkoutCart({ ...currentUser, deliveryAddress: address });
     if (res.success) {
       showToast('Order placed! Track it in My Orders.', 'success');
       setIsCartOpen(false);

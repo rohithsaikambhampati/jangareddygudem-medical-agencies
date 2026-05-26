@@ -290,7 +290,7 @@ export default function OwnerPage() {
     delivered: 'Mark Delivered'
   };
 
-  const handleRecordPayment = (e) => {
+  const handleRecordPayment = async (e) => {
     e.preventDefault();
     setPaymentError('');
     const amt = parseFloat(paymentAmount);
@@ -326,7 +326,7 @@ export default function OwnerPage() {
       }
     }
 
-    addPayment(selectedRetailer.id, amt, formattedDate);
+    await addPayment(selectedRetailer.id, amt, formattedDate);
     
     setPaymentAmount('');
     setPaymentDate('');

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { supabase } from '../supabaseClient';
 
 const ProductContext = createContext();
 
@@ -55,7 +56,6 @@ const DEFAULT_PRODUCTS = [
   }
 ];
 
-// Helper functions for promo schemes
 export const parseOffer = (offerText) => {
   if (!offerText) return null;
   const text = offerText.trim();
@@ -84,50 +84,102 @@ export const getDispatchedQty = (product, baseQty) => {
   return baseQty;
 };
 
-// ─────────────────────────────────────────────────────
-// ProductProvider accepts a userId so each user's cart
-// is stored under a unique key: pharmacy_cart_{userId}
-// Products (inventory) remain globally shared.
-// ─────────────────────────────────────────────────────
+// ── Model Mapping Helpers ──────────────────────────────────────────────────
+const mapDbProductToReact = (dbProd) => ({
+  id: dbProd.id,
+  name: dbProd.name,
+  brand: dbProd.brand,
+  price: Number(dbProd.price),
+  stockQuantity: dbProd.stock_quantity,
+  discountPercentage: Number(dbProd.discount_percentage || 0),
+  isOfferActive: dbProd.is_offer_active,
+  offerText: dbProd.offer_text || ''
+});
+
+const mapReactProductToDb = (reactProd) => ({
+  id: reactProd.id,
+  name: reactProd.name,
+  brand: reactProd.brand,
+  price: reactProd.price,
+  stock_quantity: reactProd.stockQuantity,
+  discount_percentage: reactProd.discountPercentage,
+  is_offer_active: reactProd.isOfferActive,
+  offer_text: reactProd.offerText
+});
+
+const mapDbOrderToReact = (dbOrd) => ({
+  id: dbOrd.id,
+  productId: dbOrd.product_id,
+  productName: dbOrd.product_name,
+  offerText: dbOrd.offer_text || '',
+  discountPercentage: Number(dbOrd.discount_percentage || 0),
+  quantity: dbOrd.quantity,
+  totalDispatched: dbOrd.total_dispatched,
+  freeUnits: dbOrd.free_units,
+  unitPrice: Number(dbOrd.unit_price || 0),
+  finalUnitPrice: Number(dbOrd.final_unit_price || 0),
+  totalPrice: Number(dbOrd.total_price || 0),
+  userId: dbOrd.user_id,
+  userName: dbOrd.user_name || 'Retailer',
+  deliveryAddress: dbOrd.delivery_address,
+  status: dbOrd.status,
+  statusHistory: dbOrd.status_history || [],
+  orderDate: dbOrd.order_date,
+  orderTime: dbOrd.order_time
+});
+
+const mapReactOrderToDb = (reactOrd) => ({
+  id: reactOrd.id,
+  product_id: reactOrd.productId,
+  product_name: reactOrd.productName,
+  offer_text: reactOrd.offerText,
+  discount_percentage: reactOrd.discountPercentage,
+  quantity: reactOrd.quantity,
+  total_dispatched: reactOrd.totalDispatched,
+  free_units: reactOrd.freeUnits,
+  unit_price: reactOrd.unitPrice,
+  final_unit_price: reactOrd.finalUnitPrice,
+  total_price: reactOrd.totalPrice,
+  user_id: reactOrd.userId,
+  user_name: reactOrd.userName,
+  delivery_address: reactOrd.deliveryAddress,
+  status: reactOrd.status,
+  status_history: reactOrd.statusHistory,
+  order_date: reactOrd.orderDate,
+  order_time: reactOrd.orderTime
+});
+
+const mapDbPaymentToReact = (dbPay) => ({
+  id: dbPay.id,
+  userId: dbPay.user_id,
+  amount: Number(dbPay.amount),
+  date: dbPay.date,
+  time: dbPay.time
+});
+
+const mapReactPaymentToDb = (reactPay) => ({
+  id: reactPay.id,
+  user_id: reactPay.userId,
+  amount: reactPay.amount,
+  date: reactPay.date,
+  time: reactPay.time
+});
+
 export const ProductProvider = ({ children, userId }) => {
-  // Derive the user-specific cart key
   const cartKey = userId ? `pharmacy_cart_${userId}` : 'pharmacy_cart_guest';
 
-  // ── Shared global state ──────────────────────────
-  const [products, setProducts] = useState(() => {
-    const saved = localStorage.getItem('pharmacy_products_v4');
-    let loaded = saved ? JSON.parse(saved) : DEFAULT_PRODUCTS;
-    return loaded;
-  });
+  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [brands, setBrands] = useState([]);
 
-  const [orders, setOrders] = useState(() => {
-    const saved = localStorage.getItem('pharmacy_orders_v4');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const [payments, setPayments] = useState(() => {
-    const saved = localStorage.getItem('pharmacy_payments_v4');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const DEFAULT_BRANDS = ['PharmaCorp', 'HealthLife', 'MediTech'];
-  const [brands, setBrands] = useState(() => {
-    const saved = localStorage.getItem('pharmacy_brands_v4');
-    return saved ? JSON.parse(saved) : DEFAULT_BRANDS;
-  });
-
-  // ── Per-user cart state ───────────────────────────
-  // We use a ref to track the previous cartKey so we can
-  // reload the cart when the logged-in user changes.
   const cartKeyRef = useRef(cartKey);
-
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem(cartKey);
     return saved ? JSON.parse(saved) : [];
   });
 
-  // When userId changes (e.g. different user logs in on this tab),
-  // save old cart and load the new user's cart from their own key.
+  // Reload cart when user session changes
   useEffect(() => {
     if (cartKeyRef.current !== cartKey) {
       cartKeyRef.current = cartKey;
@@ -136,97 +188,237 @@ export const ProductProvider = ({ children, userId }) => {
     }
   }, [cartKey]);
 
-  // ── Persist to localStorage ───────────────────────
+  // Persist cart locally
   useEffect(() => {
-    localStorage.setItem('pharmacy_products_v4', JSON.stringify(products));
-  }, [products]);
-
-  useEffect(() => {
-    localStorage.setItem('pharmacy_orders_v4', JSON.stringify(orders));
-  }, [orders]);
-
-  useEffect(() => {
-    localStorage.setItem('pharmacy_payments_v4', JSON.stringify(payments));
-  }, [payments]);
-
-  useEffect(() => {
-    localStorage.setItem('pharmacy_brands_v4', JSON.stringify(brands));
-  }, [brands]);
-
-  useEffect(() => {
-    // Each user's cart saved under their own key
     localStorage.setItem(cartKey, JSON.stringify(cart));
   }, [cart, cartKey]);
 
-  // ── Cross-tab sync (only for products, orders & payments) ───
-  // Cart is NOT synced cross-tab — each user manages their own.
+  // Load initial data from Supabase & adjust products stock based on local cart
   useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'pharmacy_products_v4' && e.newValue) {
-        setProducts(JSON.parse(e.newValue));
-      }
-      if (e.key === 'pharmacy_orders_v4' && e.newValue) {
-        setOrders(JSON.parse(e.newValue));
-      }
-      if (e.key === 'pharmacy_payments_v4' && e.newValue) {
-        setPayments(JSON.parse(e.newValue));
-      }
-      if (e.key === 'pharmacy_brands_v4' && e.newValue) {
-        setBrands(JSON.parse(e.newValue));
-      }
-      // Only sync this user's cart if it was updated from another tab of the same user
-      if (e.key === cartKey && e.newValue) {
-        setCart(JSON.parse(e.newValue));
+    const fetchData = async () => {
+      try {
+        const { data: dbProducts } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        const { data: dbOrders } = await supabase
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        const { data: dbPayments } = await supabase
+          .from('payments')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        const { data: dbBrands } = await supabase
+          .from('brands')
+          .select('*');
+
+        if (dbBrands) setBrands(dbBrands.map((b) => b.name));
+        if (dbOrders) setOrders(dbOrders.map(mapDbOrderToReact));
+        if (dbPayments) setPayments(dbPayments.map(mapDbPaymentToReact));
+
+        if (dbProducts) {
+          const reactProducts = dbProducts.map(mapDbProductToReact);
+          // Subtract quantities in current user's local cart from products stock
+          const currentCart = JSON.parse(localStorage.getItem(cartKey)) || [];
+          const adjustedProducts = reactProducts.map((p) => {
+            const cartItem = currentCart.find((item) => item.id === p.id);
+            if (cartItem) {
+              return { ...p, stockQuantity: Math.max(0, p.stockQuantity - cartItem.totalDispatched) };
+            }
+            return p;
+          });
+          setProducts(adjustedProducts);
+        }
+      } catch (err) {
+        console.error('Error fetching data from Supabase:', err);
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    fetchData();
   }, [cartKey]);
 
+  // Real-time Database Subscriptions
+  useEffect(() => {
+    const productsChannel = supabase
+      .channel('products_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          setProducts((prev) => {
+            if (prev.some((p) => p.id === payload.new.id)) return prev;
+            return [mapDbProductToReact(payload.new), ...prev];
+          });
+        } else if (payload.eventType === 'DELETE') {
+          setProducts((prev) => prev.filter((p) => p.id !== payload.old.id));
+        } else if (payload.eventType === 'UPDATE') {
+          setProducts((prev) =>
+            prev.map((p) => (p.id === payload.new.id ? mapDbProductToReact(payload.new) : p))
+          );
+        }
+      })
+      .subscribe();
+
+    const ordersChannel = supabase
+      .channel('orders_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          setOrders((prev) => {
+            if (prev.some((o) => o.id === payload.new.id)) return prev;
+            return [mapDbOrderToReact(payload.new), ...prev];
+          });
+        } else if (payload.eventType === 'DELETE') {
+          setOrders((prev) => prev.filter((o) => o.id !== payload.old.id));
+        } else if (payload.eventType === 'UPDATE') {
+          setOrders((prev) =>
+            prev.map((o) => (o.id === payload.new.id ? mapDbOrderToReact(payload.new) : o))
+          );
+        }
+      })
+      .subscribe();
+
+    const paymentsChannel = supabase
+      .channel('payments_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'payments' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          setPayments((prev) => {
+            if (prev.some((p) => p.id === payload.new.id)) return prev;
+            return [mapDbPaymentToReact(payload.new), ...prev];
+          });
+        } else if (payload.eventType === 'DELETE') {
+          setPayments((prev) => prev.filter((p) => p.id !== payload.old.id));
+        } else if (payload.eventType === 'UPDATE') {
+          setPayments((prev) =>
+            prev.map((p) => (p.id === payload.new.id ? mapDbPaymentToReact(payload.new) : p))
+          );
+        }
+      })
+      .subscribe();
+
+    const brandsChannel = supabase
+      .channel('brands_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'brands' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          setBrands((prev) => {
+            if (prev.includes(payload.new.name)) return prev;
+            return [...prev, payload.new.name];
+          });
+        } else if (payload.eventType === 'DELETE') {
+          setBrands((prev) => prev.filter((b) => b !== payload.old.name));
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(productsChannel);
+      supabase.removeChannel(ordersChannel);
+      supabase.removeChannel(paymentsChannel);
+      supabase.removeChannel(brandsChannel);
+    };
+  }, []);
+
   // ── Provider Functions ──────────────────────────
-  const addBrand = (brandName) => {
-    if (!brands.includes(brandName)) {
-      setBrands(prev => [...prev, brandName]);
+  const addBrand = async (brandName) => {
+    const trimmed = brandName.trim();
+    if (!trimmed) return;
+    try {
+      const { error } = await supabase.from('brands').insert([{ name: trimmed }]);
+      if (error) throw error;
+      setBrands((prev) => (prev.includes(trimmed) ? prev : [...prev, trimmed]));
+    } catch (err) {
+      console.error('Error adding brand:', err);
     }
   };
 
-  const deleteBrand = (brandName) => {
-    setBrands(prev => prev.filter(b => b !== brandName));
-    setProducts(prev => prev.filter(p => p.brand !== brandName));
+  const deleteBrand = async (brandName) => {
+    try {
+      const { error: prodErr } = await supabase.from('products').delete().eq('brand', brandName);
+      if (prodErr) throw prodErr;
+
+      const { error: brandErr } = await supabase.from('brands').delete().eq('name', brandName);
+      if (brandErr) throw brandErr;
+
+      setBrands((prev) => prev.filter((b) => b !== brandName));
+      setProducts((prev) => prev.filter((p) => p.brand !== brandName));
+    } catch (err) {
+      console.error('Error deleting brand:', err);
+    }
   };
 
-  const updateBrand = (oldBrandName, newBrandName) => {
+  const updateBrand = async (oldBrandName, newBrandName) => {
     const trimmedNew = newBrandName.trim();
     if (!trimmedNew || oldBrandName === trimmedNew) return;
-    
-    // Rename in brands list
-    setBrands(prev => prev.map(b => b === oldBrandName ? trimmedNew : b));
-    
-    // Rename brand field of all products
-    setProducts(prev => prev.map(p => p.brand === oldBrandName ? { ...p, brand: trimmedNew } : p));
+
+    try {
+      const { error: insertErr } = await supabase.from('brands').insert([{ name: trimmedNew }]);
+      if (insertErr) throw insertErr;
+
+      const { error: prodUpdateErr } = await supabase
+        .from('products')
+        .update({ brand: trimmedNew })
+        .eq('brand', oldBrandName);
+      if (prodUpdateErr) throw prodUpdateErr;
+
+      const { error: deleteErr } = await supabase.from('brands').delete().eq('name', oldBrandName);
+      if (deleteErr) throw deleteErr;
+
+      setBrands((prev) =>
+        prev
+          .map((b) => (b === oldBrandName ? trimmedNew : b))
+          .filter((v, i, a) => a.indexOf(v) === i)
+      );
+      setProducts((prev) =>
+        prev.map((p) => (p.brand === oldBrandName ? { ...p, brand: trimmedNew } : p))
+      );
+    } catch (err) {
+      console.error('Error updating brand:', err);
+    }
   };
-  const addProduct = (product) => {
+
+  const addProduct = async (product) => {
     const newProduct = {
       ...product,
       id: `prod-${Date.now()}`,
       brand: product.brand || 'Unbranded'
     };
-    setProducts((prev) => [newProduct, ...prev]);
+    try {
+      const { error } = await supabase.from('products').insert([mapReactProductToDb(newProduct)]);
+      if (error) throw error;
+      setProducts((prev) => [newProduct, ...prev]);
+    } catch (err) {
+      console.error('Error adding product:', err);
+    }
   };
 
-  const updateProduct = (updatedProduct) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
-    );
+  const updateProduct = async (updatedProduct) => {
+    try {
+      const { error } = await supabase
+        .from('products')
+        .update(mapReactProductToDb(updatedProduct))
+        .eq('id', updatedProduct.id);
+      if (error) throw error;
+      setProducts((prev) =>
+        prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+      );
+    } catch (err) {
+      console.error('Error updating product:', err);
+    }
   };
 
-  const deleteProduct = (id) => {
-    removeFromCart(id);
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+  const deleteProduct = async (id) => {
+    try {
+      removeFromCart(id);
+      const { error } = await supabase.from('products').delete().eq('id', id);
+      if (error) throw error;
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    } catch (err) {
+      console.error('Error deleting product:', err);
+    }
   };
 
-  // Cart operations — adjust global stock instantly
+  // Cart operations (instant local state updates)
   const addToCart = (productId) => {
     let success = false;
     let errorMsg = '';
@@ -338,7 +530,7 @@ export const ProductProvider = ({ children, userId }) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
 
-  const checkoutCart = (userInfo) => {
+  const checkoutCart = async (userInfo) => {
     if (cart.length === 0) return { success: false };
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -369,7 +561,6 @@ export const ProductProvider = ({ children, userId }) => {
         userId: userId || 'guest',
         userName: userInfo?.name || userInfo?.username || 'Retailer',
         deliveryAddress: userInfo?.deliveryAddress || null,
-        // Order lifecycle tracking
         status: 'processing',
         statusHistory: [
           { status: 'processing', label: 'Order Received', date: dateStr, time: timeStr }
@@ -379,13 +570,41 @@ export const ProductProvider = ({ children, userId }) => {
       };
     });
 
-    setOrders((prev) => [...newOrders, ...prev]);
-    setCart([]);
-    return { success: true, orderIds: newOrders.map(o => o.id) };
+    try {
+      // 1. Insert orders into database
+      const { error: orderErr } = await supabase
+        .from('orders')
+        .insert(newOrders.map(mapReactOrderToDb));
+
+      if (orderErr) throw orderErr;
+
+      // 2. Decrement physical stock in database
+      for (const cartItem of cart) {
+        const { data: dbProd, error: fetchErr } = await supabase
+          .from('products')
+          .select('stock_quantity')
+          .eq('id', cartItem.id)
+          .single();
+
+        if (!fetchErr && dbProd) {
+          const newStock = Math.max(0, dbProd.stock_quantity - cartItem.totalDispatched);
+          await supabase
+            .from('products')
+            .update({ stock_quantity: newStock })
+            .eq('id', cartItem.id);
+        }
+      }
+
+      setOrders((prev) => [...newOrders, ...prev]);
+      setCart([]);
+      return { success: true, orderIds: newOrders.map((o) => o.id) };
+    } catch (err) {
+      console.error('Checkout error:', err);
+      return { success: false, message: 'Checkout failed. Database error.' };
+    }
   };
 
-  // Owner updates an order's delivery status
-  const updateOrderStatus = (orderId, newStatus) => {
+  const updateOrderStatus = async (orderId, newStatus) => {
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
@@ -395,26 +614,42 @@ export const ProductProvider = ({ children, userId }) => {
       delivered:  'Delivered'
     };
 
-    setOrders((prev) =>
-      prev.map((o) =>
-        o.id === orderId
-          ? {
-              ...o,
-              status: newStatus,
-              statusHistory: [
-                ...o.statusHistory,
-                { status: newStatus, label: labels[newStatus], date: dateStr, time: timeStr }
-              ]
-            }
-          : o
-      )
-    );
+    const order = orders.find((o) => o.id === orderId);
+    if (!order) return;
+
+    const newHistory = [
+      ...(order.statusHistory || []),
+      { status: newStatus, label: labels[newStatus], date: dateStr, time: timeStr }
+    ];
+
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({
+          status: newStatus,
+          status_history: newHistory
+        })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId
+            ? { ...o, status: newStatus, statusHistory: newHistory }
+            : o
+        )
+      );
+    } catch (err) {
+      console.error('Error updating order status:', err);
+    }
   };
 
-  const addPayment = (userId, amount, date) => {
+  const addPayment = async (userId, amount, date) => {
     const now = new Date();
     const dateStr = date || now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    
     const newPayment = {
       id: `pay-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       userId,
@@ -422,38 +657,65 @@ export const ProductProvider = ({ children, userId }) => {
       date: dateStr,
       time: timeStr
     };
-    setPayments(prev => [newPayment, ...prev]);
-    return newPayment;
+
+    try {
+      const { error } = await supabase
+        .from('payments')
+        .insert([mapReactPaymentToDb(newPayment)]);
+
+      if (error) throw error;
+
+      setPayments((prev) => [newPayment, ...prev]);
+      return newPayment;
+    } catch (err) {
+      console.error('Error adding payment:', err);
+      return null;
+    }
   };
 
-  const resetData = () => {
-    setProducts(DEFAULT_PRODUCTS);
-    setOrders([]);
-    setPayments([]);
-    setCart([]);
+  const resetData = async () => {
+    try {
+      await supabase.from('orders').delete().neq('id', '');
+      await supabase.from('payments').delete().neq('id', '');
+      await supabase.from('products').delete().neq('id', '');
+
+      const dbSeedProducts = DEFAULT_PRODUCTS.map(mapReactProductToDb);
+      await supabase.from('products').insert(dbSeedProducts);
+
+      setOrders([]);
+      setPayments([]);
+      setCart([]);
+      
+      const { data } = await supabase.from('products').select('*');
+      if (data) setProducts(data.map(mapDbProductToReact));
+    } catch (err) {
+      console.error('Error resetting data:', err);
+    }
   };
 
   return (
-    <ProductContext.Provider value={{
-      products,
-      orders,
-      payments,
-      brands,
-      cart,
-      addProduct,
-      updateProduct,
-      deleteProduct,
-      addBrand,
-      deleteBrand,
-      updateBrand,
-      addToCart,
-      updateCartQty,
-      removeFromCart,
-      checkoutCart,
-      updateOrderStatus,
-      addPayment,
-      resetData
-    }}>
+    <ProductContext.Provider
+      value={{
+        products,
+        orders,
+        payments,
+        brands,
+        cart,
+        addProduct,
+        updateProduct,
+        deleteProduct,
+        addBrand,
+        deleteBrand,
+        updateBrand,
+        addToCart,
+        updateCartQty,
+        removeFromCart,
+        checkoutCart,
+        updateOrderStatus,
+        addPayment,
+        resetData
+      }}
+    >
       {children}
     </ProductContext.Provider>
   );

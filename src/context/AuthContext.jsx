@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
 
 const AuthContext = createContext();
 
-// The single owner credentials — hardcoded for a single owner agency
 const OWNER_CREDENTIALS = {
   username: 'JRG_MEDICAL_AGENCIES',
   password: 'jrg@1234',
@@ -11,28 +11,18 @@ const OWNER_CREDENTIALS = {
 };
 
 const STORAGE_KEYS = {
-  // sessionStorage = per-tab isolation (each tab has its own login session)
-  currentUser: 'pharma_current_user_v4',
-  // localStorage = shared across tabs (registered user accounts list)
-  registeredUsers: 'pharma_registered_users_v4'
+  currentUser: 'pharma_current_user_v4'
 };
 
-const DEFAULT_REGISTERED_USERS = [];
-
 export const AuthProvider = ({ children }) => {
-  // sessionStorage is per-tab — each browser tab has its own isolated login session
-  // This means owner in Tab 1 and user in Tab 2 never interfere with each other
   const [currentUser, setCurrentUser] = useState(() => {
     const saved = sessionStorage.getItem(STORAGE_KEYS.currentUser);
     return saved ? JSON.parse(saved) : null;
   });
 
-  const [registeredUsers, setRegisteredUsers] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.registeredUsers);
-    return saved ? JSON.parse(saved) : DEFAULT_REGISTERED_USERS;
-  });
+  const [registeredUsers, setRegisteredUsers] = useState([]);
 
-  // Sync current session to sessionStorage (per-tab — does NOT broadcast to other tabs)
+  // Sync current session to sessionStorage (per-tab)
   useEffect(() => {
     if (currentUser) {
       sessionStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(currentUser));
@@ -41,31 +31,56 @@ export const AuthProvider = ({ children }) => {
     }
   }, [currentUser]);
 
+  // Load registered retailers from Supabase & subscribe to real-time updates
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.registeredUsers, JSON.stringify(registeredUsers));
-  }, [registeredUsers]);
-
-  // Sync registeredUsers cross-tab
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === STORAGE_KEYS.registeredUsers && e.newValue) {
-        setRegisteredUsers(JSON.parse(e.newValue));
+    const fetchUsers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('retailers')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (error) throw error;
+        if (data) setRegisteredUsers(data);
+      } catch (err) {
+        console.error('Error fetching retailers:', err);
       }
     };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+
+    fetchUsers();
+
+    // Subscribe to real-time changes
+    const channel = supabase
+      .channel('retailers_realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'retailers' },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setRegisteredUsers((prev) => {
+              if (prev.some((u) => u.id === payload.new.id)) return prev;
+              return [payload.new, ...prev];
+            });
+          } else if (payload.eventType === 'DELETE') {
+            setRegisteredUsers((prev) => prev.filter((u) => u.id !== payload.old.id));
+          } else if (payload.eventType === 'UPDATE') {
+            setRegisteredUsers((prev) =>
+              prev.map((u) => (u.id === payload.new.id ? payload.new : u))
+            );
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
-  /**
-   * Login function
-   * Returns { success, message }
-   */
-  const login = (username, password, asOwner = false) => {
+  const login = async (username, password, asOwner = false) => {
     const trimUser = username.trim().toLowerCase();
     const trimPass = password.trim();
 
     if (asOwner) {
-      // Owner check
       if (
         trimUser === OWNER_CREDENTIALS.username.toLowerCase() &&
         trimPass === OWNER_CREDENTIALS.password
@@ -77,22 +92,30 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: 'Invalid owner credentials.' };
     }
 
-    // User check
-    const found = registeredUsers.find(
-      (u) => u.username.toLowerCase() === trimUser && u.password === trimPass && u.role === 'user'
-    );
-    if (found) {
-      setCurrentUser(found);
+    try {
+      const { data, error } = await supabase
+        .from('retailers')
+        .select('*')
+        .eq('username', trimUser)
+        .eq('password', trimPass)
+        .eq('role', 'user')
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!data) {
+        return { success: false, message: 'Invalid username or password.' };
+      }
+
+      setCurrentUser(data);
       return { success: true };
+    } catch (err) {
+      console.error('Login error:', err);
+      return { success: false, message: 'Login failed. Database connection error.' };
     }
-    return { success: false, message: 'Invalid username or password.' };
   };
 
-  /**
-   * Register new retailer user
-   * Returns { success, message }
-   */
-  const register = (username, password, name, phone) => {
+  const register = async (username, password, name, phone) => {
     const trimUser  = username.trim().toLowerCase();
     const trimPass  = password.trim();
     const trimName  = name.trim();
@@ -105,28 +128,44 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: 'Password must be at least 4 characters.' };
     }
 
-    // Block owner username
     if (trimUser === OWNER_CREDENTIALS.username.toLowerCase()) {
       return { success: false, message: 'That username is reserved.' };
     }
 
-    const exists = registeredUsers.find((u) => u.username.toLowerCase() === trimUser);
-    if (exists) {
-      return { success: false, message: 'Username already taken. Please choose another.' };
+    try {
+      const { data: exists, error: checkError } = await supabase
+        .from('retailers')
+        .select('id')
+        .eq('username', trimUser)
+        .maybeSingle();
+
+      if (checkError) throw checkError;
+
+      if (exists) {
+        return { success: false, message: 'Username already taken. Please choose another.' };
+      }
+
+      const newUser = {
+        id: `user-${Date.now()}`,
+        username: trimUser,
+        password: trimPass,
+        name: trimName,
+        phone: trimPhone,
+        role: 'user'
+      };
+
+      const { error: insertError } = await supabase
+        .from('retailers')
+        .insert([newUser]);
+
+      if (insertError) throw insertError;
+
+      setCurrentUser(newUser);
+      return { success: true };
+    } catch (err) {
+      console.error('Registration error:', err);
+      return { success: false, message: 'Registration failed. Database error.' };
     }
-
-    const newUser = {
-      id: `user-${Date.now()}`,
-      username: trimUser,
-      password: trimPass,
-      name: trimName,
-      phone: trimPhone,
-      role: 'user'
-    };
-
-    setRegisteredUsers((prev) => [...prev, newUser]);
-    setCurrentUser(newUser);
-    return { success: true };
   };
 
   const logout = () => {
