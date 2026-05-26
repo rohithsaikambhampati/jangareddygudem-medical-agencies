@@ -298,6 +298,23 @@ export default function OwnerPage() {
       setPaymentError('Please enter a valid amount greater than 0.');
       return;
     }
+
+    // Calculate current pending amount for this retailer
+    const retailerOrds = orders.filter(o => o.userId === selectedRetailer.id);
+    const retailerPays = payments.filter(p => p.userId === selectedRetailer.id);
+    const totalDue = retailerOrds.reduce((sum, o) => sum + Number(o.totalPrice || 0), 0);
+    const totalAlreadyPaid = retailerPays.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+    const currentPending = totalDue - totalAlreadyPaid;
+
+    if (currentPending <= 0) {
+      setPaymentError('No pending balance. This retailer has no outstanding dues.');
+      return;
+    }
+
+    if (amt > currentPending) {
+      setPaymentError(`Amount exceeds pending balance! Maximum allowed: ₹${currentPending.toFixed(2)}`);
+      return;
+    }
     
     // Pass formatted date if provided
     let formattedDate = null;
@@ -665,21 +682,29 @@ export default function OwnerPage() {
               </div>
 
               <form onSubmit={handleRecordPayment} className="p-6 space-y-4">
+                {/* Show current pending balance */}
+                <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center justify-between">
+                  <span className="text-xs font-bold text-amber-800">Pending Balance Due:</span>
+                  <span className="text-sm font-extrabold text-amber-900 font-mono">₹{pendingAmount.toFixed(2)}</span>
+                </div>
+
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Amount Received ($) *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Amount Received (₹) *</label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2.5 text-slate-400 text-sm font-semibold">$</span>
+                    <span className="absolute left-3 top-2.5 text-slate-400 text-sm font-semibold">₹</span>
                     <input
                       type="number"
                       step="0.01"
                       min="0.01"
+                      max={pendingAmount.toFixed(2)}
                       required
                       placeholder="0.00"
                       value={paymentAmount}
-                      onChange={(e) => setPaymentAmount(e.target.value)}
+                      onChange={(e) => { setPaymentAmount(e.target.value); setPaymentError(''); }}
                       className={`${inputCls} pl-7`}
                     />
                   </div>
+                  <p className="text-[10px] text-slate-400 mt-1">Maximum allowed: ₹{pendingAmount.toFixed(2)}</p>
                 </div>
 
                 <div>
