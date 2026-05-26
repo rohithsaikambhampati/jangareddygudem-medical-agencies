@@ -4,8 +4,8 @@ const AuthContext = createContext();
 
 // The single owner credentials — hardcoded for a single owner agency
 const OWNER_CREDENTIALS = {
-  username: 'owner',
-  password: 'medagency2024',
+  username: 'JRG_MEDICAL_AGENCIES',
+  password: 'jrg@1234',
   role: 'owner',
   name: 'Agency Owner'
 };
