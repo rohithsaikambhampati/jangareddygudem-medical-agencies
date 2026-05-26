@@ -752,7 +752,7 @@ export default function OwnerPage() {
               onClick={() => setShowPaymentModal(true)}
               className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition shadow-md shadow-emerald-500/20"
             >
-              <DollarSign className="h-5 w-5" /> Record Payment
+              <IndianRupee className="h-5 w-5" /> Record Payment
             </button>
             <button
               onClick={() => setView('hub')}
@@ -793,7 +793,7 @@ export default function OwnerPage() {
         {/* Transaction History / Ledger */}
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-5">
           <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-            <DollarSign className="text-emerald-600" /> Transaction History (Ledger)
+            <IndianRupee className="text-emerald-600" /> Transaction History (Ledger)
           </h2>
           {retailerPayments.length === 0 ? (
             <div className="text-center py-10 text-slate-400 border border-dashed border-slate-200 rounded-xl">
