@@ -65,7 +65,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-500 rounded-2xl shadow-xl shadow-teal-500/30 mb-4 ring-4 ring-teal-500/20">
             <Activity className="h-8 w-8 text-white animate-pulse" />
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Anti-Gravity</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">The Jangareddygudem Medical Agencies</h1>
           <p className="text-teal-400 text-sm font-semibold uppercase tracking-widest mt-1 font-mono">Digital Pharmacy</p>
           <p className="text-slate-400 text-sm mt-2">Medical Agency Distribution Portal</p>
         </div>
@@ -293,7 +293,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-slate-600 text-xs mt-6">
-          © {new Date().getFullYear()} Anti-Gravity Digital Pharmacy Systems
+          © {new Date().getFullYear()} The Jangareddygudem Medical Agencies
         </p>
       </div>
     </div>
