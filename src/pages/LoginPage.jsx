@@ -267,6 +267,8 @@ export default function LoginPage() {
                   >
                     Sign in
                   </button>
+                </p>
+              )}
             </div>
           )}
         </div>
