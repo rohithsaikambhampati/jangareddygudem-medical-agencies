@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Search, ShoppingCart, CheckCircle, AlertCircle, Sparkles,
   Trash2, X, Minus, Plus, ArrowRight, Tag, ShoppingBag,
-  Star, ClipboardList, ChevronDown, ChevronUp, Clock, MapPin, Save, DollarSign
+  Star, ClipboardList, ChevronDown, ChevronUp, Clock, MapPin, Save, IndianRupee
 } from 'lucide-react';
 
 // ── Order Status Stepper ───────────────────────────────────────────────────
@@ -162,10 +162,10 @@ function MyOrders({ userId }) {
                 <p className="text-base font-extrabold text-emerald-700 mt-0.5">+{order.freeUnits} 🎁</p>
               </div>
             )}
-            <div className="bg-teal-50 border border-teal-100 rounded-xl p-2.5">
-              <p className="text-[10px] text-teal-600 font-semibold uppercase tracking-wide">Total Paid</p>
-              <p className="text-base font-extrabold text-teal-700 font-mono mt-0.5">${order.totalPrice?.toFixed(2)}</p>
-            </div>
+             <div className="bg-teal-50 border border-teal-100 rounded-xl p-2.5">
+               <p className="text-[10px] text-teal-600 font-semibold uppercase tracking-wide">Total Paid</p>
+               <p className="text-base font-extrabold text-teal-700 font-mono mt-0.5">₹{order.totalPrice?.toFixed(2)}</p>
+             </div>
           </div>
 
           {/* Delivery Address */}
@@ -511,13 +511,13 @@ export default function UserPage() {
               : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
           }`}
         >
-          <DollarSign className="h-4 w-4" />
+          <IndianRupee className="h-4 w-4" />
           My Payments
           {remainingOutstanding > 0 && (
             <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
               activeTab === 'ledger' ? 'bg-rose-500 text-white' : 'bg-rose-100 text-rose-700'
             }`}>
-              Due: ${remainingOutstanding.toFixed(2)}
+              Due: ₹{remainingOutstanding.toFixed(2)}
             </span>
           )}
         </button>
@@ -661,11 +661,11 @@ export default function UserPage() {
                       <div className="mt-3 flex items-baseline gap-2">
                         {hasDiscount ? (
                           <>
-                            <span className="text-2xl font-extrabold text-slate-900">${finalPrice.toFixed(2)}</span>
-                            <span className="text-sm font-semibold text-slate-400 line-through">${product.price.toFixed(2)}</span>
+                            <span className="text-2xl font-extrabold text-slate-900">₹{finalPrice.toFixed(2)}</span>
+                            <span className="text-sm font-semibold text-slate-400 line-through">₹{product.price.toFixed(2)}</span>
                           </>
                         ) : (
-                          <span className="text-2xl font-extrabold text-slate-900">${product.price.toFixed(2)}</span>
+                          <span className="text-2xl font-extrabold text-slate-900">₹{product.price.toFixed(2)}</span>
                         )}
                       </div>
                       <div className="mt-4 flex items-center justify-between text-xs font-semibold">
@@ -742,18 +742,18 @@ export default function UserPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-2xl border border-rose-100 shadow-sm flex items-center gap-5">
-              <div className="p-4 bg-rose-50 text-rose-500 rounded-2xl"><DollarSign className="h-8 w-8" /></div>
+              <div className="p-4 bg-rose-50 text-rose-500 rounded-2xl"><IndianRupee className="h-8 w-8" /></div>
               <div>
                 <p className="text-rose-600 text-sm font-bold uppercase tracking-wider">Outstanding Balance Due</p>
-                <p className="text-3xl font-extrabold text-slate-800 mt-1">${remainingOutstanding.toFixed(2)}</p>
+                <p className="text-3xl font-extrabold text-slate-800 mt-1">₹{remainingOutstanding.toFixed(2)}</p>
                 <p className="text-xs text-slate-500 mt-1">Please pay to clear pending balance</p>
               </div>
             </div>
             <div className="bg-white p-6 rounded-2xl border border-teal-100 shadow-sm flex items-center gap-5">
-              <div className="p-4 bg-teal-50 text-teal-500 rounded-2xl"><DollarSign className="h-8 w-8" /></div>
+              <div className="p-4 bg-teal-50 text-teal-500 rounded-2xl"><IndianRupee className="h-8 w-8" /></div>
               <div>
                 <p className="text-teal-600 text-sm font-bold uppercase tracking-wider">Total Paid to Date</p>
-                <p className="text-3xl font-extrabold text-slate-800 mt-1">${totalLifetimePaid.toFixed(2)}</p>
+                <p className="text-3xl font-extrabold text-slate-800 mt-1">₹{totalLifetimePaid.toFixed(2)}</p>
                 <p className="text-xs text-slate-500 mt-1">Manual payments confirmed by Owner</p>
               </div>
             </div>
@@ -761,7 +761,7 @@ export default function UserPage() {
               <div className="p-4 bg-emerald-50 text-emerald-500 rounded-2xl"><CheckCircle className="h-8 w-8" /></div>
               <div>
                 <p className="text-emerald-600 text-sm font-bold uppercase tracking-wider">Total Lifetime Purchases</p>
-                <p className="text-3xl font-extrabold text-slate-800 mt-1">${totalLifetimeDue.toFixed(2)}</p>
+                <p className="text-3xl font-extrabold text-slate-800 mt-1">₹{totalLifetimeDue.toFixed(2)}</p>
                 <p className="text-xs text-slate-500 mt-1">Lifetime total of placed orders</p>
               </div>
             </div>
@@ -769,7 +769,7 @@ export default function UserPage() {
 
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-5">
             <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-              <DollarSign className="text-emerald-600" /> Transaction / Payment History
+              <IndianRupee className="text-emerald-600" /> Transaction / Payment History
             </h2>
             {myPaymentsList.length === 0 ? (
               <div className="text-center py-10 text-slate-400 border border-dashed border-slate-200 rounded-xl">
@@ -794,7 +794,7 @@ export default function UserPage() {
                         </td>
                         <td className="px-5 py-4 font-mono text-xs text-slate-500">{payment.id}</td>
                         <td className="px-5 py-4 text-right text-emerald-600 font-bold font-mono">
-                          +${Number(payment.amount).toFixed(2)}
+                          +₹{Number(payment.amount).toFixed(2)}
                         </td>
                       </tr>
                     ))}
@@ -849,7 +849,7 @@ export default function UserPage() {
                           <div className="flex justify-between items-start gap-4">
                             <div>
                               <p className="font-bold text-slate-800">{item.name}</p>
-                              <p className="text-xs text-slate-400 mt-0.5">Unit: ${item.price.toFixed(2)}</p>
+                              <p className="text-xs text-slate-400 mt-0.5">Unit: ₹{item.price.toFixed(2)}</p>
                               {freeQuantity > 0 && (
                                 <p className="text-xs text-emerald-600 font-bold mt-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 w-fit">
                                   🎁 +{freeQuantity} free unit{freeQuantity > 1 ? 's' : ''}
@@ -896,7 +896,7 @@ export default function UserPage() {
                               )}
                             </div>
                             <span className="font-mono font-extrabold text-slate-800">
-                              ${(finalUnitPrice * item.quantity).toFixed(2)}
+                              ₹{(finalUnitPrice * item.quantity).toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -923,12 +923,12 @@ export default function UserPage() {
                     {cartSavings > 0 && (
                       <div className="flex justify-between text-teal-600 font-semibold">
                         <span>Cash Discount</span>
-                        <span>-${cartSavings.toFixed(2)}</span>
+                        <span>-₹{cartSavings.toFixed(2)}</span>
                       </div>
                     )}
                     <div className="flex justify-between border-t border-slate-200 pt-3 text-lg font-black text-slate-800">
                       <span>Invoice Total</span>
-                      <span className="font-mono text-teal-700 text-xl">${cartSubtotal.toFixed(2)}</span>
+                      <span className="font-mono text-teal-700 text-xl">₹{cartSubtotal.toFixed(2)}</span>
                     </div>
                   </div>
 

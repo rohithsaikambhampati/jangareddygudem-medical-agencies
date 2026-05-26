@@ -3,7 +3,7 @@ import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 import {
   Plus, Trash2, AlertTriangle, ShieldCheck, ToggleLeft, ToggleRight,
-  Package, Tag, ShoppingBag, X, Pencil, CheckCircle, Save, MapPin, Users, ArrowLeft, ArrowRight, DollarSign, User
+  Package, Tag, ShoppingBag, X, Pencil, CheckCircle, Save, MapPin, Users, ArrowLeft, ArrowRight, IndianRupee, User
 } from 'lucide-react';
 
 // ── Edit Product Modal ──────────────────────────────────────────────────────
@@ -102,9 +102,9 @@ function EditProductModal({ product, onClose, onSave }) {
           {/* Price + Stock */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Price ($)</label>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Price (₹)</label>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-slate-400 text-sm font-semibold">$</span>
+                <span className="absolute left-3 top-2.5 text-slate-400 text-sm font-semibold">₹</span>
                 <input type="number" step="0.01" min="0" name="price" value={form.price} onChange={handleChange}
                   className={`${inputCls} pl-7`} placeholder="0.00" />
               </div>
@@ -562,9 +562,9 @@ export default function OwnerPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-600 mb-1">Price ($)</label>
+                  <label className="block text-sm font-medium text-slate-600 mb-1">Price (₹)</label>
                   <div className="relative">
-                    <span className="absolute left-3 top-3 text-slate-400 text-sm">$</span>
+                    <span className="absolute left-3 top-3 text-slate-400 text-sm">₹</span>
                     <input type="number" step="0.01" name="price" value={newProduct.price} onChange={handleInputChange} className={`${inputCls} pl-7`} placeholder="0.00" />
                   </div>
                 </div>
@@ -627,11 +627,11 @@ export default function OwnerPage() {
                           <td className="px-5 py-4 font-mono">
                             {hasDiscount ? (
                               <div>
-                                <span className="font-bold text-slate-800">${finalPrice.toFixed(2)}</span>
-                                <span className="text-xs text-slate-400 line-through ml-1.5">${product.price.toFixed(2)}</span>
+                                <span className="font-bold text-slate-800">₹{finalPrice.toFixed(2)}</span>
+                                <span className="text-xs text-slate-400 line-through ml-1.5">₹{product.price.toFixed(2)}</span>
                               </div>
                             ) : (
-                              <span>${product.price.toFixed(2)}</span>
+                              <span>₹{product.price.toFixed(2)}</span>
                             )}
                           </td>
                           <td className="px-5 py-4 font-semibold text-slate-700">{product.stockQuantity}</td>
@@ -765,18 +765,18 @@ export default function OwnerPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-2xl border border-rose-100 shadow-sm flex items-center gap-5">
-            <div className="p-4 bg-rose-50 text-rose-500 rounded-2xl"><DollarSign className="h-8 w-8" /></div>
+            <div className="p-4 bg-rose-50 text-rose-500 rounded-2xl"><IndianRupee className="h-8 w-8" /></div>
             <div>
               <p className="text-rose-600 text-sm font-bold uppercase tracking-wider">Remaining Balance Due</p>
-              <p className="text-4xl font-extrabold text-slate-800 mt-1">${pendingAmount.toFixed(2)}</p>
+              <p className="text-4xl font-extrabold text-slate-800 mt-1">₹{pendingAmount.toFixed(2)}</p>
               <p className="text-xs text-slate-500 mt-1">Outstanding outstanding amount</p>
             </div>
           </div>
           <div className="bg-white p-6 rounded-2xl border border-teal-100 shadow-sm flex items-center gap-5">
-            <div className="p-4 bg-teal-50 text-teal-500 rounded-2xl"><DollarSign className="h-8 w-8" /></div>
+            <div className="p-4 bg-teal-50 text-teal-500 rounded-2xl"><IndianRupee className="h-8 w-8" /></div>
             <div>
               <p className="text-teal-600 text-sm font-bold uppercase tracking-wider">Total Amount Paid</p>
-              <p className="text-4xl font-extrabold text-slate-800 mt-1">${totalPaid.toFixed(2)}</p>
+              <p className="text-4xl font-extrabold text-slate-800 mt-1">₹{totalPaid.toFixed(2)}</p>
               <p className="text-xs text-slate-500 mt-1">From {retailerPayments.length} logged payments</p>
             </div>
           </div>
@@ -784,7 +784,7 @@ export default function OwnerPage() {
             <div className="p-4 bg-emerald-50 text-emerald-500 rounded-2xl"><CheckCircle className="h-8 w-8" /></div>
             <div>
               <p className="text-emerald-600 text-sm font-bold uppercase tracking-wider">Lifetime Processed (Due)</p>
-              <p className="text-4xl font-extrabold text-slate-800 mt-1">${totalLifetime.toFixed(2)}</p>
+              <p className="text-4xl font-extrabold text-slate-800 mt-1">₹{totalLifetime.toFixed(2)}</p>
               <p className="text-xs text-slate-500 mt-1">Across {retailerOrders.length} total order(s)</p>
             </div>
           </div>
@@ -818,7 +818,7 @@ export default function OwnerPage() {
                       </td>
                       <td className="px-5 py-4 font-mono text-xs text-slate-500">{payment.id}</td>
                       <td className="px-5 py-4 text-right text-emerald-600 font-bold font-mono">
-                        +${Number(payment.amount).toFixed(2)}
+                        +₹{Number(payment.amount).toFixed(2)}
                       </td>
                     </tr>
                   ))}
@@ -880,7 +880,7 @@ export default function OwnerPage() {
                       )}
                       <div className="bg-teal-50 rounded-xl p-2 border border-teal-100">
                         <p className="text-[10px] text-teal-600 font-semibold">Invoice</p>
-                        <p className="text-sm font-extrabold text-teal-700 font-mono">${order.totalPrice?.toFixed(2)}</p>
+                        <p className="text-sm font-extrabold text-teal-700 font-mono">₹{order.totalPrice?.toFixed(2)}</p>
                       </div>
                     </div>
 
