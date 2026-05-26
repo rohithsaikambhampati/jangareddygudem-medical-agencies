@@ -179,7 +179,7 @@ export default function LoginPage() {
                   name="username"
                   value={form.username}
                   onChange={handleChange}
-                  placeholder={isOwnerMode ? 'owner' : 'e.g., retailer_store1'}
+                  placeholder={isOwnerMode ? 'Enter owner username' : 'Enter username'}
                   required
                   autoComplete="username"
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-400 transition text-sm"
