@@ -86,7 +86,7 @@ function EditProductModal({ product, onClose, onSave }) {
         <form onSubmit={handleSave} className="p-6 space-y-4">
 
           {/* Name & Brand */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Product Name</label>
               <input type="text" name="name" value={form.name} onChange={handleChange} className={inputCls} placeholder="e.g., Paracetamol 500mg" />
@@ -100,7 +100,7 @@ function EditProductModal({ product, onClose, onSave }) {
           </div>
 
           {/* Price + Stock */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Price (₹)</label>
               <div className="relative">
@@ -120,7 +120,7 @@ function EditProductModal({ product, onClose, onSave }) {
           <div className="border-t border-slate-100 pt-4">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Offer & Discount Settings</p>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                   Discount (%)
@@ -560,7 +560,7 @@ export default function OwnerPage() {
                 <label className="block text-sm font-medium text-slate-600 mb-1">Product Name</label>
                 <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} className={inputCls} placeholder="e.g., Aspirin 100mg" />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-600 mb-1">Price (₹)</label>
                   <div className="relative">
@@ -573,7 +573,7 @@ export default function OwnerPage() {
                   <input type="number" name="stockQuantity" value={newProduct.stockQuantity} onChange={handleInputChange} className={inputCls} placeholder="0" />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-600 mb-1">Discount (%)</label>
                   <input type="number" min="0" max="100" name="discountPercentage" value={newProduct.discountPercentage} onChange={handleInputChange} className={inputCls} placeholder="0" />

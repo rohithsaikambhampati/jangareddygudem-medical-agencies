@@ -58,13 +58,13 @@ function AppHeader() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <div className="bg-teal-600 text-white p-2 rounded-xl shadow-md shadow-teal-500/20">
-            <Activity className="h-5 w-5 animate-pulse" />
+        <div className="flex items-center gap-2">
+          <div className="bg-teal-600 text-white p-1.5 sm:p-2 rounded-xl shadow-md shadow-teal-500/20 shrink-0">
+            <Activity className="h-4 w-4 sm:h-5 sm:w-5 animate-pulse" />
           </div>
           <div>
-            <span className="font-extrabold text-xl tracking-tight text-slate-900 block leading-tight">The Jangareddygudem</span>
-            <span className="font-extrabold text-xl tracking-tight text-slate-900 block leading-tight -mt-0.5">Medical Agencies</span>
+            <span className="font-extrabold text-xs sm:text-xl tracking-tight text-slate-900 block leading-tight">The Jangareddygudem</span>
+            <span className="font-extrabold text-xs sm:text-xl tracking-tight text-slate-900 block leading-tight -mt-0.5">Medical Agencies</span>
           </div>
         </div>
 

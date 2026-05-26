@@ -284,16 +284,16 @@ function AddressModal({ currentUser, onConfirm, onCancel }) {
             <input type="text" name="line1" value={form.line1} onChange={handleChange} className={inputCls} placeholder="Shop / Street / Colony name" />
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            <div className="col-span-1">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">City *</label>
               <input type="text" name="city" value={form.city} onChange={handleChange} className={inputCls} placeholder="Chennai" />
             </div>
-            <div className="col-span-1">
+            <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">State</label>
               <input type="text" name="state" value={form.state} onChange={handleChange} className={inputCls} placeholder="TN" />
             </div>
-            <div className="col-span-1">
+            <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">PIN *</label>
               <input type="text" name="pin" value={form.pin} onChange={handleChange} className={inputCls} placeholder="600001" maxLength={6} />
             </div>
@@ -810,7 +810,7 @@ export default function UserPage() {
       {isCartOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setIsCartOpen(false)} />
-          <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
+          <div className="absolute inset-y-0 right-0 max-w-full flex pl-4 sm:pl-10">
             <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col">
 
               {/* Drawer Header */}

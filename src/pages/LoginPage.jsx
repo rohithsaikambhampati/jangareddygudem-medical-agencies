@@ -133,7 +133,7 @@ export default function LoginPage() {
 
             {/* Name & Phone fields — only for register */}
             {mode === 'user-register' && (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-semibold text-slate-300 mb-1.5">Business / Full Name</label>
                   <div className="relative">
