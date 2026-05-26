@@ -267,26 +267,6 @@ export default function LoginPage() {
                   >
                     Sign in
                   </button>
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Demo hint for owner */}
-          {isOwnerMode && (
-            <div className="mt-5 bg-purple-500/10 border border-purple-500/20 rounded-xl p-3.5 text-center">
-              <p className="text-xs text-purple-300 font-medium">
-                🔐 Demo: Username <span className="font-mono font-bold text-purple-200">owner</span> / Password <span className="font-mono font-bold text-purple-200">medagency2024</span>
-              </p>
-            </div>
-          )}
-
-          {/* Demo hint for user */}
-          {mode === 'user-login' && (
-            <div className="mt-4 bg-teal-500/10 border border-teal-500/20 rounded-xl p-3.5 text-center">
-              <p className="text-xs text-teal-300 font-medium">
-                💡 Demo: Username <span className="font-mono font-bold text-teal-200">retailer1</span> / Password <span className="font-mono font-bold text-teal-200">pass123</span>
-              </p>
             </div>
           )}
         </div>
