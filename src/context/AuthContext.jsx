@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 const OWNER_CREDENTIALS = {
   username: 'JRG_MEDICAL_AGENCIES',
-  password: 'jrg@1234',
+  password: 'jrg_2026#website',
   role: 'owner',
   name: 'Agency Owner'
 };
