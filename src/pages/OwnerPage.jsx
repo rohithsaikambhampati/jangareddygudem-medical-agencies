@@ -144,7 +144,12 @@ function EditProductModal({ product, onClose, onSave }) {
               <div className="mt-2.5 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center gap-2">
                 <Tag className="h-4 w-4 text-amber-500 shrink-0" />
                 <p className="text-xs font-bold text-amber-800">
-                  Deal Preview: Buy <span className="text-amber-600">{form.offerText.split('+')[0]?.trim()}</span> → Get <span className="text-amber-600">{form.offe/* Activate toggle */
+                  Deal Preview: Buy <span className="text-amber-600">{form.offerText.split('+')[0]?.trim()}</span> → Get <span className="text-amber-600">{form.offerText.split('+')[1]?.trim()}</span> extra free
+                </p>
+              </div>
+            )}
+
+            {/* Activate toggle */}
             <div
               onClick={() => setForm(p => ({ ...p, isOfferActive: !p.isOfferActive }))}
               className={`mt-3 flex items-center justify-between cursor-pointer px-4 py-3 rounded-xl border transition ${
