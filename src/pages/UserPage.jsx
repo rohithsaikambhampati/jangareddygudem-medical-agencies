@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Search, ShoppingCart, CheckCircle, AlertCircle, Sparkles,
   Trash2, X, Minus, Plus, ArrowRight, Tag, ShoppingBag,
-  Star, ClipboardList, ChevronDown, ChevronUp, Clock, MapPin, Save, IndianRupee, Phone
+  Star, ClipboardList, ChevronDown, ChevronUp, Clock, MapPin, Save, IndianRupee, Phone, Mail
 } from 'lucide-react';
 
 // ── Order Status Stepper ───────────────────────────────────────────────────
@@ -474,18 +474,13 @@ export default function UserPage() {
       </button>
 
       {/* Contact Owner Banner */}
-      <div className="bg-teal-50 border border-teal-100 p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center shrink-0">
-            <Phone className="h-5 w-5" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-teal-900">Need help? Contact the Owner</h3>
-            <p className="text-xs text-teal-700 mt-0.5">JRG Medical Agencies, Main Road, Jangareddygudem</p>
-          </div>
-        </div>
-        <a href="tel:+919000000000" className="shrink-0 bg-white text-teal-700 px-4 py-2 rounded-xl border border-teal-200 hover:bg-teal-100 font-bold text-sm transition shadow-sm flex items-center gap-2">
-          <Phone className="h-4 w-4" /> Call Us
+      <div className="bg-white border border-slate-200 px-5 py-3.5 rounded-2xl flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6 shadow-sm">
+        <span className="text-sm font-bold text-slate-700">Contact Owner:</span>
+        <a href="tel:9440103869" className="flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-800 transition bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100">
+          <Phone className="h-4 w-4" /> 9440103869
+        </a>
+        <a href="mailto:himagiriprasadkambhampati@gmail.com" className="flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-800 transition bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100">
+          <Mail className="h-4 w-4" /> himagiriprasadkambhampati@gmail.com
         </a>
       </div>
 
