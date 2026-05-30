@@ -17,6 +17,7 @@ function EditProductModal({ product, onClose, onSave }) {
     discountPercentage: String(product.discountPercentage),
     offerText:          product.offerText || '',
     isOfferActive:      product.isOfferActive,
+    expiryDate:         product.expiryDate ? product.expiryDate.slice(0,10) : '',
   });
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
@@ -50,6 +51,7 @@ function EditProductModal({ product, onClose, onSave }) {
       discountPercentage: discountNum,
       offerText:          form.offerText.trim(),
       isOfferActive:      form.isOfferActive,
+      expiryDate:         form.expiryDate,
     });
 
     setSaved(true);
@@ -142,12 +144,7 @@ function EditProductModal({ product, onClose, onSave }) {
               <div className="mt-2.5 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center gap-2">
                 <Tag className="h-4 w-4 text-amber-500 shrink-0" />
                 <p className="text-xs font-bold text-amber-800">
-                  Deal Preview: Buy <span className="text-amber-600">{form.offerText.split('+')[0]?.trim()}</span> → Get <span className="text-amber-600">{form.offerText.split('+')[1]?.trim()}</span> extra free
-                </p>
-              </div>
-            )}
-
-            {/* Activate toggle */}
+                  Deal Preview: Buy <span className="text-amber-600">{form.offerText.split('+')[0]?.trim()}</span> → Get <span className="text-amber-600">{form.offe/* Activate toggle */
             <div
               onClick={() => setForm(p => ({ ...p, isOfferActive: !p.isOfferActive }))}
               className={`mt-3 flex items-center justify-between cursor-pointer px-4 py-3 rounded-xl border transition ${
@@ -170,6 +167,12 @@ function EditProductModal({ product, onClose, onSave }) {
                 ? <ToggleRight className="h-8 w-8 text-teal-500 shrink-0" />
                 : <ToggleLeft className="h-8 w-8 text-slate-400 shrink-0" />
               }
+            </div>
+            
+            {/* Expiry Date Input */}
+            <div className="mt-4">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Expiry Date</label>
+              <input type="date" name="expiryDate" value={form.expiryDate} onChange={handleChange} className={inputCls} />
             </div>
           </div>
 
@@ -233,7 +236,7 @@ export default function OwnerPage() {
   const [editingProduct, setEditingProduct] = useState(null);
 
   const [newProduct, setNewProduct] = useState({
-    name: '', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false
+    name: '', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false, expiryDate: ''
   });
   const [formError, setFormError] = useState('');
 
@@ -257,8 +260,8 @@ export default function OwnerPage() {
     const discountNum = parseFloat(newProduct.discountPercentage);
     if (isNaN(discountNum) || discountNum < 0 || discountNum > 100)            return setFormError('Discount must be between 0% and 100%.');
 
-    addProduct({ name: newProduct.name, brand: selectedBrand, price: priceNum, stockQuantity: stockNum, discountPercentage: discountNum, offerText: newProduct.offerText.trim(), isOfferActive: newProduct.isOfferActive });
-    setNewProduct({ name: '', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false });
+    addProduct({ name: newProduct.name, brand: selectedBrand, price: priceNum, stockQuantity: stockNum, discountPercentage: discountNum, offerText: newProduct.offerText.trim(), isOfferActive: newProduct.isOfferActive, expiryDate: newProduct.expiryDate });
+    setNewProduct({ name: '', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false, expiryDate: '' });
   };
 
   const handleUpdateStock = (product, newStockVal) => {
@@ -583,6 +586,10 @@ export default function OwnerPage() {
                   <input type="text" name="offerText" value={newProduct.offerText} onChange={handleInputChange} className={inputCls} placeholder="e.g. 10 + 2" />
                 </div>
               </div>
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-slate-600 mb-1">Expiry Date</label>
+                <input type="date" name="expiryDate" value={newProduct.expiryDate} onChange={handleInputChange} className={inputCls} />
+              </div>
               <div className="flex items-center gap-2 py-1">
                 <input type="checkbox" id="isOfferActive" name="isOfferActive" checked={newProduct.isOfferActive} onChange={handleInputChange}
                   className="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500" />
@@ -607,12 +614,13 @@ export default function OwnerPage() {
                     <th className="px-5 py-3.5">Price</th>
                     <th className="px-5 py-3.5">Stock</th>
                     <th className="px-5 py-3.5 text-center">Offer</th>
+                    <th className="px-5 py-3.5 text-center">Expiry</th>
                     <th className="px-5 py-3.5 text-right">Delete</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
                   {brandProducts.length === 0 ? (
-                    <tr><td colSpan="5" className="text-center py-10 text-slate-400">No products for this brand yet.</td></tr>
+                    <tr><td colSpan="6" className="text-center py-10 text-slate-400">No products for this brand yet.</td></tr>
                   ) : (
                     brandProducts.map((product) => {
                       const isLowStock = product.stockQuantity < 5;
@@ -637,6 +645,9 @@ export default function OwnerPage() {
                           <td className="px-5 py-4 font-semibold text-slate-700">{product.stockQuantity}</td>
                           <td className="px-5 py-4 text-center">
                             {product.isOfferActive ? <span className="text-xs bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded-lg">Active</span> : <span className="text-xs bg-slate-100 text-slate-400 font-bold px-2 py-1 rounded-lg">Inactive</span>}
+                          </td>
+                          <td className="px-5 py-4 text-center">
+                            {product.expiryDate ? <span className="text-xs text-slate-600">{new Date(product.expiryDate).toLocaleDateString()}</span> : <span className="text-xs text-slate-400">N/A</span>}
                           </td>
                           <td className="px-5 py-4 text-right" onClick={e => e.stopPropagation()}>
                             <button onClick={() => deleteProduct(product.id)} className="text-rose-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50"><Trash2 className="h-4 w-4" /></button>

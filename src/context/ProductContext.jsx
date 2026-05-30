@@ -12,7 +12,8 @@ const DEFAULT_PRODUCTS = [
     stockQuantity: 50,
     discountPercentage: 10,
     isOfferActive: true,
-    offerText: '10 + 2'
+    offerText: '10 + 2',
+    expiryDate: null
   },
   {
     id: 'prod-2',
@@ -22,7 +23,8 @@ const DEFAULT_PRODUCTS = [
     stockQuantity: 15,
     discountPercentage: 0,
     isOfferActive: false,
-    offerText: ''
+    offerText: '',
+    expiryDate: null
   },
   {
     id: 'prod-3',
@@ -32,7 +34,8 @@ const DEFAULT_PRODUCTS = [
     stockQuantity: 8,
     discountPercentage: 15,
     isOfferActive: true,
-    offerText: '5 + 1'
+    offerText: '5 + 1',
+    expiryDate: null
   },
   {
     id: 'prod-4',
@@ -42,7 +45,8 @@ const DEFAULT_PRODUCTS = [
     stockQuantity: 4,
     discountPercentage: 5,
     isOfferActive: false,
-    offerText: ''
+    offerText: '',
+    expiryDate: null
   },
   {
     id: 'prod-5',
@@ -52,7 +56,8 @@ const DEFAULT_PRODUCTS = [
     stockQuantity: 20,
     discountPercentage: 12,
     isOfferActive: true,
-    offerText: '15 + 3'
+    offerText: '15 + 3',
+    expiryDate: null
   }
 ];
 
@@ -93,7 +98,8 @@ const mapDbProductToReact = (dbProd) => ({
   stockQuantity: dbProd.stock_quantity,
   discountPercentage: Number(dbProd.discount_percentage || 0),
   isOfferActive: dbProd.is_offer_active,
-  offerText: dbProd.offer_text || ''
+  offerText: dbProd.offer_text || '',
+  expiryDate: dbProd.expiry_date || null
 });
 
 const mapReactProductToDb = (reactProd) => ({
@@ -104,7 +110,8 @@ const mapReactProductToDb = (reactProd) => ({
   stock_quantity: reactProd.stockQuantity,
   discount_percentage: reactProd.discountPercentage,
   is_offer_active: reactProd.isOfferActive,
-  offer_text: reactProd.offerText
+  offer_text: reactProd.offerText,
+  expiry_date: reactProd.expiryDate || null
 });
 
 const mapDbOrderToReact = (dbOrd) => ({
