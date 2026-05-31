@@ -13,7 +13,7 @@ function EditProductModal({ product, onClose, onSave }) {
   const [form, setForm] = useState({
     name:               product.name,
     brand:              product.brand || '',
-    category:           product.category || 'Uncategorized',
+    category:           product.category && product.category !== 'Uncategorized' ? product.category : categories[0],
     price:              String(product.price),
     stockQuantity:      String(product.stockQuantity),
     discountPercentage: String(product.discountPercentage),
