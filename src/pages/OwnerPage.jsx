@@ -3,7 +3,7 @@ import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 import {
   Plus, Trash2, AlertTriangle, ShieldCheck, ToggleLeft, ToggleRight,
-  Package, Tag, ShoppingBag, X, Pencil, CheckCircle, Save, MapPin, Users, ArrowLeft, ArrowRight, IndianRupee, User
+  Package, Tag, ShoppingBag, X, Pencil, CheckCircle, Save, MapPin, Users, ArrowLeft, ArrowRight, IndianRupee, User, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -248,6 +248,7 @@ export default function OwnerPage() {
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paymentDate, setPaymentDate] = useState('');
   const [paymentError, setPaymentError] = useState('');
+  const [showAllLedger, setShowAllLedger] = useState(false);
 
   // Edit modal state
   const [editingProduct, setEditingProduct] = useState(null);
@@ -865,7 +866,7 @@ export default function OwnerPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700 font-medium">
-                  {retailerPayments.map((payment) => (
+                  {(showAllLedger ? retailerPayments : retailerPayments.slice(0, 3)).map((payment) => (
                     <tr key={payment.id} className="hover:bg-slate-50/50 transition">
                       <td className="px-5 py-4">
                         <div className="text-slate-800 font-bold">{payment.date}</div>
@@ -879,6 +880,20 @@ export default function OwnerPage() {
                   ))}
                 </tbody>
               </table>
+              {retailerPayments.length > 3 && (
+                <div className="border-t border-slate-100 bg-slate-50 p-2 text-center">
+                  <button
+                    onClick={() => setShowAllLedger(!showAllLedger)}
+                    className="text-xs font-bold text-teal-600 hover:text-teal-700 transition flex items-center justify-center gap-1 w-full"
+                  >
+                    {showAllLedger ? (
+                      <><ChevronUp className="h-4 w-4" /> Show Less</>
+                    ) : (
+                      <><ChevronDown className="h-4 w-4" /> View All {retailerPayments.length} Transactions</>
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
