@@ -3,6 +3,7 @@ import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 import {
   Search, ShoppingCart, CheckCircle, AlertCircle, Sparkles,
+  Trash2, X, Minus, Plus, ArrowRight, Tag, ShoppingBag,
   Star, ClipboardList, ChevronDown, ChevronUp, Clock, MapPin, Save, IndianRupee, Phone, Mail
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
