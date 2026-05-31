@@ -453,23 +453,30 @@ export default function UserPage() {
   return (
     <div className="space-y-6 animate-fadeIn relative">
 
-      <AnimatePresence>
-        {showAddrModal && (
-          <AddressModal
-            currentUser={currentUser}
-            onConfirm={handleConfirmAddress}
-            onCancel={() => setShowAddrModal(false)}
-          />
-        )}
+      {/* Address Modal */}
+      {showAddrModal && (
+        <AddressModal
+          currentUser={currentUser}
+          onConfirm={handleConfirmAddress}
+          onCancel={() => setShowAddrModal(false)}
+        />
+      )}
 
-        {/* Toast */}
+      {/* Toast */}
+      <AnimatePresence>
         {toast && (
-          <div className="fixed top-20 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-xl border border-slate-800">
+          <motion.div 
+            key="toast"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-20 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-xl border border-slate-800"
+          >
             {toast.type === 'success'
               ? <CheckCircle className="text-emerald-400 h-6 w-6 shrink-0" />
               : <AlertCircle className="text-rose-400 h-6 w-6 shrink-0" />}
             <p className="text-sm font-semibold text-slate-100">{toast.message}</p>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
