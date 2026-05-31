@@ -479,7 +479,7 @@ export default function UserPage() {
         <a href="tel:9440103869" className="flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-800 transition bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100">
           <Phone className="h-4 w-4" /> 9440103869
         </a>
-        <a href="mailto:himagiriprasadkambhampati@gmail.com" className="flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-800 transition bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100">
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=himagiriprasadkambhampati@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-800 transition bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100">
           <Mail className="h-4 w-4" /> himagiriprasadkambhampati@gmail.com
         </a>
       </div>
