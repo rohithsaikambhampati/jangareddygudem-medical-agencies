@@ -393,8 +393,10 @@ export const ProductProvider = ({ children, userId }) => {
     try {
       const { error } = await supabase.from('products').insert([mapReactProductToDb(newProduct)]);
       if (error) throw error;
-      setProducts((prev) => [newProduct, ...prev]);
-    } catch (err) {
+      setProducts((prev) => {
+        if (prev.some(p => p.id === newProduct.id)) return prev;
+        return [newProduct, ...prev];
+      });
       console.error('Error adding product:', err);
     }
   };
@@ -602,7 +604,10 @@ export const ProductProvider = ({ children, userId }) => {
         }
       }
 
-      setOrders((prev) => [...newOrders, ...prev]);
+      setOrders((prev) => {
+        const newUnique = newOrders.filter(n => !prev.some(p => p.id === n.id));
+        return [...newUnique, ...prev];
+      });
       setCart([]);
       return { success: true, orderIds: newOrders.map((o) => o.id) };
     } catch (err) {
@@ -672,8 +677,11 @@ export const ProductProvider = ({ children, userId }) => {
 
       if (error) throw error;
 
-      setPayments((prev) => [newPayment, ...prev]);
-      return newPayment;
+      setPayments((prev) => {
+        if (prev.some(p => p.id === newPayment.id)) return prev;
+        return [newPayment, ...prev];
+      });
+      return { success: true };
     } catch (err) {
       console.error('Error adding payment:', err);
       return null;
