@@ -837,7 +837,7 @@ export default function UserPage() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* ── CART DRAWER ──────────────────────────────────────── */}
@@ -980,7 +980,7 @@ export default function UserPage() {
               )}
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );

@@ -528,7 +528,7 @@ export default function OwnerPage() {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -688,7 +688,7 @@ export default function OwnerPage() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -956,7 +956,7 @@ export default function OwnerPage() {
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
     );
   }
 

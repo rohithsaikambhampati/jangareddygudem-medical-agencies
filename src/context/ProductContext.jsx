@@ -397,6 +397,7 @@ export const ProductProvider = ({ children, userId }) => {
         if (prev.some(p => p.id === newProduct.id)) return prev;
         return [newProduct, ...prev];
       });
+    } catch (err) {
       console.error('Error adding product:', err);
     }
   };
