@@ -5,6 +5,7 @@ import {
   Plus, Trash2, AlertTriangle, ShieldCheck, ToggleLeft, ToggleRight,
   Package, Tag, ShoppingBag, X, Pencil, CheckCircle, Save, MapPin, Users, ArrowLeft, ArrowRight, IndianRupee, User
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Edit Product Modal ──────────────────────────────────────────────────────
 function EditProductModal({ product, onClose, onSave }) {
@@ -63,10 +64,21 @@ function EditProductModal({ product, onClose, onSave }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" 
+        onClick={onClose} 
+      />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden"
+      >
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-gradient-to-r from-teal-600 to-teal-700">
@@ -207,7 +219,7 @@ function EditProductModal({ product, onClose, onSave }) {
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -352,7 +364,11 @@ export default function OwnerPage() {
   // ── Render HUB View ─────────────────────────────────────────────
   if (view === 'hub') {
     return (
-      <div className="space-y-8 animate-fadeIn">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-8"
+      >
         {/* Header */}
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
@@ -523,10 +539,16 @@ export default function OwnerPage() {
     const brandLowStock = brandProducts.filter(p => p.stockQuantity < 5).length;
 
     return (
-      <div className="space-y-8 animate-fadeIn">
-        {editingProduct && (
-          <EditProductModal product={editingProduct} onClose={() => setEditingProduct(null)} onSave={updateProduct} />
-        )}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-8"
+      >
+        <AnimatePresence>
+          {editingProduct && (
+            <EditProductModal product={editingProduct} onClose={() => setEditingProduct(null)} onSave={updateProduct} />
+          )}
+        </AnimatePresence>
 
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center gap-4">
           <div>
@@ -681,12 +703,28 @@ export default function OwnerPage() {
     const pendingAmount = totalLifetime - totalPaid;
 
     return (
-      <div className="space-y-8 animate-fadeIn">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-8"
+      >
         {/* Record Payment Modal */}
-        {showPaymentModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setShowPaymentModal(false)} />
-            <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+        <AnimatePresence>
+          {showPaymentModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" 
+                onClick={() => setShowPaymentModal(false)} 
+              />
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+              >
               <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-gradient-to-r from-teal-600 to-teal-700 text-white">
                 <div>
                   <h2 className="text-base font-bold">Record Payment</h2>
@@ -749,9 +787,10 @@ export default function OwnerPage() {
                   </button>
                 </div>
               </form>
-            </div>
+            </motion.div>
           </div>
         )}
+        </AnimatePresence>
 
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center gap-4 flex-wrap">
           <div className="flex items-center gap-4">

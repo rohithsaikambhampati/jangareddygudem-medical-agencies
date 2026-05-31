@@ -3,9 +3,9 @@ import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 import {
   Search, ShoppingCart, CheckCircle, AlertCircle, Sparkles,
-  Trash2, X, Minus, Plus, ArrowRight, Tag, ShoppingBag,
   Star, ClipboardList, ChevronDown, ChevronUp, Clock, MapPin, Save, IndianRupee, Phone, Mail
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Order Status Stepper ───────────────────────────────────────────────────
 const STATUS_STEPS = [
@@ -241,9 +241,23 @@ function AddressModal({ currentUser, onConfirm, onCancel }) {
   const inputCls = 'w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition text-sm text-slate-800';
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" 
+        onClick={onCancel} 
+      />
+
+      {/* Modal Content */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+      >
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-gradient-to-r from-teal-600 to-teal-700">
@@ -323,7 +337,7 @@ function AddressModal({ currentUser, onConfirm, onCancel }) {
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -439,24 +453,25 @@ export default function UserPage() {
   return (
     <div className="space-y-6 animate-fadeIn relative">
 
-      {/* Address Modal */}
-      {showAddrModal && (
-        <AddressModal
-          currentUser={currentUser}
-          onConfirm={handleConfirmAddress}
-          onCancel={() => setShowAddrModal(false)}
-        />
-      )}
+      <AnimatePresence>
+        {showAddrModal && (
+          <AddressModal
+            currentUser={currentUser}
+            onConfirm={handleConfirmAddress}
+            onCancel={() => setShowAddrModal(false)}
+          />
+        )}
 
-      {/* Toast */}
-      {toast && (
-        <div className="fixed top-20 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-xl border border-slate-800">
-          {toast.type === 'success'
-            ? <CheckCircle className="text-emerald-400 h-6 w-6 shrink-0" />
-            : <AlertCircle className="text-rose-400 h-6 w-6 shrink-0" />}
-          <p className="text-sm font-semibold text-slate-100">{toast.message}</p>
-        </div>
-      )}
+        {/* Toast */}
+        {toast && (
+          <div className="fixed top-20 right-6 z-50 flex items-center gap-3 bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-xl border border-slate-800">
+            {toast.type === 'success'
+              ? <CheckCircle className="text-emerald-400 h-6 w-6 shrink-0" />
+              : <AlertCircle className="text-rose-400 h-6 w-6 shrink-0" />}
+            <p className="text-sm font-semibold text-slate-100">{toast.message}</p>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Cart Button */}
       <button
@@ -536,7 +551,11 @@ export default function UserPage() {
 
       {/* ── STORE TAB ────────────────────────────────────────── */}
       {activeTab === 'store' && (
-        <div className="space-y-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6"
+        >
           {/* Hero Banner */}
           {activeOfferProducts.length > 0 ? (
             <div className="bg-gradient-to-r from-teal-600 to-blue-700 p-8 rounded-3xl text-white shadow-md relative overflow-hidden">
@@ -733,7 +752,7 @@ export default function UserPage() {
               })
             )}
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* ── MY ORDERS TAB ────────────────────────────────────── */}
@@ -743,7 +762,11 @@ export default function UserPage() {
 
       {/* ── MY PAYMENTS TAB ───────────────────────────────────── */}
       {activeTab === 'ledger' && (
-        <div className="space-y-6 animate-fadeIn">
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6"
+        >
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center gap-4">
             <div>
               <h2 className="text-xl font-bold text-slate-800">My Payments</h2>
@@ -957,7 +980,7 @@ export default function UserPage() {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );

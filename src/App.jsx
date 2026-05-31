@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ProductProvider } from './context/ProductContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import OwnerPage from './pages/OwnerPage';
@@ -54,7 +55,12 @@ function AppHeader() {
   if (!isLoggedIn) return null;
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm backdrop-blur-md bg-white/95">
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+      className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm backdrop-blur-md bg-white/95"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {/* Logo */}
@@ -107,52 +113,74 @@ function AppHeader() {
           </button>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
 
-function AppLayout() {
+// Page Transition Wrapper
+function PageWrapper({ children }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function AppContent() {
   const { isLoggedIn } = useAuth();
+  const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans overflow-x-hidden">
       <AppHeader />
 
       <main className={`flex-grow ${isLoggedIn ? 'max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8' : 'w-full'}`}>
-        <Routes>
-          {/* Public route — redirect away if already logged in */}
-          <Route path="/login" element={<LoginRedirect />} />
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            {/* Public route — redirect away if already logged in */}
+            <Route path="/login" element={<PageWrapper><LoginRedirect /></PageWrapper>} />
 
-          {/* Protected owner route */}
-          <Route
-            path="/owner"
-            element={
-              <ProtectedRoute requiredRole="owner">
-                <OwnerPage />
-              </ProtectedRoute>
-            }
-          />
+            {/* Protected owner route */}
+            <Route
+              path="/owner"
+              element={
+                <ProtectedRoute requiredRole="owner">
+                  <PageWrapper><OwnerPage /></PageWrapper>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Protected user route */}
-          <Route
-            path="/user"
-            element={
-              <ProtectedRoute requiredRole="user">
-                <UserPage />
-              </ProtectedRoute>
-            }
-          />
+            {/* Protected user route */}
+            <Route
+              path="/user"
+              element={
+                <ProtectedRoute requiredRole="user">
+                  <PageWrapper><UserPage /></PageWrapper>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Root — smart redirect based on role */}
-          <Route path="*" element={<RootRedirect />} />
-        </Routes>
+            {/* Root — smart redirect based on role */}
+            <Route path="*" element={<RootRedirect />} />
+          </Routes>
+        </AnimatePresence>
       </main>
 
       {/* Footer — only shown when logged in */}
       {isLoggedIn && (
-        <footer className="bg-white border-t border-slate-100 py-4 text-center text-xs text-slate-400 font-medium">
+        <motion.footer 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="bg-white border-t border-slate-100 py-4 text-center text-xs text-slate-400 font-medium"
+        >
           <p>© {new Date().getFullYear()} The Jangareddygudem Medical Agencies. All rights reserved.</p>
-        </footer>
+        </motion.footer>
       )}
     </div>
   );
@@ -174,7 +202,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <ProductProviderWithUser>
-          <AppLayout />
+          <AppContent />
         </ProductProviderWithUser>
       </BrowserRouter>
     </AuthProvider>

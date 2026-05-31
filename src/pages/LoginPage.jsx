@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Activity, ShieldCheck, User, Lock, Eye, EyeOff, UserPlus, LogIn, AlertCircle, ArrowRight, Phone } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function LoginPage() {
   const { login, register } = useAuth();
@@ -61,17 +62,27 @@ export default function LoginPage() {
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo / Branding */}
-        <div className="text-center mb-8">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
           <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-500 rounded-2xl shadow-xl shadow-teal-500/30 mb-4 ring-4 ring-teal-500/20">
             <Activity className="h-8 w-8 text-white animate-pulse" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">The Jangareddygudem Medical Agencies</h1>
           <p className="text-teal-400 text-sm font-semibold uppercase tracking-widest mt-1 font-mono">Digital Pharmacy</p>
           <p className="text-slate-400 text-sm mt-2">Medical Agency Distribution Portal</p>
-        </div>
+        </motion.div>
 
         {/* Role Selector Tabs */}
-        <div className="flex gap-1 bg-white/5 border border-white/10 p-1 rounded-2xl mb-6 backdrop-blur-sm">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex gap-1 bg-white/5 border border-white/10 p-1 rounded-2xl mb-6 backdrop-blur-sm"
+        >
           <button
             onClick={() => switchMode('user-login')}
             className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
@@ -94,10 +105,15 @@ export default function LoginPage() {
             <ShieldCheck className="h-4 w-4" />
             Owner Portal
           </button>
-        </div>
+        </motion.div>
 
         {/* Login / Register Card */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-3xl p-8 shadow-2xl">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-3xl p-8 shadow-2xl"
+        >
 
           {/* Card Title */}
           <div className="mb-6">
@@ -271,7 +287,7 @@ export default function LoginPage() {
               )}
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Footer */}
         <p className="text-center text-slate-600 text-xs mt-6">
