@@ -160,6 +160,15 @@ export const AuthProvider = ({ children }) => {
 
       if (insertError) throw insertError;
 
+      // Notify owner
+      await supabase.from('notifications').insert([{
+        user_id: 'owner',
+        title: 'New Retailer Joined 🎉',
+        message: `${trimName} (${trimPhone}) has registered a new retailer account.`,
+        type: 'info',
+        is_read: false
+      }]);
+
       setCurrentUser(newUser);
       return { success: true };
     } catch (err) {

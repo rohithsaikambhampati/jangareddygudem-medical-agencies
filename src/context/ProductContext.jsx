@@ -94,6 +94,7 @@ const mapDbProductToReact = (dbProd) => ({
   id: dbProd.id,
   name: dbProd.name,
   brand: dbProd.brand,
+  category: dbProd.category || 'Uncategorized',
   price: Number(dbProd.price),
   stockQuantity: dbProd.stock_quantity,
   discountPercentage: Number(dbProd.discount_percentage || 0),
@@ -106,6 +107,7 @@ const mapReactProductToDb = (reactProd) => ({
   id: reactProd.id,
   name: reactProd.name,
   brand: reactProd.brand,
+  category: reactProd.category || 'Uncategorized',
   price: reactProd.price,
   stock_quantity: reactProd.stockQuantity,
   discount_percentage: reactProd.discountPercentage,
@@ -179,6 +181,9 @@ export const ProductProvider = ({ children, userId }) => {
   const [orders, setOrders] = useState([]);
   const [payments, setPayments] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  
+  const categories = ['Tablets', 'Syrups', 'Injections', 'Ointments', 'Drops', 'Other'];
 
   const cartKeyRef = useRef(cartKey);
   const [cart, setCart] = useState(() => {
@@ -223,9 +228,15 @@ export const ProductProvider = ({ children, userId }) => {
           .from('brands')
           .select('*');
 
+        const { data: dbNotifications } = await supabase
+          .from('notifications')
+          .select('*')
+          .order('created_at', { ascending: false });
+
         if (dbBrands) setBrands(dbBrands.map((b) => b.name));
         if (dbOrders) setOrders(dbOrders.map(mapDbOrderToReact));
         if (dbPayments) setPayments(dbPayments.map(mapDbPaymentToReact));
+        if (dbNotifications) setNotifications(dbNotifications);
 
         if (dbProducts) {
           const reactProducts = dbProducts.map(mapDbProductToReact);
@@ -318,15 +329,59 @@ export const ProductProvider = ({ children, userId }) => {
       })
       .subscribe();
 
+    const notificationsChannel = supabase
+      .channel('notifications_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'notifications' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          setNotifications((prev) => {
+            if (prev.some((n) => n.id === payload.new.id)) return prev;
+            return [payload.new, ...prev];
+          });
+        } else if (payload.eventType === 'UPDATE') {
+          setNotifications((prev) =>
+            prev.map((n) => (n.id === payload.new.id ? payload.new : n))
+          );
+        } else if (payload.eventType === 'DELETE') {
+          setNotifications((prev) => prev.filter((n) => n.id !== payload.old.id));
+        }
+      })
+      .subscribe();
+
     return () => {
       supabase.removeChannel(productsChannel);
       supabase.removeChannel(ordersChannel);
       supabase.removeChannel(paymentsChannel);
       supabase.removeChannel(brandsChannel);
+      supabase.removeChannel(notificationsChannel);
     };
   }, []);
 
   // ── Provider Functions ──────────────────────────
+  const sendNotification = async (userIdTarget, title, message, type = 'info') => {
+    try {
+      const { error } = await supabase.from('notifications').insert([{
+        user_id: userIdTarget,
+        title,
+        message,
+        type,
+        is_read: false
+      }]);
+      if (error) throw error;
+    } catch (err) {
+      console.error('Error sending notification:', err);
+    }
+  };
+
+  const markNotificationRead = async (notificationId) => {
+    try {
+      const { error } = await supabase.from('notifications').update({ is_read: true }).eq('id', notificationId);
+      if (error) throw error;
+      setNotifications(prev => prev.map(n => n.id === notificationId ? { ...n, is_read: true } : n));
+    } catch (err) {
+      console.error('Error marking notification read:', err);
+    }
+  };
+
   const addBrand = async (brandName) => {
     const trimmed = brandName.trim();
     if (!trimmed) return;
@@ -588,6 +643,12 @@ export const ProductProvider = ({ children, userId }) => {
 
       if (orderErr) throw orderErr;
 
+      // Notify owner for large orders
+      const orderTotal = newOrders.reduce((sum, o) => sum + o.totalPrice, 0);
+      if (orderTotal > 5000) {
+        sendNotification('owner', 'Large Order Alert 🚀', `${userInfo?.name || 'A retailer'} just placed a huge order worth ₹${orderTotal.toFixed(2)}!`, 'success');
+      }
+
       // 2. Decrement physical stock in database
       for (const cartItem of cart) {
         const { data: dbProd, error: fetchErr } = await supabase
@@ -646,6 +707,12 @@ export const ProductProvider = ({ children, userId }) => {
 
       if (error) throw error;
 
+      if (newStatus === 'confirmed') {
+        sendNotification(order.userId, 'Order Confirmed', `Your order for ${order.productName} has been confirmed.`, 'success');
+      } else if (newStatus === 'delivered') {
+        sendNotification(order.userId, 'Order Delivered 📦', `Your order for ${order.productName} has been marked as delivered!`, 'success');
+      }
+
       setOrders((prev) =>
         prev.map((o) =>
           o.id === orderId
@@ -677,6 +744,8 @@ export const ProductProvider = ({ children, userId }) => {
         .insert([mapReactPaymentToDb(newPayment)]);
 
       if (error) throw error;
+
+      sendNotification(userId, 'Payment Logged 💰', `A payment of ₹${Number(amount).toFixed(2)} was successfully recorded on your ledger.`, 'success');
 
       setPayments((prev) => {
         if (prev.some(p => p.id === newPayment.id)) return prev;
@@ -716,6 +785,8 @@ export const ProductProvider = ({ children, userId }) => {
         orders,
         payments,
         brands,
+        categories,
+        notifications,
         cart,
         addProduct,
         updateProduct,
@@ -729,6 +800,8 @@ export const ProductProvider = ({ children, userId }) => {
         checkoutCart,
         updateOrderStatus,
         addPayment,
+        sendNotification,
+        markNotificationRead,
         resetData
       }}
     >

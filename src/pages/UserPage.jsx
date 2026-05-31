@@ -345,12 +345,13 @@ function AddressModal({ currentUser, onConfirm, onCancel }) {
 
 // ── Main UserPage ──────────────────────────────────────────────────────────
 export default function UserPage() {
-  const { products, orders, payments, brands, cart, addToCart, updateCartQty, removeFromCart, checkoutCart } = useProducts();
+  const { products, orders, payments, brands, categories, cart, addToCart, updateCartQty, removeFromCart, checkoutCart } = useProducts();
   const { currentUser } = useAuth();
 
   const [search, setSearch]           = useState('');
   const [sortBy, setSortBy]           = useState('name-asc');
   const [brandFilter, setBrandFilter] = useState('All');
+  const [categoryFilter, setCategoryFilter] = useState('All');
   const [dealsOnly, setDealsOnly]     = useState(false);
   const [isCartOpen, setIsCartOpen]   = useState(false);
   const [activeTab, setActiveTab]     = useState('store');
@@ -369,6 +370,7 @@ export default function UserPage() {
   const filteredProducts = validProducts.filter((p) => {
     if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
     if (brandFilter !== 'All' && (p.brand || 'Unbranded') !== brandFilter) return false;
+    if (categoryFilter !== 'All' && (p.category || 'Uncategorized') !== categoryFilter) return false;
     if (dealsOnly && !(p.isOfferActive && (p.discountPercentage > 0 || p.offerText))) return false;
     return true;
   }).sort((a, b) => {
@@ -647,6 +649,29 @@ export default function UserPage() {
                   </button>
                 )}
               </div>
+            </div>
+            
+            {/* Category Pills */}
+            <div className="flex flex-wrap gap-2 pt-2">
+              <button
+                onClick={() => setCategoryFilter('All')}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
+                  categoryFilter === 'All' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                All Categories
+              </button>
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setCategoryFilter(cat)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
+                    categoryFilter === cat ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
 

@@ -9,10 +9,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Edit Product Modal ──────────────────────────────────────────────────────
 function EditProductModal({ product, onClose, onSave }) {
-  const { brands } = useProducts();
+  const { brands, categories } = useProducts();
   const [form, setForm] = useState({
     name:               product.name,
     brand:              product.brand || '',
+    category:           product.category || 'Uncategorized',
     price:              String(product.price),
     stockQuantity:      String(product.stockQuantity),
     discountPercentage: String(product.discountPercentage),
@@ -47,6 +48,7 @@ function EditProductModal({ product, onClose, onSave }) {
       ...product,
       name:               form.name.trim(),
       brand:              form.brand.trim() || 'Unbranded',
+      category:           form.category,
       price:              priceNum,
       stockQuantity:      stockNum,
       discountPercentage: discountNum,
@@ -99,16 +101,22 @@ function EditProductModal({ product, onClose, onSave }) {
         {/* Body */}
         <form onSubmit={handleSave} className="p-6 space-y-4">
 
-          {/* Name & Brand */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Name, Brand, Category */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Product Name</label>
-              <input type="text" name="name" value={form.name} onChange={handleChange} className={inputCls} placeholder="e.g., Paracetamol 500mg" />
+              <input type="text" name="name" value={form.name} onChange={handleChange} className={inputCls} placeholder="e.g., Paracetamol" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Company / Brand</label>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Brand</label>
               <select name="brand" value={form.brand} onChange={handleChange} className={inputCls}>
                 {brands.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Category</label>
+              <select name="category" value={form.category} onChange={handleChange} className={inputCls}>
+                {categories.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
           </div>
@@ -226,7 +234,7 @@ function EditProductModal({ product, onClose, onSave }) {
 
 // ── OwnerPage ───────────────────────────────────────────────────────────────
 export default function OwnerPage() {
-  const { products, orders, payments, brands, addBrand, deleteBrand, updateBrand, addProduct, updateProduct, deleteProduct, updateOrderStatus, addPayment } = useProducts();
+  const { products, orders, payments, brands, categories, addBrand, deleteBrand, updateBrand, addProduct, updateProduct, deleteProduct, updateOrderStatus, addPayment } = useProducts();
   const { registeredUsers } = useAuth(); // All retailers
   
   const [view, setView] = useState('hub'); 
@@ -254,7 +262,7 @@ export default function OwnerPage() {
   const [editingProduct, setEditingProduct] = useState(null);
 
   const [newProduct, setNewProduct] = useState({
-    name: '', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false, expiryDate: ''
+    name: '', category: categories[0] || 'Uncategorized', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false, expiryDate: ''
   });
   const [formError, setFormError] = useState('');
 
@@ -278,8 +286,18 @@ export default function OwnerPage() {
     const discountNum = parseFloat(newProduct.discountPercentage);
     if (isNaN(discountNum) || discountNum < 0 || discountNum > 100)            return setFormError('Discount must be between 0% and 100%.');
 
-    addProduct({ name: newProduct.name, brand: selectedBrand, price: priceNum, stockQuantity: stockNum, discountPercentage: discountNum, offerText: newProduct.offerText.trim(), isOfferActive: newProduct.isOfferActive, expiryDate: newProduct.expiryDate });
-    setNewProduct({ name: '', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false, expiryDate: '' });
+    addProduct({
+      name: newProduct.name.trim(),
+      brand: selectedBrand,
+      category: newProduct.category,
+      price: priceNum,
+      stockQuantity: stockNum,
+      discountPercentage: discountNum,
+      offerText: newProduct.offerText.trim(),
+      isOfferActive: newProduct.isOfferActive,
+      expiryDate: newProduct.expiryDate
+    });
+    setNewProduct({ name: '', category: categories[0] || 'Uncategorized', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false, expiryDate: '' });
   };
 
   const handleUpdateStock = (product, newStockVal) => {
@@ -587,9 +605,17 @@ export default function OwnerPage() {
               <Plus className="text-teal-600" /> Add to {selectedBrand}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-600 mb-1">Product Name</label>
-                <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} className={inputCls} placeholder="e.g., Aspirin 100mg" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-600 mb-1">Product Name</label>
+                  <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} className={inputCls} placeholder="e.g., Aspirin 100mg" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-600 mb-1">Category</label>
+                  <select name="category" value={newProduct.category} onChange={handleInputChange} className={inputCls}>
+                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
