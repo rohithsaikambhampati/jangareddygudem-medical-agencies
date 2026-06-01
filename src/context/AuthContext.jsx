@@ -4,8 +4,8 @@ import { supabase } from '../supabaseClient';
 const AuthContext = createContext();
 
 const OWNER_CREDENTIALS = {
-  username: (import.meta.env.VITE_OWNER_USERNAME || 'JRG_MEDICAL_AGENCIES').trim(),
-  password: (import.meta.env.VITE_OWNER_PASSWORD || 'jrg_2026').trim(),
+  username: import.meta.env.VITE_OWNER_USERNAME,
+  password: import.meta.env.VITE_OWNER_PASSWORD,
   role: 'owner',
   name: 'Agency Owner'
 };
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
 
     if (asOwner) {
       if (
-        (trimUser === OWNER_CREDENTIALS.username.toLowerCase() && trimPass === OWNER_CREDENTIALS.password) ||
+        (trimUser === (OWNER_CREDENTIALS.username || '').toLowerCase() && trimPass === OWNER_CREDENTIALS.password) ||
         (trimUser === 'owner' && trimPass === 'owner')
       ) {
         const user = { ...OWNER_CREDENTIALS, id: 'owner-001' };
