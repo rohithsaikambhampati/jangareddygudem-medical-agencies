@@ -454,8 +454,10 @@ export const ProductProvider = ({ children, userId }) => {
         if (prev.some(p => p.id === newProduct.id)) return prev;
         return [newProduct, ...prev];
       });
+      return { success: true };
     } catch (err) {
       console.error('Error adding product:', err);
+      return { success: false, message: err.message || 'Failed to add product.' };
     }
   };
 
@@ -516,8 +518,10 @@ export const ProductProvider = ({ children, userId }) => {
           setNotifications(prev => prev.filter(n => n.id !== sub.id));
         }
       }
+      return { success: true };
     } catch (err) {
       console.error('Error updating product:', err);
+      return { success: false, message: err.message || 'Failed to update product.' };
     }
   };
 

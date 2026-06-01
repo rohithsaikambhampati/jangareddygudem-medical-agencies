@@ -32,7 +32,7 @@ function EditProductModal({ product, onClose, onSave }) {
     setError('');
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -46,7 +46,7 @@ function EditProductModal({ product, onClose, onSave }) {
     if (isNaN(discountNum) || discountNum < 0 || discountNum > 100)
       return setError('Discount must be between 0 and 100.');
 
-    onSave({
+    const res = await onSave({
       ...product,
       name:               form.name.trim(),
       brand:              form.brand.trim() || 'Unbranded',
@@ -60,8 +60,12 @@ function EditProductModal({ product, onClose, onSave }) {
       batch:              form.batch.trim(),
     });
 
-    setSaved(true);
-    setTimeout(() => { setSaved(false); onClose(); }, 700);
+    if (res && !res.success) {
+      setError(res.message || 'Failed to save changes.');
+    } else {
+      setSaved(true);
+      setTimeout(() => { setSaved(false); onClose(); }, 700);
+    }
   };
 
   const inputCls = 'w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/25 focus:border-indigo-500 transition text-sm text-zinc-900 dark:text-zinc-100';
@@ -298,7 +302,7 @@ export default function OwnerPage() {
     setNewProduct(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
     if (!newProduct.name.trim())                                               return setFormError('Product Name is required.');
@@ -309,7 +313,7 @@ export default function OwnerPage() {
     const discountNum = parseFloat(newProduct.discountPercentage);
     if (isNaN(discountNum) || discountNum < 0 || discountNum > 100)            return setFormError('Discount must be between 0% and 100%.');
 
-    addProduct({
+    const res = await addProduct({
       name: newProduct.name.trim(),
       brand: selectedBrand,
       category: newProduct.category,
@@ -321,8 +325,13 @@ export default function OwnerPage() {
       expiryDate: newProduct.expiryDate,
       batch: newProduct.batch.trim()
     });
-    setNewProduct({ name: '', category: categories[0] || 'Uncategorized', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false, expiryDate: '', batch: '' });
-    setFormError('');
+
+    if (res && !res.success) {
+      setFormError(res.message || 'Failed to add product.');
+    } else {
+      setNewProduct({ name: '', category: categories[0] || 'Uncategorized', price: '', stockQuantity: '', discountPercentage: '0', offerText: '', isOfferActive: false, expiryDate: '', batch: '' });
+      setFormError('');
+    }
   };
 
   const handleUpdateStock = (product, newStockVal) => {

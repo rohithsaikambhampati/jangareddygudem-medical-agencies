@@ -30,3 +30,4 @@ dist-ssr
 .env.development
 
 .vercel
+.env*
