@@ -149,7 +149,7 @@ function NotificationDropdown() {
 }
 
 // Theme Toggle Component
-function ThemeToggle() {
+export function ThemeToggle() {
   const [isDark, setIsDark] = useState(() => {
     return localStorage.getItem('theme') === 'dark' || 
            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);

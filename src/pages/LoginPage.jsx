@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Activity, ShieldCheck, User, Lock, Eye, EyeOff, UserPlus, LogIn, AlertCircle, ArrowRight, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ThemeToggle } from '../App';
 
 export default function LoginPage() {
   const { login, register } = useAuth();
@@ -53,6 +54,11 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
+      {/* Theme Toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
+
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl" />
