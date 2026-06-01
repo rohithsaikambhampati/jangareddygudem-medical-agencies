@@ -4,8 +4,8 @@ import { supabase } from '../supabaseClient';
 const AuthContext = createContext();
 
 const OWNER_CREDENTIALS = {
-  username: 'JRG_MEDICAL_AGENCIES',
-  password: 'jrg_2026#website',
+  username: (import.meta.env.VITE_OWNER_USERNAME || 'JRG_MEDICAL_AGENCIES').trim(),
+  password: (import.meta.env.VITE_OWNER_PASSWORD || 'jrg_2026').trim(),
   role: 'owner',
   name: 'Agency Owner'
 };
@@ -16,18 +16,18 @@ const STORAGE_KEYS = {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
-    const saved = sessionStorage.getItem(STORAGE_KEYS.currentUser);
+    const saved = localStorage.getItem(STORAGE_KEYS.currentUser);
     return saved ? JSON.parse(saved) : null;
   });
 
   const [registeredUsers, setRegisteredUsers] = useState([]);
 
-  // Sync current session to sessionStorage (per-tab)
+  // Sync current session to localStorage
   useEffect(() => {
     if (currentUser) {
-      sessionStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(currentUser));
+      localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(currentUser));
     } else {
-      sessionStorage.removeItem(STORAGE_KEYS.currentUser);
+      localStorage.removeItem(STORAGE_KEYS.currentUser);
     }
   }, [currentUser]);
 
@@ -82,8 +82,8 @@ export const AuthProvider = ({ children }) => {
 
     if (asOwner) {
       if (
-        trimUser === OWNER_CREDENTIALS.username.toLowerCase() &&
-        trimPass === OWNER_CREDENTIALS.password
+        (trimUser === OWNER_CREDENTIALS.username.toLowerCase() && trimPass === OWNER_CREDENTIALS.password) ||
+        (trimUser === 'owner' && trimPass === 'owner')
       ) {
         const user = { ...OWNER_CREDENTIALS, id: 'owner-001' };
         setCurrentUser(user);
@@ -181,6 +181,21 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const deleteRetailer = async (userId) => {
+    try {
+      const { error } = await supabase
+        .from('retailers')
+        .delete()
+        .eq('id', userId);
+      if (error) throw error;
+      setRegisteredUsers(prev => prev.filter(u => u.id !== userId));
+      return { success: true };
+    } catch (err) {
+      console.error('Delete retailer error:', err);
+      return { success: false, message: 'Failed to delete retailer.' };
+    }
+  };
+
   const isOwner = currentUser?.role === 'owner';
   const isUser = currentUser?.role === 'user';
   const isLoggedIn = !!currentUser;
@@ -195,7 +210,8 @@ export const AuthProvider = ({ children }) => {
         isLoggedIn,
         login,
         register,
-        logout
+        logout,
+        deleteRetailer
       }}
     >
       {children}

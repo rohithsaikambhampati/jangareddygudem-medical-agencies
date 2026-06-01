@@ -100,7 +100,8 @@ const mapDbProductToReact = (dbProd) => ({
   discountPercentage: Number(dbProd.discount_percentage || 0),
   isOfferActive: dbProd.is_offer_active,
   offerText: dbProd.offer_text || '',
-  expiryDate: dbProd.expiry_date || null
+  expiryDate: dbProd.expiry_date || null,
+  batch: dbProd.batch || null
 });
 
 const mapReactProductToDb = (reactProd) => ({
@@ -113,7 +114,8 @@ const mapReactProductToDb = (reactProd) => ({
   discount_percentage: reactProd.discountPercentage,
   is_offer_active: reactProd.isOfferActive,
   offer_text: reactProd.offerText,
-  expiry_date: reactProd.expiryDate || null
+  expiry_date: reactProd.expiryDate || null,
+  batch: reactProd.batch || null
 });
 
 const mapDbOrderToReact = (dbOrd) => ({
@@ -457,16 +459,63 @@ export const ProductProvider = ({ children, userId }) => {
     }
   };
 
+  const subscribeToRestock = async (productId, productName) => {
+    if (!userId) return { success: false, message: 'Must be logged in to subscribe.' };
+    
+    const alreadySubscribed = notifications.some(
+      n => n.user_id === userId && n.title === 'Restock Subscription' && n.message === productId
+    );
+    if (alreadySubscribed) return { success: true };
+
+    try {
+      await sendNotification(userId, 'Restock Subscription', productId, 'restock_sub');
+      return { success: true };
+    } catch (err) {
+      console.error('Error subscribing to restock:', err);
+      return { success: false };
+    }
+  };
+
   const updateProduct = async (updatedProduct) => {
     try {
+      const oldProduct = products.find(p => p.id === updatedProduct.id);
+      const wasOutOfStock = oldProduct ? oldProduct.stockQuantity === 0 : false;
+      const isNowInStock = updatedProduct.stockQuantity > 0;
+
       const { error } = await supabase
         .from('products')
         .update(mapReactProductToDb(updatedProduct))
         .eq('id', updatedProduct.id);
       if (error) throw error;
+      
       setProducts((prev) =>
         prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
       );
+
+      // If stock went from 0 to > 0, notify subscribers
+      if (wasOutOfStock && isNowInStock) {
+        const subs = notifications.filter(
+          n => n.title === 'Restock Subscription' && n.message === updatedProduct.id
+        );
+
+        for (const sub of subs) {
+          // Send notification to subscriber
+          await sendNotification(
+            sub.user_id,
+            'Product Restocked! 🎉',
+            `Product "${updatedProduct.name}" is now back in stock with ${updatedProduct.stockQuantity} units available!`,
+            'success'
+          );
+
+          // Delete the restock subscription record
+          await supabase
+            .from('notifications')
+            .delete()
+            .eq('id', sub.id);
+
+          setNotifications(prev => prev.filter(n => n.id !== sub.id));
+        }
+      }
     } catch (err) {
       console.error('Error updating product:', err);
     }
@@ -643,8 +692,14 @@ export const ProductProvider = ({ children, userId }) => {
 
       if (orderErr) throw orderErr;
 
-      // Notify owner for large orders
+      // Compute total order amount
       const orderTotal = newOrders.reduce((sum, o) => sum + o.totalPrice, 0);
+
+      // Notify owner for any order placed
+      await sendNotification('owner', 'New Order Placed', `A retailer placed a new order for ₹${orderTotal.toFixed(2)}.`, 'info');
+
+
+      // Notify owner for large orders
       if (orderTotal > 5000) {
         sendNotification('owner', 'Large Order Alert 🚀', `${userInfo?.name || 'A retailer'} just placed a huge order worth ₹${orderTotal.toFixed(2)}!`, 'success');
       }
@@ -682,18 +737,26 @@ export const ProductProvider = ({ children, userId }) => {
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-    const labels = {
-      processing: 'Order Received',
-      confirmed:  'Order Confirmed',
-      delivered:  'Delivered'
-    };
+    const statusStyles  = {
+    processing: 'bg-slate-100 text-slate-600 border-slate-200',
+    confirmed:  'bg-teal-100 text-teal-700 border-teal-200',
+    delivered:  'bg-emerald-100 text-emerald-700 border-emerald-200',
+    cancelled: 'bg-rose-100 text-rose-700 border-rose-200'
+  };
+
+  const statusDisplayLabel = {
+    processing: 'Processing',
+    confirmed: 'Confirmed',
+    delivered: 'Delivered',
+    cancelled: 'Cancelled'
+  };
 
     const order = orders.find((o) => o.id === orderId);
     if (!order) return;
 
     const newHistory = [
       ...(order.statusHistory || []),
-      { status: newStatus, label: labels[newStatus], date: dateStr, time: timeStr }
+      { status: newStatus, label: statusDisplayLabel[newStatus], date: dateStr, time: timeStr }
     ];
 
     try {
@@ -711,6 +774,38 @@ export const ProductProvider = ({ children, userId }) => {
         sendNotification(order.userId, 'Order Confirmed', `Your order for ${order.productName} has been confirmed.`, 'success');
       } else if (newStatus === 'delivered') {
         sendNotification(order.userId, 'Order Delivered 📦', `Your order for ${order.productName} has been marked as delivered!`, 'success');
+      } else if (newStatus === 'cancelled') {
+        sendNotification(order.userId, 'Order Cancelled', `Your order for ${order.productName} has been cancelled by the owner.`, 'error');
+
+        // Restore stock in Supabase database
+        try {
+          supabase
+            .from('products')
+            .select('stock_quantity')
+            .eq('id', order.productId)
+            .single()
+            .then(({ data: dbProd, error: fetchErr }) => {
+              if (!fetchErr && dbProd) {
+                const newStock = dbProd.stock_quantity + (order.totalDispatched || order.quantity);
+                supabase
+                  .from('products')
+                  .update({ stock_quantity: newStock })
+                  .eq('id', order.productId)
+                  .then(() => {});
+              }
+            });
+        } catch (stockErr) {
+          console.error('Error restoring stock on cancel:', stockErr);
+        }
+
+        // Restore stock in local state immediately
+        setProducts((prev) =>
+          prev.map((p) =>
+            p.id === order.productId
+              ? { ...p, stockQuantity: p.stockQuantity + (order.totalDispatched || order.quantity) }
+              : p
+          )
+        );
       }
 
       setOrders((prev) =>
@@ -802,6 +897,7 @@ export const ProductProvider = ({ children, userId }) => {
         addPayment,
         sendNotification,
         markNotificationRead,
+        subscribeToRestock,
         resetData
       }}
     >
