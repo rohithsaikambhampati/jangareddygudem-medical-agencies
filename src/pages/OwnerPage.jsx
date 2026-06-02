@@ -41,6 +41,7 @@ function EditProductModal({ product, onClose, onSave }) {
     const discountNum = parseFloat(form.discountPercentage);
 
     if (!form.name.trim())                             return setError('Product name is required.');
+    if (!form.expiryDate)                              return setError('Expiry date is required.');
     if (isNaN(priceNum) || priceNum < 0)               return setError('Price must be a positive number.');
     if (isNaN(stockNum) || stockNum < 0)               return setError('Stock must be a positive number.');
     if (isNaN(discountNum) || discountNum < 0 || discountNum > 100)
@@ -208,8 +209,8 @@ function EditProductModal({ product, onClose, onSave }) {
                 <input type="text" name="batch" value={form.batch} onChange={handleChange} className={inputCls} placeholder="e.g. BATCH-001" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider mb-1.5">Expiry Date</label>
-                <input type="date" name="expiryDate" value={form.expiryDate} onChange={handleChange} className={inputCls} />
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider mb-1.5">Expiry Date *</label>
+                <input type="date" name="expiryDate" value={form.expiryDate} onChange={handleChange} className={inputCls} required />
               </div>
             </div>
           </div>
@@ -306,6 +307,7 @@ export default function OwnerPage() {
     e.preventDefault();
     setFormError('');
     if (!newProduct.name.trim())                                               return setFormError('Product Name is required.');
+    if (!newProduct.expiryDate)                                                return setFormError('Expiry Date is required.');
     const priceNum = parseFloat(newProduct.price);
     if (isNaN(priceNum) || priceNum < 0)                                       return setFormError('Price must be a positive number.');
     const stockNum = parseInt(newProduct.stockQuantity, 10);
@@ -724,8 +726,8 @@ export default function OwnerPage() {
                   <input type="text" name="batch" value={newProduct.batch} onChange={handleInputChange} className={inputCls} placeholder="e.g. BATCH-001" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-1">Expiry Date</label>
-                  <input type="date" name="expiryDate" value={newProduct.expiryDate} onChange={handleInputChange} className={inputCls} />
+                  <label className="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-1">Expiry Date *</label>
+                  <input type="date" name="expiryDate" value={newProduct.expiryDate} onChange={handleInputChange} className={inputCls} required />
                 </div>
               </div>
               <div className="flex items-center gap-2 py-1">
