@@ -16,18 +16,18 @@ const STORAGE_KEYS = {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.currentUser);
+    const saved = sessionStorage.getItem(STORAGE_KEYS.currentUser);
     return saved ? JSON.parse(saved) : null;
   });
 
   const [registeredUsers, setRegisteredUsers] = useState([]);
 
-  // Sync current session to localStorage
+  // Sync current session to sessionStorage
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(currentUser));
+      sessionStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(currentUser));
     } else {
-      localStorage.removeItem(STORAGE_KEYS.currentUser);
+      sessionStorage.removeItem(STORAGE_KEYS.currentUser);
     }
   }, [currentUser]);
 
