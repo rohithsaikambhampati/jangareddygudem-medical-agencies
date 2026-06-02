@@ -765,7 +765,7 @@ export default function OwnerPage() {
                       const hasDiscount = product.isOfferActive && product.discountPercentage > 0;
                       const finalPrice = hasDiscount ? product.price * (1 - product.discountPercentage / 100) : product.price;
                       return (
-                        <tr key={product.id} onClick={() => setEditingProduct(product)} className="hover:bg-indigo-50 dark:bg-indigo-500/20/40 transition cursor-pointer">
+                        <tr key={product.id} onClick={() => setEditingProduct(product)} className="hover:bg-indigo-50 dark:hover:bg-indigo-950/60 transition cursor-pointer">
                           <td className="px-5 py-4">
                             <div className="font-semibold text-zinc-900 dark:text-zinc-100">{product.name}</div>
                             {isLowStock && <span className="text-[10px] text-rose-500 font-bold bg-rose-50 dark:bg-rose-500/20 px-2 py-0.5 rounded-full border border-rose-100 dark:border-rose-500/20">Low Stock</span>}
