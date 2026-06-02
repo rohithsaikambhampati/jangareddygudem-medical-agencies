@@ -913,29 +913,35 @@ export default function OwnerPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center bg-white dark:bg-[#18181b] p-3 rounded-xl border border-zinc-200 dark:border-white/10">
+                    {/* Order details */}
+                    <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5] dark:bg-[#27272a]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
+                      <div className="p-1">
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Billed</p>
+                        <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.quantity}</p>
+                      </div>
+                      <div className="p-1">
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Dispatched</p>
+                        <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.totalDispatched || order.quantity}</p>
+                      </div>
+                      <div className="p-1">
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Free</p>
+                        <p className={`text-sm sm:text-base font-extrabold mt-0.5 ${order.freeUnits > 0 ? 'text-emerald-600 dark:text-emerald-400 font-black' : 'text-zinc-400'}`}>
+                          {order.freeUnits > 0 ? `+${order.freeUnits} 🎁` : '0'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Price & Invoice Action Row */}
+                    <div className="flex items-center justify-between pt-3 border-t border-zinc-200 dark:border-white/10">
                       <div>
-                        <p className="text-[10px] text-zinc-400 font-semibold">Billed Qty</p>
-                        <p className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100">{order.quantity}</p>
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Invoice Total</p>
+                        <p className="text-base sm:text-lg font-black text-indigo-700 dark:text-indigo-400 font-mono mt-0.5">₹{order.totalPrice?.toFixed(2)}</p>
                       </div>
-                      <div>
-                        <p className="text-[10px] text-zinc-400 font-semibold">Dispatched</p>
-                        <p className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100">{order.totalDispatched || order.quantity}</p>
-                      </div>
-                      {order.freeUnits > 0 && (
-                        <div className="bg-emerald-50 dark:bg-emerald-500/20 rounded-xl p-0.5 border border-emerald-100 dark:border-emerald-500/20">
-                          <p className="text-[10px] text-emerald-600 font-semibold">Free Units</p>
-                          <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400">+{order.freeUnits} 🎁</p>
-                        </div>
-                      )}
-                      <div className="bg-transparent rounded-xl flex flex-col items-center justify-center gap-1">
-                        <p className="text-sm font-extrabold text-indigo-700 dark:text-indigo-400 font-mono">₹{order.totalPrice?.toFixed(2)}</p>
-                        <Link to={`/invoice/${order.id}`} 
-                           className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm w-full justify-center">
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                          Invoice
-                        </Link>
-                      </div>
+                      <Link to={`/invoice/${order.id}`} 
+                         className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Invoice
+                      </Link>
                     </div>
 
                     {order.deliveryAddress && typeof order.deliveryAddress === 'object' && (
@@ -1212,25 +1218,35 @@ export default function OwnerPage() {
                         )}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-                      <div className="bg-white dark:bg-[#18181b] rounded-xl p-2 border border-zinc-200 dark:border-white/10">
-                        <p className="text-[10px] text-zinc-400 font-semibold">Billed Qty</p>
-                        <p className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100">{order.quantity}</p>
+                    {/* Order details */}
+                    <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5] dark:bg-[#27272a]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
+                      <div className="p-1">
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Billed</p>
+                        <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.quantity}</p>
                       </div>
-                      <div className="bg-white dark:bg-[#18181b] rounded-xl p-2 border border-zinc-200 dark:border-white/10">
-                        <p className="text-[10px] text-zinc-400 font-semibold">Dispatched</p>
-                        <p className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100">{order.totalDispatched || order.quantity}</p>
+                      <div className="p-1">
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Dispatched</p>
+                        <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.totalDispatched || order.quantity}</p>
                       </div>
-                      {order.freeUnits > 0 && (
-                        <div className="bg-emerald-50 dark:bg-emerald-500/20 rounded-xl p-2 border border-emerald-100 dark:border-emerald-500/20">
-                          <p className="text-[10px] text-emerald-600 font-semibold">Free Units</p>
-                          <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400">+{order.freeUnits} 🎁</p>
-                        </div>
-                      )}
-                      <div className="bg-indigo-50 dark:bg-indigo-500/20 rounded-xl p-2 border border-indigo-100 dark:border-indigo-500/30">
-                        <p className="text-[10px] text-indigo-600 font-semibold">Invoice</p>
-                        <p className="text-sm font-extrabold text-indigo-700 dark:text-indigo-400 font-mono">₹{order.totalPrice?.toFixed(2)}</p>
+                      <div className="p-1">
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Free</p>
+                        <p className={`text-sm sm:text-base font-extrabold mt-0.5 ${order.freeUnits > 0 ? 'text-emerald-600 dark:text-emerald-400 font-black' : 'text-zinc-400'}`}>
+                          {order.freeUnits > 0 ? `+${order.freeUnits} 🎁` : '0'}
+                        </p>
                       </div>
+                    </div>
+
+                    {/* Price & Invoice Action Row */}
+                    <div className="flex items-center justify-between pt-3 border-t border-zinc-200 dark:border-white/10">
+                      <div>
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Invoice Total</p>
+                        <p className="text-base sm:text-lg font-black text-indigo-700 dark:text-indigo-400 font-mono mt-0.5">₹{order.totalPrice?.toFixed(2)}</p>
+                      </div>
+                      <Link to={`/invoice/${order.id}`} 
+                         className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Invoice
+                      </Link>
                     </div>
 
                     {order.deliveryAddress && typeof order.deliveryAddress === 'object' && (

@@ -192,18 +192,19 @@ function AppHeader() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <div className="bg-indigo-600 text-white p-1.5 sm:p-2 rounded-xl shadow-md shadow-indigo-500/20 shrink-0">
             <Activity className="h-4 w-4 sm:h-5 sm:w-5 animate-pulse" />
           </div>
           <div>
-            <span className="font-extrabold text-xs sm:text-xl tracking-tight text-zinc-950 dark:text-white block leading-tight">The Jangareddygudem</span>
-            <span className="font-extrabold text-xs sm:text-xl tracking-tight text-zinc-950 dark:text-white block leading-tight -mt-0.5">Medical Agencies</span>
+            <span className="font-extrabold text-sm sm:text-xl tracking-tight text-zinc-950 dark:text-white block sm:hidden leading-tight">JRG Medical Agencies</span>
+            <span className="font-extrabold text-xs sm:text-xl tracking-tight text-zinc-950 dark:text-white hidden sm:block leading-tight">The Jangareddygudem</span>
+            <span className="font-extrabold text-xs sm:text-xl tracking-tight text-zinc-950 dark:text-white hidden sm:block leading-tight -mt-0.5">Medical Agencies</span>
           </div>
         </div>
 
         {/* Right side: Role badge + user info + logout */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
 
           <ThemeToggle />
           <NotificationDropdown />
@@ -223,8 +224,8 @@ function AppHeader() {
           )}
 
           {/* User pill */}
-          <div className="flex items-center gap-2 bg-transparent dark:bg-transparent border border-zinc-300 dark:border-white/15 rounded-xl px-3 py-1.5">
-            <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black text-white ${isOwner ? 'bg-purple-500' : 'bg-indigo-500'}`}>
+          <div className="flex items-center gap-2 bg-transparent dark:bg-transparent sm:border sm:border-zinc-300 dark:sm:border-white/15 rounded-xl sm:px-3 sm:py-1.5">
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black text-white ${isOwner ? 'bg-purple-500' : 'bg-indigo-500'} shrink-0`}>
               {currentUser?.name?.charAt(0).toUpperCase() || '?'}
             </div>
             <div className="hidden sm:block">
@@ -237,7 +238,7 @@ function AppHeader() {
           <button
             onClick={logout}
             title="Sign out"
-            className="flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-500 hover:text-rose-500 hover:bg-rose-50 dark:bg-rose-500/20 px-3 py-2 rounded-xl transition duration-200 font-semibold border border-transparent hover:border-rose-100 dark:border-rose-500/20"
+            className="flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-500 hover:text-rose-500 hover:bg-rose-50 dark:bg-rose-500/20 p-1.5 sm:px-3 sm:py-2 rounded-xl transition duration-200 font-semibold border border-transparent hover:border-rose-100 dark:border-rose-500/20"
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Logout</span>

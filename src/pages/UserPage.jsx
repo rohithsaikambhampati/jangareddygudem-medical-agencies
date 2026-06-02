@@ -192,31 +192,36 @@ function MyOrders({ userId }) {
           </div>
 
           {/* Order details */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-            <div className="bg-transparent dark:bg-transparent rounded-xl p-2.5">
-              <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-wide">Billed Qty</p>
-              <p className="text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.quantity}</p>
+          <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5] dark:bg-[#27272a]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
+            <div className="p-1">
+              <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Billed</p>
+              <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.quantity}</p>
             </div>
-            <div className="bg-transparent dark:bg-transparent rounded-xl p-2.5">
-              <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-wide">Dispatched</p>
-              <p className="text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.totalDispatched || order.quantity}</p>
+            <div className="p-1">
+              <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Dispatched</p>
+              <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.totalDispatched || order.quantity}</p>
             </div>
-            {order.freeUnits > 0 && (
-              <div className="bg-emerald-50 dark:bg-emerald-500/20 border border-emerald-100 dark:border-emerald-500/20 rounded-xl p-2.5">
-                <p className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wide">Free Units</p>
-                <p className="text-base font-extrabold text-emerald-700 dark:text-emerald-400 mt-0.5">+{order.freeUnits} 🎁</p>
-              </div>
+            <div className="p-1">
+              <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Free</p>
+              <p className={`text-sm sm:text-base font-extrabold mt-0.5 ${order.freeUnits > 0 ? 'text-emerald-600 dark:text-emerald-400 font-black' : 'text-zinc-400'}`}>
+                {order.freeUnits > 0 ? `+${order.freeUnits} 🎁` : '0'}
+              </p>
+            </div>
+          </div>
+
+          {/* Price & Invoice Action Row */}
+          <div className="flex items-center justify-between pt-3 border-t border-zinc-200 dark:border-white/10">
+            <div>
+              <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Invoice Total</p>
+              <p className="text-base sm:text-lg font-black text-indigo-700 dark:text-indigo-400 font-mono mt-0.5">₹{order.totalPrice?.toFixed(2)}</p>
+            </div>
+            {order.status !== 'processing' && order.status !== 'cancelled' && (
+              <Link to={`/invoice/${order.id}`} 
+                 className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Download Invoice
+              </Link>
             )}
-             <div className="bg-transparent flex flex-col items-start justify-center">
-               <p className="text-base font-extrabold text-indigo-700 dark:text-indigo-400 font-mono mt-0.5">₹{order.totalPrice?.toFixed(2)}</p>
-               {order.status !== 'processing' && order.status !== 'cancelled' && (
-                 <Link to={`/invoice/${order.id}`} 
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm mt-1">
-                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                   Download Invoice
-                 </Link>
-               )}
-             </div>
           </div>
 
           {/* Delivery Address */}
@@ -563,26 +568,27 @@ export default function UserPage() {
       <div className="flex gap-1 bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-white/10 shadow-sm p-1.5 rounded-2xl">
         <button
           onClick={() => setActiveTab('store')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
+          className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
             activeTab === 'store'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
               : 'text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:text-zinc-100 hover:bg-transparent dark:bg-transparent'
           }`}
         >
-          <ShoppingBag className="h-4 w-4" /> Store
+          <ShoppingBag className="h-4 w-4 shrink-0" />
+          <span>Store</span>
         </button>
         <button
           onClick={() => setActiveTab('orders')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
+          className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
             activeTab === 'orders'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
               : 'text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:text-zinc-100 hover:bg-transparent dark:bg-transparent'
           }`}
         >
-          <ClipboardList className="h-4 w-4" />
-          My Orders
+          <ClipboardList className="h-4 w-4 shrink-0" />
+          <span><span className="hidden sm:inline">My </span>Orders</span>
           {myOrdersCount > 0 && (
-            <span className={`text-xs font-black px-1.5 py-0.5 rounded-full ${
+            <span className={`text-[10px] sm:text-xs font-black px-1.5 py-0.5 rounded-full ${
               activeTab === 'orders' ? 'bg-white dark:bg-[#18181b]/25 text-white' : 'bg-indigo-100 text-indigo-700 dark:text-indigo-400'
             }`}>
               {myOrdersCount}
@@ -591,19 +597,19 @@ export default function UserPage() {
         </button>
         <button
           onClick={() => setActiveTab('ledger')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
+          className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
             activeTab === 'ledger'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
               : 'text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:text-zinc-100 hover:bg-transparent dark:bg-transparent'
           }`}
         >
-          <IndianRupee className="h-4 w-4" />
-          My Payments
+          <IndianRupee className="h-4 w-4 shrink-0" />
+          <span><span className="hidden sm:inline">My </span>Payments</span>
           {remainingOutstanding > 0 && (
-            <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
+            <span className={`text-[9px] sm:text-[10px] font-black px-1.5 py-0.5 rounded-full ${
               activeTab === 'ledger' ? 'bg-rose-500 text-white' : 'bg-rose-100 text-rose-700 dark:text-rose-400'
             }`}>
-              Due: ₹{remainingOutstanding.toFixed(2)}
+              <span className="hidden sm:inline">Due: </span>₹{Math.round(remainingOutstanding)}
             </span>
           )}
         </button>
@@ -663,11 +669,11 @@ export default function UserPage() {
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm"
                 />
               </div>
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                 <select
                   value={brandFilter}
                   onChange={(e) => setBrandFilter(e.target.value)}
-                  className="py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-600 dark:text-zinc-400 bg-transparent dark:bg-transparent cursor-pointer"
+                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-600 dark:text-zinc-400 bg-transparent dark:bg-transparent cursor-pointer"
                 >
                   {uniqueBrands.map(b => <option key={b} value={b}>{b === 'All' ? 'All Brands' : b}</option>)}
                 </select>
@@ -675,7 +681,7 @@ export default function UserPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-600 dark:text-zinc-400 bg-transparent dark:bg-transparent cursor-pointer"
+                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-600 dark:text-zinc-400 bg-transparent dark:bg-transparent cursor-pointer"
                 >
                   <option value="name-asc">A to Z</option>
                   <option value="name-desc">Z to A</option>
@@ -683,16 +689,16 @@ export default function UserPage() {
                   <option value="price-desc">Price: High to Low</option>
                 </select>
 
-                <label className="flex items-center gap-2 cursor-pointer py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent transition select-none bg-white dark:bg-[#18181b]">
+                <label className="flex-1 sm:flex-initial flex items-center justify-center gap-2 cursor-pointer py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent transition select-none bg-white dark:bg-[#18181b]">
                   <input type="checkbox" checked={dealsOnly} onChange={e => setDealsOnly(e.target.checked)}
                     className="w-4 h-4 text-indigo-600 border-zinc-400 dark:border-white/20 rounded focus:ring-indigo-500" />
-                  <span className="text-sm font-bold text-zinc-600 dark:text-zinc-400">Deals Only</span>
+                  <span className="text-sm font-bold text-zinc-600 dark:text-zinc-400">Deals</span>
                 </label>
 
                 {totalCartItemsPaid > 0 && (
                   <button
                     onClick={() => setIsCartOpen(true)}
-                    className="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 px-4 py-2.5 rounded-xl text-sm font-bold transition shrink-0 ml-auto"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 px-4 py-2.5 rounded-xl text-sm font-bold transition shrink-0 sm:ml-auto"
                   >
                     <ShoppingBag className="h-4 w-4" />
                     Verify Order ({totalCartItemsPaid})
@@ -702,7 +708,7 @@ export default function UserPage() {
             </div>
             
             {/* Category Pills */}
-            <div className="flex flex-wrap gap-2 pt-2">
+            <div className="flex overflow-x-auto gap-2 pt-2 pb-1 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
               <button
                 onClick={() => setCategoryFilter('All')}
                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
