@@ -116,14 +116,14 @@ function EditProductModal({ product, onClose, onSave }) {
             </div>
             <div>
               <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider mb-1.5">Brand</label>
-              <select name="brand" value={form.brand} onChange={handleChange} className={inputCls}>
-                {brands.map(b => <option key={b} value={b}>{b}</option>)}
+              <select name="brand" value={form.brand} onChange={handleChange} className={`${inputCls} bg-white dark:bg-[#18181b]`}>
+                {brands.map(b => <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" key={b} value={b}>{b}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider mb-1.5">Category</label>
-              <select name="category" value={form.category} onChange={handleChange} className={inputCls}>
-                {categories.map(c => <option key={c} value={c}>{c}</option>)}
+              <select name="category" value={form.category} onChange={handleChange} className={`${inputCls} bg-white dark:bg-[#18181b]`}>
+                {categories.map(c => <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" key={c} value={c}>{c}</option>)}
               </select>
             </div>
           </div>
@@ -690,8 +690,8 @@ export default function OwnerPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-1">Category</label>
-                  <select name="category" value={newProduct.category} onChange={handleInputChange} className={inputCls}>
-                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                  <select name="category" value={newProduct.category} onChange={handleInputChange} className={`${inputCls} bg-white dark:bg-[#18181b]`}>
+                    {categories.map(c => <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
               </div>

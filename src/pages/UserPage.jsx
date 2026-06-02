@@ -673,20 +673,20 @@ export default function UserPage() {
                 <select
                   value={brandFilter}
                   onChange={(e) => setBrandFilter(e.target.value)}
-                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-600 dark:text-zinc-400 bg-transparent dark:bg-transparent cursor-pointer"
+                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#18181b] cursor-pointer"
                 >
-                  {uniqueBrands.map(b => <option key={b} value={b}>{b === 'All' ? 'All Brands' : b}</option>)}
+                  {uniqueBrands.map(b => <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" key={b} value={b}>{b === 'All' ? 'All Brands' : b}</option>)}
                 </select>
 
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-600 dark:text-zinc-400 bg-transparent dark:bg-transparent cursor-pointer"
+                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#18181b] cursor-pointer"
                 >
-                  <option value="name-asc">A to Z</option>
-                  <option value="name-desc">Z to A</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
+                  <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" value="name-asc">A to Z</option>
+                  <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" value="name-desc">Z to A</option>
+                  <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" value="price-asc">Price: Low to High</option>
+                  <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" value="price-desc">Price: High to Low</option>
                 </select>
 
                 <label className="flex-1 sm:flex-initial flex items-center justify-center gap-2 cursor-pointer py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent transition select-none bg-white dark:bg-[#18181b]">
