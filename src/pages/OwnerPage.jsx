@@ -906,7 +906,7 @@ export default function OwnerPage() {
                              {nextBtnLabel[nextStatus] || 'Update Status'}
                           </button>
                         )}
-                        {(safeStatus === 'processing' || safeStatus === 'confirmed') && (
+                        {safeStatus === 'processing' && (
                           <button onClick={() => updateOrderStatus(order.id, 'cancelled')}
                             className="text-xs font-bold px-3 py-1.5 rounded-lg bg-rose-100 text-rose-700 dark:text-rose-400 border border-rose-200 hover:bg-rose-200 transition">
                             Cancel Order
