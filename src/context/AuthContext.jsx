@@ -10,24 +10,46 @@ const OWNER_CREDENTIALS = {
   name: 'Agency Owner'
 };
 
-const STORAGE_KEYS = {
-  currentUser: 'pharma_current_user_v4'
-};
-
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
-    const saved = sessionStorage.getItem(STORAGE_KEYS.currentUser);
-    return saved ? JSON.parse(saved) : null;
+    // 1. Get or create tabId in sessionStorage
+    let tabId = sessionStorage.getItem('pharma_tab_id');
+    if (!tabId) {
+      tabId = `tab_${Math.random().toString(36).substring(2, 11)}`;
+      sessionStorage.setItem('pharma_tab_id', tabId);
+    }
+
+    // 2. Try to get tab-specific session from localStorage
+    const saved = localStorage.getItem(`pharma_session_${tabId}`);
+    if (saved) return JSON.parse(saved);
+
+    // 3. Fallback to last active user from localStorage (for new tabs/windows)
+    const lastActive = localStorage.getItem('pharma_last_active_user');
+    if (lastActive) {
+      // Save it as this tab's session
+      localStorage.setItem(`pharma_session_${tabId}`, lastActive);
+      return JSON.parse(lastActive);
+    }
+
+    return null;
   });
 
   const [registeredUsers, setRegisteredUsers] = useState([]);
 
-  // Sync current session to sessionStorage
+  // Sync current session to tab-specific localStorage and last active user
   useEffect(() => {
+    let tabId = sessionStorage.getItem('pharma_tab_id');
+    if (!tabId) {
+      tabId = `tab_${Math.random().toString(36).substring(2, 11)}`;
+      sessionStorage.setItem('pharma_tab_id', tabId);
+    }
+
     if (currentUser) {
-      sessionStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(currentUser));
+      localStorage.setItem(`pharma_session_${tabId}`, JSON.stringify(currentUser));
+      localStorage.setItem('pharma_last_active_user', JSON.stringify(currentUser));
     } else {
-      sessionStorage.removeItem(STORAGE_KEYS.currentUser);
+      localStorage.removeItem(`pharma_session_${tabId}`);
+      localStorage.removeItem('pharma_last_active_user');
     }
   }, [currentUser]);
 
