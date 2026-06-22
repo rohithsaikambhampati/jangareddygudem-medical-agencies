@@ -49,6 +49,44 @@ function formatInvoiceDate(dateStr) {
   return dateStr;
 }
 
+// Helper: Abbreviate brand names to fit in print grids without ellipsis dots
+function abbreviateBrand(brand) {
+  if (!brand) return '';
+  const name = brand.trim().toUpperCase();
+  if (name.length <= 5) return name;
+  
+  const mappings = {
+    'PHARMACORP': 'PHRMC',
+    'HEALTHLIFE': 'HLIFE',
+    'MEDITECH': 'MTECH',
+    'LIFEKIND': 'LFKND',
+    'PHARMACEUTICALS': 'PHRMA',
+    'LABORATORIES': 'LABS',
+    'LABORATORY': 'LABS',
+    'INDUSTRIES': 'IND',
+    'CHEMICALS': 'CHEM',
+  };
+  
+  if (mappings[name]) return mappings[name];
+  
+  const words = name.split(/\s+/);
+  if (words.length > 1) {
+    return words.map(w => {
+      if (w === 'MEDICAL' || w === 'MEDICALS') return 'MED';
+      if (w === 'AGENCIES' || w === 'AGENCY') return 'AGC';
+      return w.slice(0, 3);
+    }).join(' ').slice(0, 6).trim();
+  }
+  
+  const firstChar = name[0];
+  const rest = name.slice(1);
+  const noVowels = rest.replace(/[AEIOU]/g, '');
+  const shortened = (firstChar + noVowels).toUpperCase();
+  
+  if (shortened.length <= 5) return shortened;
+  return shortened.slice(0, 5);
+}
+
 export default function InvoicePage() {
   const { orderId } = useParams();
   const navigate = useNavigate();
@@ -275,7 +313,7 @@ export default function InvoicePage() {
                 <td className="border-r-black py-1 text-left px-2 font-bold truncate max-w-0">{order.productName?.toUpperCase()}</td>
                 <td className="border-r-black py-1 font-mono truncate max-w-0">{product?.batch || '2640078'}</td>
                 <td className="border-r-black py-1">{product?.expiryDate ? new Date(product.expiryDate).toLocaleDateString('en-GB', { month: '2-digit', year: '2-digit' }) : '12/27'}</td>
-                <td className="border-r-black py-1 uppercase truncate max-w-0" title={mfrName}>{mfrName}</td>
+                <td className="border-r-black py-1 uppercase" title={mfrName}>{abbreviateBrand(mfrName)}</td>
                 <td className="border-r-black py-1">{(order.unitPrice * 1.15).toFixed(2)}</td>
                 <td className="border-r-black py-1">{order.unitPrice?.toFixed(2)}</td>
                 <td className="border-r-black py-1">{order.discountPercentage > 0 ? order.discountPercentage.toFixed(2) : '0.00'}</td>
