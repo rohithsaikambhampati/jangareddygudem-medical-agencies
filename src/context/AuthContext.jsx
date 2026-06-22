@@ -3,53 +3,26 @@ import { supabase } from '../supabaseClient';
 
 const AuthContext = createContext();
 
-const OWNER_CREDENTIALS = {
-  username: import.meta.env.VITE_OWNER_USERNAME,
-  password: import.meta.env.VITE_OWNER_PASSWORD,
-  role: 'owner',
-  name: 'Agency Owner'
-};
+// Owner credentials stored only in env — never exposed in DB
+const OWNER_USERNAME = import.meta.env.VITE_OWNER_USERNAME;
+const OWNER_PASSWORD = import.meta.env.VITE_OWNER_PASSWORD;
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
-    // 1. Get or create tabId in sessionStorage
-    let tabId = sessionStorage.getItem('pharma_tab_id');
-    if (!tabId) {
-      tabId = `tab_${Math.random().toString(36).substring(2, 11)}`;
-      sessionStorage.setItem('pharma_tab_id', tabId);
-    }
-
-    // 2. Try to get tab-specific session from localStorage
-    const saved = localStorage.getItem(`pharma_session_${tabId}`);
+    // Tab-isolated session: each browser tab gets its own sessionStorage
+    const saved = sessionStorage.getItem('pharma_session');
     if (saved) return JSON.parse(saved);
-
-    // 3. Fallback to last active user from localStorage (for new tabs/windows)
-    const lastActive = localStorage.getItem('pharma_last_active_user');
-    if (lastActive) {
-      // Save it as this tab's session
-      localStorage.setItem(`pharma_session_${tabId}`, lastActive);
-      return JSON.parse(lastActive);
-    }
-
     return null;
   });
 
   const [registeredUsers, setRegisteredUsers] = useState([]);
 
-  // Sync current session to tab-specific localStorage and last active user
+  // Sync current session ONLY to tab-specific sessionStorage (no cross-tab bleed)
   useEffect(() => {
-    let tabId = sessionStorage.getItem('pharma_tab_id');
-    if (!tabId) {
-      tabId = `tab_${Math.random().toString(36).substring(2, 11)}`;
-      sessionStorage.setItem('pharma_tab_id', tabId);
-    }
-
     if (currentUser) {
-      localStorage.setItem(`pharma_session_${tabId}`, JSON.stringify(currentUser));
-      localStorage.setItem('pharma_last_active_user', JSON.stringify(currentUser));
+      sessionStorage.setItem('pharma_session', JSON.stringify(currentUser));
     } else {
-      localStorage.removeItem(`pharma_session_${tabId}`);
-      localStorage.removeItem('pharma_last_active_user');
+      sessionStorage.removeItem('pharma_session');
     }
   }, [currentUser]);
 
@@ -59,7 +32,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const { data, error } = await supabase
           .from('retailers')
-          .select('*')
+          .select('id, username, name, phone, role, created_at')
           .order('created_at', { ascending: false });
         if (error) throw error;
         if (data) setRegisteredUsers(data);
@@ -70,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
     fetchUsers();
 
-    // Subscribe to real-time changes
+    // Subscribe to real-time changes on retailers table
     const channel = supabase
       .channel('retailers_realtime')
       .on(
@@ -98,119 +71,173 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const login = async (username, password, asOwner = false) => {
+  // ── Owner Login (credentials validated via env only, not stored in DB) ──
+  const loginAsOwner = (username, password) => {
     const trimUser = username.trim().toLowerCase();
     const trimPass = password.trim();
 
-    if (asOwner) {
-      if (
-        (trimUser === (OWNER_CREDENTIALS.username || '').toLowerCase() && trimPass === OWNER_CREDENTIALS.password) ||
-        (trimUser === 'owner' && trimPass === 'owner')
-      ) {
-        const user = { ...OWNER_CREDENTIALS, id: 'owner-001' };
-        setCurrentUser(user);
-        return { success: true };
-      }
+    const ownerMatch =
+      trimUser === (OWNER_USERNAME || '').toLowerCase() &&
+      trimPass === OWNER_PASSWORD;
+
+    if (!ownerMatch) {
       return { success: false, message: 'Invalid owner credentials.' };
     }
 
+    const user = {
+      id: 'owner-001',
+      username: OWNER_USERNAME,
+      name: 'Agency Owner',
+      role: 'owner',
+    };
+    setCurrentUser(user);
+    return { success: true };
+  };
+
+  // ── Retailer Login via Supabase Auth (hashed passwords, secure) ──
+  const loginAsRetailer = async (username, password) => {
+    const trimUser = username.trim().toLowerCase();
+    const trimPass = password.trim();
+
     try {
-      const { data, error } = await supabase
-        .from('retailers')
-        .select('*')
-        .eq('username', trimUser)
-        .eq('password', trimPass)
-        .eq('role', 'user')
-        .maybeSingle();
+      // Supabase Auth uses email — we store username as email format internally
+      const email = `${trimUser}@jrg-retailers.local`;
 
-      if (error) throw error;
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password: trimPass,
+      });
 
-      if (!data) {
+      if (error) {
         return { success: false, message: 'Invalid username or password.' };
       }
 
-      setCurrentUser(data);
+      // Fetch the retailer's profile from public.retailers
+      const { data: profile, error: profileErr } = await supabase
+        .from('retailers')
+        .select('id, username, name, phone, role')
+        .eq('id', data.user.id)
+        .maybeSingle();
+
+      if (profileErr || !profile) {
+        return { success: false, message: 'Account profile not found. Please contact owner.' };
+      }
+
+      setCurrentUser(profile);
       return { success: true };
     } catch (err) {
       console.error('Login error:', err);
-      return { success: false, message: 'Login failed. Database connection error.' };
+      return { success: false, message: 'Login failed. Please try again.' };
     }
   };
 
+  // ── Unified login function ──
+  const login = async (username, password, asOwner = false) => {
+    if (asOwner) return loginAsOwner(username, password);
+    return loginAsRetailer(username, password);
+  };
+
+  // ── Retailer Registration via Supabase Auth (password is hashed automatically) ──
   const register = async (username, password, name, phone) => {
-    const trimUser  = username.trim().toLowerCase();
-    const trimPass  = password.trim();
-    const trimName  = name.trim();
+    const trimUser = username.trim().toLowerCase();
+    const trimPass = password.trim();
+    const trimName = name.trim();
     const trimPhone = phone.trim();
 
     if (!trimUser || !trimPass || !trimName || !trimPhone) {
       return { success: false, message: 'All fields are required.' };
     }
-    if (trimPass.length < 4) {
-      return { success: false, message: 'Password must be at least 4 characters.' };
+    if (trimPass.length < 6) {
+      return { success: false, message: 'Password must be at least 6 characters.' };
     }
-
-    if (trimUser === OWNER_CREDENTIALS.username.toLowerCase()) {
+    if (trimUser === (OWNER_USERNAME || '').toLowerCase()) {
       return { success: false, message: 'That username is reserved.' };
     }
 
     try {
-      const { data: exists, error: checkError } = await supabase
+      // Check if username is already taken in public.retailers
+      const { data: exists } = await supabase
         .from('retailers')
         .select('id')
         .eq('username', trimUser)
         .maybeSingle();
 
-      if (checkError) throw checkError;
-
       if (exists) {
         return { success: false, message: 'Username already taken. Please choose another.' };
       }
 
-      const newUser = {
-        id: `user-${Date.now()}`,
-        username: trimUser,
+      // Use Supabase Auth to create the user — passwords are hashed automatically
+      const email = `${trimUser}@jrg-retailers.local`;
+
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
         password: trimPass,
+        options: {
+          data: { name: trimName, phone: trimPhone, username: trimUser },
+          // Auto-confirm: set this in Supabase Auth settings (disable email confirmation)
+        },
+      });
+
+      if (authError) {
+        if (authError.message.includes('already registered')) {
+          return { success: false, message: 'Username already taken. Please choose another.' };
+        }
+        throw authError;
+      }
+
+      // Insert the profile into public.retailers (trigger also handles this — belt and suspenders)
+      const newProfile = {
+        id: authData.user.id,
+        username: trimUser,
         name: trimName,
         phone: trimPhone,
-        role: 'user'
+        role: 'user',
       };
 
       const { error: insertError } = await supabase
         .from('retailers')
-        .insert([newUser]);
+        .upsert([newProfile], { onConflict: 'id' });
 
       if (insertError) throw insertError;
 
-      // Notify owner
+      // Notify owner about new registration
       await supabase.from('notifications').insert([{
         user_id: 'owner',
         title: 'New Retailer Joined 🎉',
         message: `${trimName} (${trimPhone}) has registered a new retailer account.`,
         type: 'info',
-        is_read: false
+        is_read: false,
       }]);
 
-      setCurrentUser(newUser);
+      setCurrentUser(newProfile);
       return { success: true };
     } catch (err) {
       console.error('Registration error:', err);
-      return { success: false, message: 'Registration failed. Database error.' };
+      return { success: false, message: 'Registration failed. Please try again.' };
     }
   };
 
-  const logout = () => {
+  // ── Logout ──
+  const logout = async () => {
+    // Sign out from Supabase Auth session (for retailer accounts)
+    if (currentUser?.role === 'user') {
+      await supabase.auth.signOut();
+    }
     setCurrentUser(null);
+    sessionStorage.removeItem('pharma_session');
   };
 
+  // ── Delete Retailer (Owner action) ──
   const deleteRetailer = async (userId) => {
     try {
-      const { error } = await supabase
+      // Delete from public.retailers first
+      const { error: profileErr } = await supabase
         .from('retailers')
         .delete()
         .eq('id', userId);
-      if (error) throw error;
-      setRegisteredUsers(prev => prev.filter(u => u.id !== userId));
+      if (profileErr) throw profileErr;
+
+      setRegisteredUsers((prev) => prev.filter((u) => u.id !== userId));
       return { success: true };
     } catch (err) {
       console.error('Delete retailer error:', err);
@@ -233,7 +260,7 @@ export const AuthProvider = ({ children }) => {
         login,
         register,
         logout,
-        deleteRetailer
+        deleteRetailer,
       }}
     >
       {children}

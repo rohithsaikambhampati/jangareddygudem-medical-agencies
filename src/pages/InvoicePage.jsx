@@ -50,15 +50,26 @@ export default function InvoicePage() {
   const discountAmount = order.discountPercentage > 0 ? (originalTotal * order.discountPercentage) / 100 : 0;
   const amountAfterDiscount = originalTotal - discountAmount;
   
-  // Find product to get the brand for MFR column
+  // Find product to get the brand and GST rate
   const product = products?.find(p => p.id === order.productId);
   const mfrName = product?.brand?.toUpperCase() || '-';
   
-  // Calculate assumed GST for template (assuming 12% GST = 6% CGST + 6% SGST, backward calculated from total)
-  // Let's just do a simple dummy calculation for the template
-  const subTotal = amountAfterDiscount; 
-  const grandTotal = Math.round(amountAfterDiscount);
-  const roundOff = (grandTotal - amountAfterDiscount).toFixed(2);
+  // Dynamic GST Calculation — uses product's gst_rate field (0, 5, 12, 18, 28)
+  // Pharmaceutical products in India are typically taxed at 12% GST
+  // gstRate of 0 means tax-exempt (e.g., unbranded generic medicines)
+  const gstRate = product?.gstRate ?? 0;  // fallback to 0% if not set on product
+  
+  // Calculate GST amounts from the post-discount subtotal
+  // If GST-inclusive pricing: taxable = amount / (1 + rate/100)
+  // Here we treat prices as GST-exclusive (i.e., GST is added on top) — change to 'inclusive' below if needed
+  const gstAmount = Number(((amountAfterDiscount * gstRate) / 100).toFixed(2));
+  const cgstPayable = Number((gstAmount / 2).toFixed(2));
+  const sgstPayable = Number((gstAmount / 2).toFixed(2));
+  
+  const subTotal = amountAfterDiscount;
+  const grandTotal = Math.round(amountAfterDiscount + gstAmount);
+  const roundOff = (grandTotal - (amountAfterDiscount + gstAmount)).toFixed(2);
+
 
   const handleWhatsAppShare = () => {
     const url = window.location.href;
@@ -167,9 +178,9 @@ export default function InvoicePage() {
               <div className="text-right pt-2">{order.unitPrice?.toFixed(2)}</div>
               <div className="text-right pt-2">{order.unitPrice?.toFixed(2)}</div>
               <div className="text-right pt-2">{order.discountPercentage > 0 ? order.discountPercentage.toFixed(2) : '0.00'}</div>
-              <div className="text-right pt-2">0.00</div>
-              <div className="text-right pt-2">0.00</div>
-              <div className="text-right pt-2">{amountAfterDiscount.toFixed(2)}</div>
+              <div className="text-right pt-2">{sgstPayable.toFixed(2)}</div>
+              <div className="text-right pt-2">{cgstPayable.toFixed(2)}</div>
+              <div className="text-right pt-2">{(amountAfterDiscount + gstAmount).toFixed(2)}</div>
             </div>
             {/* Empty rows to fill space can be added here if needed, but flex-1 will stretch this container */}
             <div className="invoice-grid invoice-table-row flex-1">
@@ -195,25 +206,39 @@ export default function InvoicePage() {
                 <div>CGST</div>
                 <div>TOTAL GST</div>
               </div>
-              {['GST 0%', 'GST 5.0%', 'GST 12.0%', 'GST 18%', 'GST 28%'].map((taxClass, idx) => (
-                <div key={idx} className="gst-grid border-b border-black text-right text-[11px]">
-                  <div className="text-left">{taxClass}</div>
-                  <div>{idx === 0 ? amountAfterDiscount.toFixed(2) : '0.00'}</div>
-                  <div>0.00</div>
-                  <div>{idx === 0 ? discountAmount.toFixed(2) : '0.00'}</div>
-                  <div>0.00</div>
-                  <div>0.00</div>
-                  <div>0.00</div>
-                </div>
-              ))}
+              {[
+                { label: 'GST 0%',   rate: 0  },
+                { label: 'GST 5.0%', rate: 5  },
+                { label: 'GST 12.0%',rate: 12 },
+                { label: 'GST 18%',  rate: 18 },
+                { label: 'GST 28%',  rate: 28 },
+              ].map(({ label, rate: rowRate }) => {
+                const isThisRow = rowRate === gstRate;
+                const rowSgst = isThisRow ? sgstPayable.toFixed(2) : '0.00';
+                const rowCgst = isThisRow ? cgstPayable.toFixed(2) : '0.00';
+                const rowTotal = isThisRow ? (amountAfterDiscount).toFixed(2) : '0.00';
+                const rowDisc  = isThisRow ? discountAmount.toFixed(2) : '0.00';
+                const rowGst   = isThisRow ? gstAmount.toFixed(2) : '0.00';
+                return (
+                  <div key={label} className="gst-grid border-b border-black text-right text-[11px]">
+                    <div className="text-left">{label}</div>
+                    <div>{rowTotal}</div>
+                    <div>0.00</div>
+                    <div>{rowDisc}</div>
+                    <div>{rowSgst}</div>
+                    <div>{rowCgst}</div>
+                    <div>{rowGst}</div>
+                  </div>
+                );
+              })}
               <div className="gst-grid font-bold text-right text-[11px]">
                 <div className="text-left">TOTAL</div>
                 <div>{amountAfterDiscount.toFixed(2)}</div>
                 <div>0.00</div>
                 <div>{discountAmount.toFixed(2)}</div>
-                <div>0.00</div>
-                <div>0.00</div>
-                <div>0.00</div>
+                <div>{sgstPayable.toFixed(2)}</div>
+                <div>{cgstPayable.toFixed(2)}</div>
+                <div>{gstAmount.toFixed(2)}</div>
               </div>
             </div>
 
@@ -221,8 +246,8 @@ export default function InvoicePage() {
             <div className="w-[30%] text-[11px]">
               <div className="flex justify-between border-b border-black p-1"><span className="uppercase">SUB TOTAL</span><span>{originalTotal.toFixed(2)}</span></div>
               <div className="flex justify-between border-b border-black p-1"><span className="uppercase">Discount</span><span>{discountAmount.toFixed(2)}</span></div>
-              <div className="flex justify-between border-b border-black p-1"><span className="uppercase">SGST PAYBLE</span><span>0.00</span></div>
-              <div className="flex justify-between border-b border-black p-1"><span className="uppercase">CGST PAYBLE</span><span>0.00</span></div>
+              <div className="flex justify-between border-b border-black p-1"><span className="uppercase">SGST PAYBLE</span><span>{sgstPayable.toFixed(2)}</span></div>
+              <div className="flex justify-between border-b border-black p-1"><span className="uppercase">CGST PAYBLE</span><span>{cgstPayable.toFixed(2)}</span></div>
               <div className="flex justify-between border-b border-black p-1"><span className="uppercase">CR/DR NOTE</span><span>0.00</span></div>
               <div className="flex justify-between border-b border-black p-1"><span className="uppercase">Round off</span><span>{roundOff}</span></div>
               <div className="flex justify-between p-1 font-bold text-[13px]"><span className="uppercase">GRAND TOTAL</span><span>{grandTotal.toFixed(2)}</span></div>

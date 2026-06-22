@@ -4,7 +4,7 @@ import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 import {
   Plus, Trash2, AlertTriangle, ShieldCheck, ToggleLeft, ToggleRight,
-  Package, Tag, ShoppingBag, X, Pencil, CheckCircle, Save, MapPin, Users, ArrowLeft, ArrowRight, IndianRupee, User, ChevronDown, ChevronUp, Clock, Truck
+  Package, Tag, ShoppingBag, X, Pencil, CheckCircle, Save, MapPin, Users, ArrowLeft, ArrowRight, IndianRupee, User, ChevronDown, ChevronUp, Clock, Truck, Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -257,9 +257,11 @@ export default function OwnerPage() {
   const [activeQueueTab, setActiveQueueTab] = useState('processing');
 
   const [newBrandName, setNewBrandName] = useState('');
+  const [productSearch, setProductSearch] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setProductSearch('');
   }, [view]);
 
   // Brand edit state
@@ -634,6 +636,7 @@ export default function OwnerPage() {
   // ── Render BRAND View ──────────────────────────────────────────────────────
   if (view === 'brand') {
     const brandProducts = products.filter(p => (p.brand || 'Unbranded') === selectedBrand);
+    const filteredBrandProducts = brandProducts.filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase()));
     const brandActiveOffers = brandProducts.filter(p => p.isOfferActive).length;
     const brandLowStock = brandProducts.filter(p => p.stockQuantity < 5).length;
 
@@ -745,7 +748,19 @@ export default function OwnerPage() {
           </div>
 
           <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm lg:col-span-2 space-y-4">
-            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{selectedBrand} Products</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{selectedBrand} Products</h2>
+              <div className="relative w-full sm:w-72">
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
+                <input
+                  type="text"
+                  placeholder="Search products in brand..."
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#18181b]"
+                />
+              </div>
+            </div>
             <div className="overflow-x-auto rounded-xl border border-zinc-200 dark:border-white/10">
               <table className="min-w-full divide-y divide-slate-100 text-left text-sm">
                 <thead className="bg-transparent dark:bg-transparent text-zinc-500 dark:text-zinc-500 font-semibold text-xs uppercase tracking-wider">
@@ -761,8 +776,10 @@ export default function OwnerPage() {
                 <tbody className="divide-y divide-slate-100 text-zinc-800 dark:text-zinc-300">
                   {brandProducts.length === 0 ? (
                     <tr><td colSpan="6" className="text-center py-10 text-zinc-400">No products for this brand yet.</td></tr>
+                  ) : filteredBrandProducts.length === 0 ? (
+                    <tr><td colSpan="6" className="text-center py-10 text-zinc-400">No products match your search.</td></tr>
                   ) : (
-                    brandProducts.map((product) => {
+                    filteredBrandProducts.map((product) => {
                       const isLowStock = product.stockQuantity < 5;
                       const hasDiscount = product.isOfferActive && product.discountPercentage > 0;
                       const finalPrice = hasDiscount ? product.price * (1 - product.discountPercentage / 100) : product.price;

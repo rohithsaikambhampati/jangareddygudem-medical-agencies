@@ -101,7 +101,8 @@ const mapDbProductToReact = (dbProd) => ({
   isOfferActive: dbProd.is_offer_active,
   offerText: dbProd.offer_text || '',
   expiryDate: dbProd.expiry_date || null,
-  batch: dbProd.batch || null
+  batch: dbProd.batch || null,
+  gstRate: Number(dbProd.gst_rate || 0),  // NEW: GST rate field (0, 5, 12, 18, 28)
 });
 
 const mapReactProductToDb = (reactProd) => ({
@@ -115,7 +116,8 @@ const mapReactProductToDb = (reactProd) => ({
   is_offer_active: reactProd.isOfferActive,
   offer_text: reactProd.offerText,
   expiry_date: reactProd.expiryDate || null,
-  batch: reactProd.batch || null
+  batch: reactProd.batch || null,
+  gst_rate: reactProd.gstRate || 0,  // NEW: persist GST rate
 });
 
 const mapDbOrderToReact = (dbOrd) => ({
@@ -649,93 +651,56 @@ export const ProductProvider = ({ children, userId }) => {
   };
 
   const checkoutCart = async (userInfo) => {
-    if (cart.length === 0) return { success: false };
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-    const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    if (cart.length === 0) return { success: false, message: 'Cart is empty.' };
 
-    const newOrders = cart.map((cartItem) => {
-      const product = products.find((p) => p.id === cartItem.id) || cartItem;
-      const totalDispatched = cartItem.totalDispatched;
-      const hasDiscount = product.isOfferActive && product.discountPercentage > 0;
-      const finalUnitPrice = hasDiscount
-        ? Number((product.price * (1 - product.discountPercentage / 100)).toFixed(2))
-        : product.price;
-      const finalTotalPrice = Number((finalUnitPrice * cartItem.quantity).toFixed(2));
-      const freeUnits = totalDispatched - cartItem.quantity;
-
-      return {
-        id: `ord-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-        productId: cartItem.id,
-        productName: product.name,
-        offerText: product.offerText || '',
-        discountPercentage: product.discountPercentage || 0,
-        quantity: cartItem.quantity,
-        totalDispatched,
-        freeUnits,
-        unitPrice: product.price,
-        finalUnitPrice,
-        totalPrice: finalTotalPrice,
-        userId: userId || 'guest',
-        userName: userInfo?.name || userInfo?.username || 'Retailer',
-        deliveryAddress: userInfo?.deliveryAddress || null,
-        status: 'processing',
-        statusHistory: [
-          { status: 'processing', label: 'Order Received', date: dateStr, time: timeStr }
-        ],
-        orderDate: dateStr,
-        orderTime: timeStr
-      };
-    });
+    // Prepare the cart payload for the RPC function
+    // The RPC function on Supabase handles stock validation + order insert + stock decrement atomically
+    const cartPayload = cart.map((cartItem) => ({
+      id: cartItem.id,
+      quantity: cartItem.quantity,
+      totalDispatched: cartItem.totalDispatched,
+    }));
 
     try {
-      // 1. Insert orders into database
-      const { error: orderErr } = await supabase
-        .from('orders')
-        .insert(newOrders.map(mapReactOrderToDb));
-
-      if (orderErr) throw orderErr;
-
-      // Compute total order amount
-      const orderTotal = newOrders.reduce((sum, o) => sum + o.totalPrice, 0);
-
-      // Notify owner for any order placed
-      await sendNotification('owner', 'New Order Placed', `A retailer placed a new order for ₹${orderTotal.toFixed(2)}.`, 'info');
-
-
-      // Notify owner for large orders
-      if (orderTotal > 5000) {
-        sendNotification('owner', 'Large Order Alert 🚀', `${userInfo?.name || 'A retailer'} just placed a huge order worth ₹${orderTotal.toFixed(2)}!`, 'success');
-      }
-
-      // 2. Decrement physical stock in database
-      for (const cartItem of cart) {
-        const { data: dbProd, error: fetchErr } = await supabase
-          .from('products')
-          .select('stock_quantity')
-          .eq('id', cartItem.id)
-          .single();
-
-        if (!fetchErr && dbProd) {
-          const newStock = Math.max(0, dbProd.stock_quantity - cartItem.totalDispatched);
-          await supabase
-            .from('products')
-            .update({ stock_quantity: newStock })
-            .eq('id', cartItem.id);
-        }
-      }
-
-      setOrders((prev) => {
-        const newUnique = newOrders.filter(n => !prev.some(p => p.id === n.id));
-        return [...newUnique, ...prev];
+      const { data, error } = await supabase.rpc('checkout_cart', {
+        p_user_id: userId || 'guest',
+        p_user_name: userInfo?.name || userInfo?.username || 'Retailer',
+        p_delivery_address: userInfo?.deliveryAddress || null,
+        p_items: cartPayload,
       });
+
+      if (error) throw error;
+      if (!data?.success) {
+        return { success: false, message: data?.message || 'Checkout failed.' };
+      }
+
+      // After atomic success: compute total for owner notifications
+      const orderTotal = cart.reduce((sum, cartItem) => {
+        const product = products.find((p) => p.id === cartItem.id) || cartItem;
+        const hasDiscount = product.isOfferActive && product.discountPercentage > 0;
+        const finalUnitPrice = hasDiscount
+          ? Number((product.price * (1 - product.discountPercentage / 100)).toFixed(2))
+          : product.price;
+        return sum + Number((finalUnitPrice * cartItem.quantity).toFixed(2));
+      }, 0);
+
+      // Send owner notifications (non-critical — don't block on failure)
+      sendNotification('owner', 'New Order Placed', `${userInfo?.name || 'A retailer'} placed a new order for ₹${orderTotal.toFixed(2)}.`, 'info').catch(console.error);
+      if (orderTotal > 5000) {
+        sendNotification('owner', 'Large Order Alert 🚀', `${userInfo?.name || 'A retailer'} placed a huge order worth ₹${orderTotal.toFixed(2)}!`, 'success').catch(console.error);
+      }
+
+      // Clear local cart — real-time subscriptions will update orders + products state automatically
       setCart([]);
-      return { success: true, orderIds: newOrders.map((o) => o.id) };
+
+      // Return the newly created order IDs from the RPC response (if provided)
+      return { success: true, orderIds: data?.order_ids || [] };
     } catch (err) {
       console.error('Checkout error:', err);
-      return { success: false, message: 'Checkout failed. Database error.' };
+      return { success: false, message: err?.message || 'Checkout failed. Please try again.' };
     }
   };
+
 
   const updateOrderStatus = async (orderId, newStatus) => {
     const now = new Date();
