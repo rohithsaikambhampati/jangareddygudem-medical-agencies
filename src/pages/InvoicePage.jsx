@@ -268,14 +268,14 @@ export default function InvoicePage() {
               </tr>
 
               {/* Active Product Line Item */}
-              <tr className="align-middle font-semibold text-center" style={{ height: '30px' }}>
+              <tr className="align-middle text-zinc-900 text-center" style={{ height: '30px' }}>
                 <td className="border-r-black py-1 text-center">1.</td>
                 <td className="border-r-black py-1 font-bold">{order.quantity}</td>
                 <td className="border-r-black py-1">{order.freeUnits > 0 ? order.freeUnits.toFixed(2) : '0.00'}</td>
-                <td className="border-r-black py-1 text-left px-2 font-bold">{order.productName?.toUpperCase()}</td>
-                <td className="border-r-black py-1 font-mono">{product?.batch || '2640078'}</td>
+                <td className="border-r-black py-1 text-left px-2 font-bold truncate max-w-0">{order.productName?.toUpperCase()}</td>
+                <td className="border-r-black py-1 font-mono truncate max-w-0">{product?.batch || '2640078'}</td>
                 <td className="border-r-black py-1">{product?.expiryDate ? new Date(product.expiryDate).toLocaleDateString('en-GB', { month: '2-digit', year: '2-digit' }) : '12/27'}</td>
-                <td className="border-r-black py-1 uppercase">{mfrName}</td>
+                <td className="border-r-black py-1 uppercase truncate max-w-0" title={mfrName}>{mfrName}</td>
                 <td className="border-r-black py-1">{(order.unitPrice * 1.15).toFixed(2)}</td>
                 <td className="border-r-black py-1">{order.unitPrice?.toFixed(2)}</td>
                 <td className="border-r-black py-1">{order.discountPercentage > 0 ? order.discountPercentage.toFixed(2) : '0.00'}</td>
