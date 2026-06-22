@@ -197,11 +197,10 @@ export default function InvoicePage() {
               <col style={{ width: '3%' }} />
               <col style={{ width: '5%' }} />
               <col style={{ width: '5%' }} />
-              <col style={{ width: '32%' }} />
+              <col style={{ width: '35%' }} />
+              <col style={{ width: '9%' }} />
+              <col style={{ width: '6%' }} />
               <col style={{ width: '7%' }} />
-              <col style={{ width: '8%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '5%' }} />
               <col style={{ width: '6%' }} />
               <col style={{ width: '6%' }} />
               <col style={{ width: '4%' }} />
@@ -212,7 +211,7 @@ export default function InvoicePage() {
             <tbody>
               {/* HEADER ROW 1 */}
               <tr className="border-b-black">
-                <td colSpan="8" className="p-2 border-r-black align-top" style={{ verticalAlign: 'top' }}>
+                <td colSpan="7" className="p-2 border-r-black align-top" style={{ verticalAlign: 'top' }}>
                   <h1 className="text-[17px] font-black uppercase tracking-wide">THE JANAGAREDDIGUDEM MEDICAL AGENCIES</h1>
                   <p className="mt-1 font-semibold text-zinc-800">BATTINAVARI STREET,</p>
                   <p className="font-semibold text-zinc-800">JANAGAREDDIGUDEM - 534447</p>
@@ -233,7 +232,7 @@ export default function InvoicePage() {
 
               {/* HEADER ROW 2 */}
               <tr className="border-b-black">
-                <td colSpan="5" className="p-2 border-r-black align-bottom font-bold text-[12px]" style={{ verticalAlign: 'bottom' }}>
+                <td colSpan="4" className="p-2 border-r-black align-bottom font-bold text-[12px]" style={{ verticalAlign: 'bottom' }}>
                   GSTIN : 37AEJPK1583R1ZQ
                 </td>
                 <td colSpan="3" className="p-2 border-r-black text-center align-middle" style={{ verticalAlign: 'middle' }}>
@@ -257,7 +256,6 @@ export default function InvoicePage() {
                 <th className="border-r-black py-1">Qty.</th>
                 <th className="border-r-black py-1">Free</th>
                 <th className="border-r-black py-1 text-left px-2">Item Name & Packing</th>
-                <th className="border-r-black py-1">HSN</th>
                 <th className="border-r-black py-1">Batch</th>
                 <th className="border-r-black py-1">Exp.</th>
                 <th className="border-r-black py-1">MFR</th>
@@ -275,7 +273,6 @@ export default function InvoicePage() {
                 <td className="border-r-black py-1 font-bold">{order.quantity}</td>
                 <td className="border-r-black py-1">{order.freeUnits > 0 ? order.freeUnits.toFixed(2) : '0.00'}</td>
                 <td className="border-r-black py-1 text-left px-2 font-bold">{order.productName?.toUpperCase()}</td>
-                <td className="border-r-black py-1">{product?.hsn || '30042019'}</td>
                 <td className="border-r-black py-1 font-mono">{product?.batch || '2640078'}</td>
                 <td className="border-r-black py-1">{product?.expiryDate ? new Date(product.expiryDate).toLocaleDateString('en-GB', { month: '2-digit', year: '2-digit' }) : '12/27'}</td>
                 <td className="border-r-black py-1 uppercase">{mfrName}</td>
@@ -302,14 +299,13 @@ export default function InvoicePage() {
                   <td className="border-r-black"></td>
                   <td className="border-r-black"></td>
                   <td className="border-r-black"></td>
-                  <td className="border-r-black"></td>
                   <td></td>
                 </tr>
               ))}
 
               {/* BANK DETAILS BAR */}
               <tr className="border-t-black border-b-black">
-                <td colSpan="14" className="p-1.5 font-bold text-[11px] uppercase tracking-wide text-left">
+                <td colSpan="13" className="p-1.5 font-bold text-[11px] uppercase tracking-wide text-left">
                   Bank Details: BANK OF BARODA, A/C NO. 82390400000280, IFSC CODE: BARB0VJJAWG
                 </td>
               </tr>
@@ -317,7 +313,7 @@ export default function InvoicePage() {
               {/* FINANCIAL TOTALS SPLIT SECTION */}
               <tr>
                 {/* Left Half: GST Classes Summary */}
-                <td colSpan="8" className="p-0 border-r-black align-top" style={{ verticalAlign: 'top' }}>
+                <td colSpan="7" className="p-0 border-r-black align-top" style={{ verticalAlign: 'top' }}>
                   <table className="w-full border-collapse text-right text-[10.5px]">
                     <thead>
                       <tr className="border-b-black font-bold text-center text-[10px]" style={{ height: '22px' }}>
@@ -408,7 +404,7 @@ export default function InvoicePage() {
 
               {/* FOOTER AREA */}
               <tr className="border-t-black">
-                <td colSpan="8" className="p-2 border-r-black align-top" style={{ height: '95px', verticalAlign: 'top' }}>
+                <td colSpan="7" className="p-2 border-r-black align-top" style={{ height: '95px', verticalAlign: 'top' }}>
                   <div className="font-bold italic text-[11px] text-zinc-900 mb-4">
                     Rs. {numberToWords(grandTotal)} only
                   </div>
