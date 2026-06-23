@@ -230,7 +230,66 @@ export default function InvoicePage() {
       <div className="w-full overflow-x-auto pb-12 pt-4 px-4 sm:px-0 flex justify-start md:justify-center print:overflow-visible print:p-0 print:m-0">
         <div className="invoice-sheet w-[1000px] min-w-[1000px] print:w-full print:min-w-0 border border-black relative text-black bg-white shadow-lg print:shadow-none p-0 flex flex-col">
           
+          {/* HEADER SECTION TABLE */}
+          <table className="w-full border-collapse border-l border-r border-t border-black text-[11px] leading-tight" style={{ tableLayout: 'fixed' }}>
+            <colgroup>
+              <col style={{ width: '70%' }} />
+              <col style={{ width: '30%' }} />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td className="p-2 border-r-black align-top" style={{ verticalAlign: 'top' }}>
+                  <h1 className="text-[17px] font-black uppercase tracking-wide">THE JANAGAREDDIGUDEM MEDICAL AGENCIES</h1>
+                  <p className="mt-1 font-semibold text-zinc-800">BATTINAVARI STREET,</p>
+                  <p className="font-semibold text-zinc-800">JANAGAREDDIGUDEM - 534447</p>
+                  <p className="mt-1 font-semibold text-zinc-800">D.L NO :20B&21B;13/AP/WG/E/2002/R</p>
+                  <p className="font-semibold text-zinc-800">Phone : 9440103869</p>
+                </td>
+                <td className="p-2 align-top" style={{ verticalAlign: 'top' }}>
+                  <h2 className="text-[13px] font-black uppercase">M/s {order.deliveryAddress?.name?.toUpperCase() || order.userName?.toUpperCase() || 'RETAILER'}</h2>
+                  {order.deliveryAddress?.line1 && <p className="mt-1 font-semibold text-zinc-800">{order.deliveryAddress.line1.toUpperCase()}</p>}
+                  <p className="font-semibold text-zinc-800">
+                    {order.deliveryAddress?.city?.toUpperCase() || 'JANGAREDDYGUDEM'}
+                    {order.deliveryAddress?.pin ? ` - ${order.deliveryAddress.pin}` : ' - 534447'}
+                  </p>
+                  <p className="font-semibold text-zinc-800">Ph.No.: {order.deliveryAddress?.phone || '9394079893,9394079893'}</p>
+                  <p className="font-semibold text-zinc-800">D.L NO: {order.deliveryAddress?.dlNo || '116 * 116'}</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* HEADER ROW 2 (GSTIN / GST INVOICE / METADATA) */}
           <table className="w-full border-collapse border border-black text-[11px] leading-tight" style={{ tableLayout: 'fixed' }}>
+            <colgroup>
+              <col style={{ width: '48%' }} />
+              <col style={{ width: '22%' }} />
+              <col style={{ width: '30%' }} />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td className="p-2 border-r-black align-bottom font-bold text-[12px]" style={{ verticalAlign: 'bottom' }}>
+                  GSTIN : 37AEJPK1583R1ZQ
+                </td>
+                <td className="p-2 border-r-black text-center align-middle" style={{ verticalAlign: 'middle' }}>
+                  <h2 className="text-[18px] font-black tracking-wider uppercase text-zinc-950">GST INVOICE</h2>
+                </td>
+                <td className="p-0 align-top">
+                  <div className="p-1 text-center font-bold border-b-black text-[11px]">GST:</div>
+                  <div className="p-1.5 leading-snug">
+                    <div className="grid grid-cols-[80px_1fr] text-[10.5px]">
+                      <span className="font-bold text-zinc-800">Invoice No.</span><span className="font-semibold">: {order.id.split('-').pop().toUpperCase()}</span>
+                      <span className="font-bold text-zinc-800">Date</span><span className="font-semibold">: {invoiceDate}</span>
+                      <span className="font-bold text-zinc-800">BILL TYPE</span><span className="font-bold">: CREDIT</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* ITEMS SECTION TABLE */}
+          <table className="w-full border-collapse border-l border-r border-black text-[11px] leading-tight" style={{ tableLayout: 'fixed' }}>
             <colgroup>
               <col style={{ width: '3%' }} />
               <col style={{ width: '5%' }} />
@@ -246,48 +305,7 @@ export default function InvoicePage() {
               <col style={{ width: '4%' }} />
               <col style={{ width: '6%' }} />
             </colgroup>
-            <tbody>
-              {/* HEADER ROW 1 */}
-              <tr className="border-b-black">
-                <td colSpan="7" className="p-2 border-r-black align-top" style={{ verticalAlign: 'top' }}>
-                  <h1 className="text-[17px] font-black uppercase tracking-wide">THE JANAGAREDDIGUDEM MEDICAL AGENCIES</h1>
-                  <p className="mt-1 font-semibold text-zinc-800">BATTINAVARI STREET,</p>
-                  <p className="font-semibold text-zinc-800">JANAGAREDDIGUDEM - 534447</p>
-                  <p className="mt-1 font-semibold text-zinc-800">D.L NO :20B&21B;13/AP/WG/E/2002/R</p>
-                  <p className="font-semibold text-zinc-800">Phone : 9440103869</p>
-                </td>
-                <td colSpan="6" className="p-2 align-top" style={{ verticalAlign: 'top' }}>
-                  <h2 className="text-[13px] font-black uppercase">M/s {order.deliveryAddress?.name?.toUpperCase() || order.userName?.toUpperCase() || 'RETAILER'}</h2>
-                  {order.deliveryAddress?.line1 && <p className="mt-1 font-semibold text-zinc-800">{order.deliveryAddress.line1.toUpperCase()}</p>}
-                  <p className="font-semibold text-zinc-800">
-                    {order.deliveryAddress?.city?.toUpperCase() || 'JANGAREDDYGUDEM'}
-                    {order.deliveryAddress?.pin ? ` - ${order.deliveryAddress.pin}` : ' - 534447'}
-                  </p>
-                  <p className="font-semibold text-zinc-800">Ph.No.: {order.deliveryAddress?.phone || '9394079893,9394079893'}</p>
-                  <p className="font-semibold text-zinc-800">D.L NO: {order.deliveryAddress?.dlNo || '116 * 116'}</p>
-                </td>
-              </tr>
-
-              {/* HEADER ROW 2 */}
-              <tr className="border-b-black">
-                <td colSpan="4" className="p-2 border-r-black align-bottom font-bold text-[12px]" style={{ verticalAlign: 'bottom' }}>
-                  GSTIN : 37AEJPK1583R1ZQ
-                </td>
-                <td colSpan="3" className="p-2 border-r-black text-center align-middle" style={{ verticalAlign: 'middle' }}>
-                  <h2 className="text-[18px] font-black tracking-wider uppercase text-zinc-950">GST INVOICE</h2>
-                </td>
-                <td colSpan="6" className="p-0 align-top">
-                  <div className="p-1 text-center font-bold border-b-black text-[11px]">GST:</div>
-                  <div className="p-1.5 leading-snug">
-                    <div className="grid grid-cols-[80px_1fr] text-[10.5px]">
-                      <span className="font-bold text-zinc-800">Invoice No.</span><span className="font-semibold">: {order.id.split('-').pop().toUpperCase()}</span>
-                      <span className="font-bold text-zinc-800">Date</span><span className="font-semibold">: {invoiceDate}</span>
-                      <span className="font-bold text-zinc-800">BILL TYPE</span><span className="font-bold">: CREDIT</span>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-
+            <thead>
               {/* ITEMS TABLE HEADER ROW */}
               <tr className="border-b-black font-bold uppercase text-[9.5px] text-center" style={{ height: '24px' }}>
                 <th className="border-r-black py-1">Sn.</th>
@@ -304,7 +322,8 @@ export default function InvoicePage() {
                 <th className="border-r-black py-1">CGST</th>
                 <th className="py-1">Amount</th>
               </tr>
-
+            </thead>
+            <tbody>
               {/* Active Product Line Item */}
               <tr className="align-middle text-zinc-900 text-center" style={{ height: '30px' }}>
                 <td className="border-r-black py-1 text-center">1.</td>
@@ -313,7 +332,7 @@ export default function InvoicePage() {
                 <td className="border-r-black py-1 text-left px-2 font-bold truncate max-w-0">{order.productName?.toUpperCase()}</td>
                 <td className="border-r-black py-1 font-mono truncate max-w-0">{product?.batch || '2640078'}</td>
                 <td className="border-r-black py-1">{product?.expiryDate ? new Date(product.expiryDate).toLocaleDateString('en-GB', { month: '2-digit', year: '2-digit' }) : '12/27'}</td>
-                <td className="border-r-black py-1 uppercase" title={mfrName}>{abbreviateBrand(mfrName)}</td>
+                <td className="border-r-black py-1 uppercase truncate max-w-0" title={mfrName}>{abbreviateBrand(mfrName)}</td>
                 <td className="border-r-black py-1">{(order.unitPrice * 1.15).toFixed(2)}</td>
                 <td className="border-r-black py-1">{order.unitPrice?.toFixed(2)}</td>
                 <td className="border-r-black py-1">{order.discountPercentage > 0 ? order.discountPercentage.toFixed(2) : '0.00'}</td>
@@ -340,18 +359,24 @@ export default function InvoicePage() {
                   <td></td>
                 </tr>
               ))}
+            </tbody>
+          </table>
 
-              {/* BANK DETAILS BAR */}
-              <tr className="border-t-black border-b-black">
-                <td colSpan="13" className="p-1.5 font-bold text-[11px] uppercase tracking-wide text-left">
-                  Bank Details: BANK OF BARODA, A/C NO. 82390400000280, IFSC CODE: BARB0VJJAWG
-                </td>
-              </tr>
+          {/* BANK DETAILS BAR */}
+          <div className="w-full border-t border-b border-l border-r border-black p-1.5 font-bold text-[11px] uppercase tracking-wide text-left bg-transparent">
+            Bank Details: BANK OF BARODA, A/C NO. 82390400000280, IFSC CODE: BARB0VJJAWG
+          </div>
 
-              {/* FINANCIAL TOTALS SPLIT SECTION */}
+          {/* FINANCIAL TOTALS SPLIT SECTION */}
+          <table className="w-full border-collapse border-l border-r border-b border-black text-[11px]" style={{ tableLayout: 'fixed' }}>
+            <colgroup>
+              <col style={{ width: '70%' }} />
+              <col style={{ width: '30%' }} />
+            </colgroup>
+            <tbody>
               <tr>
                 {/* Left Half: GST Classes Summary */}
-                <td colSpan="7" className="p-0 border-r-black align-top" style={{ verticalAlign: 'top' }}>
+                <td className="p-0 border-r-black align-top" style={{ verticalAlign: 'top' }}>
                   <table className="w-full border-collapse text-right text-[10.5px]">
                     <thead>
                       <tr className="border-b-black font-bold text-center text-[10px]" style={{ height: '22px' }}>
@@ -390,7 +415,7 @@ export default function InvoicePage() {
                           </tr>
                         );
                       })}
-                      <tr className="font-black border-b-black bg-zinc-50/50" style={{ height: '24px' }}>
+                      <tr className="font-black bg-zinc-50/50" style={{ height: '24px' }}>
                         <td className="border-r-black text-left px-1.5">TOTAL</td>
                         <td className="border-r-black px-1">{originalTotal.toFixed(2)}</td>
                         <td className="border-r-black px-1">0.00</td>
@@ -404,7 +429,7 @@ export default function InvoicePage() {
                 </td>
 
                 {/* Right Half: Total calculations */}
-                <td colSpan="6" className="p-0 align-top" style={{ verticalAlign: 'top' }}>
+                <td className="p-0 align-top" style={{ verticalAlign: 'top' }}>
                   <table className="w-full border-collapse text-[10.5px]">
                     <tbody>
                       <tr className="border-b-black" style={{ height: '22px' }}>
@@ -439,10 +464,19 @@ export default function InvoicePage() {
                   </table>
                 </td>
               </tr>
+            </tbody>
+          </table>
 
-              {/* FOOTER AREA */}
-              <tr className="border-t-black">
-                <td colSpan="7" className="p-2 border-r-black align-top" style={{ height: '95px', verticalAlign: 'top' }}>
+          {/* FOOTER AREA */}
+          <table className="w-full border-collapse border-l border-r border-b border-black text-[11px]" style={{ tableLayout: 'fixed' }}>
+            <colgroup>
+              <col style={{ width: '70%' }} />
+              <col style={{ width: '12%' }} />
+              <col style={{ width: '18%' }} />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td className="p-2 border-r-black align-top" style={{ height: '95px', verticalAlign: 'top' }}>
                   <div className="font-bold italic text-[11px] text-zinc-900 mb-4">
                     Rs. {numberToWords(grandTotal)} only
                   </div>
@@ -452,10 +486,10 @@ export default function InvoicePage() {
                     <p>Bills not paid due date will attract 24% interest.</p>
                   </div>
                 </td>
-                <td colSpan="2" className="p-2 border-r-black align-bottom text-center" style={{ height: '95px', verticalAlign: 'bottom' }}>
+                <td className="p-2 border-r-black align-bottom text-center" style={{ height: '95px', verticalAlign: 'bottom' }}>
                   <span className="font-bold text-[10.5px] block pb-1">Reciver</span>
                 </td>
-                <td colSpan="4" className="p-2 align-bottom text-center" style={{ height: '95px', verticalAlign: 'bottom' }}>
+                <td className="p-2 align-bottom text-center" style={{ height: '95px', verticalAlign: 'bottom' }}>
                   <div className="text-[7.5px] font-bold uppercase tracking-tighter text-zinc-950 text-right block mb-auto" style={{ lineHeight: '1' }}>
                     For THE JANAGAREDDIGUDEM MEDICAL AGENCIES
                   </div>
