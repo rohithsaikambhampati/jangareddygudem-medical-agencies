@@ -956,11 +956,13 @@ export default function OwnerPage() {
                         <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Invoice Total</p>
                         <p className="text-base sm:text-lg font-black text-indigo-700 dark:text-indigo-400 font-mono mt-0.5">₹{order.totalPrice?.toFixed(2)}</p>
                       </div>
-                      <Link to={`/invoice/${order.id}`} 
-                         className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Invoice
-                      </Link>
+                      {order.status !== 'processing' && order.status !== 'cancelled' && (
+                        <Link to={`/invoice/${order.id}`} 
+                           className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                          Invoice
+                        </Link>
+                      )}
                     </div>
 
                     {order.deliveryAddress && typeof order.deliveryAddress === 'object' && (
@@ -1261,11 +1263,13 @@ export default function OwnerPage() {
                         <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Invoice Total</p>
                         <p className="text-base sm:text-lg font-black text-indigo-700 dark:text-indigo-400 font-mono mt-0.5">₹{order.totalPrice?.toFixed(2)}</p>
                       </div>
-                      <Link to={`/invoice/${order.id}`} 
-                         className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Invoice
-                      </Link>
+                      {order.status !== 'processing' && order.status !== 'cancelled' && (
+                        <Link to={`/invoice/${order.id}`} 
+                           className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                          Invoice
+                        </Link>
+                      )}
                     </div>
 
                     {order.deliveryAddress && typeof order.deliveryAddress === 'object' && (
