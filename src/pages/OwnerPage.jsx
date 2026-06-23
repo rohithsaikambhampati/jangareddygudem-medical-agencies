@@ -1139,7 +1139,7 @@ export default function OwnerPage() {
           <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm flex items-center gap-5">
             <div className="p-4 bg-emerald-50 dark:bg-emerald-500/20 text-emerald-500 rounded-2xl"><CheckCircle className="h-8 w-8" /></div>
             <div>
-              <p className="text-emerald-600 text-sm font-bold uppercase tracking-wider">Lifetime Processed (Due)</p>
+              <p className="text-emerald-600 text-sm font-bold uppercase tracking-wider">Lifetime Processed</p>
               <p className="text-4xl font-extrabold text-zinc-900 dark:text-zinc-100 mt-1">₹{totalLifetime.toFixed(2)}</p>
               <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">Across {retailerOrders.length} total order(s)</p>
             </div>
