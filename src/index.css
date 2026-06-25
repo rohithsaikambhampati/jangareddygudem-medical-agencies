@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@custom-variant dark (&:is(.dark *));
 
 /* ─── Override Tailwind color tokens to match the new B2B Medical palette ─── */
 @theme {
@@ -96,16 +95,8 @@
   --color-teal-700: #256427;
 }
 
-html.dark {
-  color-scheme: dark;
-}
-
 body {
   @apply bg-[#F8FAFC] text-[#6B7280] transition-colors duration-200 font-sans;
-}
-
-html.dark body {
-  @apply bg-[#111827] text-zinc-300;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

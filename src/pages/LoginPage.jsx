@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Pill, ShieldCheck, User, Lock, Eye, EyeOff, UserPlus, LogIn, AlertCircle, ArrowRight, Phone } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { ThemeToggle } from '../App';
+import { ShieldCheck, User, Lock, Eye, EyeOff, UserPlus, LogIn, AlertCircle, ArrowRight, Phone } from 'lucide-react';
 
 export default function LoginPage() {
   const { login, register } = useAuth();
@@ -53,92 +51,63 @@ export default function LoginPage() {
   const isOwnerMode = mode === 'owner-login';
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#111827] flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
-      {/* Theme Toggle */}
-      <div className="absolute top-4 right-4 z-20">
-        <ThemeToggle />
-      </div>
-
-      {/* Background decoration removed for clean professional look */}
-
+    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
       <div className="w-full max-w-md relative z-10">
         {/* Logo / Branding */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl shadow-sm mb-4 ring-4 ring-indigo-100 dark:ring-indigo-900">
-            <Pill className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">The Jangareddygudem Medical Agencies</h1>
-          <p className="text-indigo-600 dark:text-indigo-400 text-sm font-bold uppercase tracking-widest mt-1">Digital Pharmacy</p>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2">Medical Agency Distribution Portal</p>
-        </motion.div>
+        <div className="text-center mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 tracking-tight">The Jangareddygudem Medical Agencies</h1>
+        </div>
 
         {/* Role Selector Tabs */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex gap-1 bg-white dark:bg-[#111827] border border-zinc-200 dark:border-white/10 p-1 rounded-2xl mb-6 shadow-sm"
-        >
+        <div className="flex mb-6 border-b border-zinc-200">
           <button
             onClick={() => switchMode('user-login')}
-            className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
+            className={`flex-1 py-2.5 text-sm font-medium transition-all duration-200 flex items-center justify-center ${
               !isOwnerMode
-                ? 'bg-indigo-500 text-white shadow-sm'
-                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5'
+                ? 'bg-white border-b-2 border-indigo-600 text-indigo-600'
+                : 'bg-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50'
             }`}
           >
-            <User className="h-4 w-4" />
             Retailer Access
           </button>
           <button
             onClick={() => switchMode('owner-login')}
-            className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
+            className={`flex-1 py-2.5 text-sm font-medium transition-all duration-200 flex items-center justify-center ${
               isOwnerMode
-                ? 'bg-purple-500 text-white shadow-sm'
-                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5'
+                ? 'bg-white border-b-2 border-indigo-600 text-indigo-600'
+                : 'bg-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50'
             }`}
           >
-            <ShieldCheck className="h-4 w-4" />
             Owner Portal
           </button>
-        </motion.div>
+        </div>
 
         {/* Login / Register Card */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white dark:bg-[#111827] border border-zinc-200 dark:border-white/10 rounded-3xl p-8 shadow-xl"
-        >
+        <div className="bg-white border border-zinc-200 rounded-lg p-5 shadow-sm">
 
           {/* Card Title */}
           <div className="mb-6">
             {isOwnerMode ? (
               <div>
                 <div className="flex items-center gap-2.5 mb-1">
-                  <div className="w-8 h-8 bg-purple-100 dark:bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <ShieldCheck className="h-4.5 w-4.5 text-purple-600 dark:text-purple-400" />
+                  <div className="w-8 h-8 bg-purple-100 rounded-md flex items-center justify-center">
+                    <ShieldCheck className="h-4.5 w-4.5 text-purple-600" />
                   </div>
-                  <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Owner Login</h2>
+                  <h2 className="text-xl font-medium text-zinc-900">Owner Login</h2>
                 </div>
-                <p className="text-zinc-500 dark:text-zinc-400 text-sm">Restricted access — Agency Owner only</p>
+                <p className="text-zinc-500 text-sm">Restricted access — Agency Owner only</p>
               </div>
             ) : (
               <div>
                 <div className="flex items-center gap-2.5 mb-1">
-                  <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-500/20 rounded-lg flex items-center justify-center">
-                    <User className="h-4.5 w-4.5 text-indigo-600 dark:text-indigo-400" />
+                  <div className="w-8 h-8 bg-indigo-100 rounded-md flex items-center justify-center">
+                    <User className="h-4.5 w-4.5 text-indigo-600" />
                   </div>
-                  <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
+                  <h2 className="text-xl font-medium text-zinc-900">
                     {mode === 'user-login' ? 'Retailer Login' : 'Create Account'}
                   </h2>
                 </div>
-                <p className="text-zinc-500 dark:text-zinc-400 text-sm">
+                <p className="text-zinc-500 text-sm">
                   {mode === 'user-login' ? 'Access your distribution portal' : 'Register as a new retailer'}
                 </p>
               </div>
@@ -152,9 +121,9 @@ export default function LoginPage() {
             {mode === 'user-register' && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Business / Full Name</label>
+                  <label className="block text-sm font-medium text-zinc-700 mb-1.5">Business / Full Name</label>
                   <div className="relative">
-                    <User className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-zinc-400 dark:text-zinc-500" />
+                    <User className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-zinc-400" />
                     <input
                       type="text"
                       name="name"
@@ -162,14 +131,14 @@ export default function LoginPage() {
                       onChange={handleChange}
                       placeholder="e.g., City Pharmacy"
                       required
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
+                      className="w-full pl-10 pr-4 py-3 rounded-md bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Phone Number</label>
+                  <label className="block text-sm font-medium text-zinc-700 mb-1.5">Phone Number</label>
                   <div className="relative">
-                    <Phone className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-zinc-400 dark:text-zinc-500" />
+                    <Phone className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-zinc-400" />
                     <input
                       type="tel"
                       name="phone"
@@ -177,7 +146,7 @@ export default function LoginPage() {
                       onChange={handleChange}
                       placeholder="e.g., 9876543210"
                       required
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
+                      className="w-full pl-10 pr-4 py-3 rounded-md bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
                     />
                   </div>
                 </div>
@@ -186,11 +155,11 @@ export default function LoginPage() {
 
             {/* Username */}
             <div>
-              <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+              <label className="block text-sm font-medium text-zinc-700 mb-1.5">
                 {isOwnerMode ? 'Owner Username' : 'Username'}
               </label>
               <div className="relative">
-                <User className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-zinc-400 dark:text-zinc-500" />
+                <User className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-zinc-400" />
                 <input
                   type="text"
                   name="username"
@@ -199,16 +168,16 @@ export default function LoginPage() {
                   placeholder={isOwnerMode ? 'Enter owner username' : 'Enter username'}
                   required
                   autoComplete="username"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
+                  className="w-full pl-10 pr-4 py-3 rounded-md bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-zinc-700 mb-1.5">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-zinc-400 dark:text-zinc-500" />
+                <Lock className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-zinc-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
@@ -217,12 +186,12 @@ export default function LoginPage() {
                   placeholder="Enter your password"
                   required
                   autoComplete="current-password"
-                  className="w-full pl-10 pr-12 py-3 rounded-xl bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
+                  className="w-full pl-10 pr-12 py-3 rounded-md bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-3.5 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 transition"
+                  className="absolute right-3.5 top-3.5 text-zinc-400 hover:text-zinc-600 transition"
                 >
                   {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
                 </button>
@@ -231,7 +200,7 @@ export default function LoginPage() {
 
             {/* Error Message */}
             {error && (
-              <div className="flex items-center gap-2.5 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-600 dark:text-rose-400 px-4 py-3 rounded-xl text-sm font-medium">
+              <div className="flex items-center gap-2.5 bg-rose-50 border border-rose-200 text-rose-600 px-4 py-3 rounded-md text-sm font-medium">
                 <AlertCircle className="h-4.5 w-4.5 shrink-0" />
                 {error}
               </div>
@@ -241,10 +210,10 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3.5 px-4 rounded-xl font-bold text-white flex items-center justify-center gap-2.5 transition-all duration-200 shadow-md mt-2 ${
+              className={`w-full py-3 px-4 rounded-md font-medium text-white flex items-center justify-center gap-2.5 transition-all duration-200 mt-2 ${
                 isOwnerMode
-                  ? 'bg-purple-600 hover:bg-purple-700 shadow-sm disabled:bg-purple-600/50'
-                  : 'bg-indigo-600 hover:bg-indigo-700 shadow-sm disabled:bg-indigo-600/50'
+                  ? 'bg-purple-600 hover:bg-purple-700 disabled:bg-purple-600/50'
+                  : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600/50'
               } ${loading ? 'cursor-wait' : ''}`}
             >
               {loading ? (
@@ -264,23 +233,23 @@ export default function LoginPage() {
 
           {/* Toggle between login/register for user mode */}
           {!isOwnerMode && (
-            <div className="mt-5 text-center border-t border-zinc-100 dark:border-white/10 pt-5">
+            <div className="mt-5 text-center border-t border-zinc-100 pt-5">
               {mode === 'user-login' ? (
-                <p className="text-zinc-500 dark:text-zinc-400 text-sm">
+                <p className="text-zinc-500 text-sm">
                   New retailer?{' '}
                   <button
                     onClick={() => switchMode('user-register')}
-                    className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-bold transition"
+                    className="text-indigo-600 hover:text-indigo-700 font-medium transition"
                   >
                     Register here
                   </button>
                 </p>
               ) : (
-                <p className="text-zinc-500 dark:text-zinc-400 text-sm">
+                <p className="text-zinc-500 text-sm">
                   Already have an account?{' '}
                   <button
                     onClick={() => switchMode('user-login')}
-                    className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-bold transition"
+                    className="text-indigo-600 hover:text-indigo-700 font-medium transition"
                   >
                     Sign in
                   </button>
@@ -288,10 +257,10 @@ export default function LoginPage() {
               )}
             </div>
           )}
-        </motion.div>
+        </div>
 
         {/* Footer */}
-        <p className="text-center text-zinc-500 dark:text-zinc-500 text-xs mt-6 font-medium">
+        <p className="text-center text-zinc-500 text-xs mt-6 font-medium">
           © {new Date().getFullYear()} The Jangareddygudem Medical Agencies
         </p>
       </div>
