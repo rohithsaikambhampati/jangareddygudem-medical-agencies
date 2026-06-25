@@ -87,12 +87,12 @@ function NotificationDropdown() {
 
         {isOpen && (
           <div
-            className="absolute right-0 mt-2 w-80 bg-[#111827] rounded-md shadow-sm border border-white/5 overflow-hidden z-50"
+            className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg border border-slate-200 overflow-hidden z-50"
           >
-            <div className="px-4 py-3 border-b border-slate-50 flex items-center justify-between bg-transparent">
-              <h3 className="font-bold text-sm text-slate-100">Notifications</h3>
+            <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <h3 className="font-bold text-sm text-slate-900">Notifications</h3>
               {unreadCount > 0 && (
-                <span className="bg-indigo-100 text-indigo-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                <span className="bg-teal-100 text-teal-700 text-xs font-medium px-2 py-0.5 rounded-full">
                   {unreadCount} New
                 </span>
               )}
@@ -104,7 +104,7 @@ function NotificationDropdown() {
                 myNotifications.map((notif) => (
                   <div 
                     key={notif.id} 
-                    className={`p-4 border-b border-white/5 last:border-0 transition ${notif.is_read ? 'bg-[#111827] opacity-60' : 'bg-indigo-50/50'}`}
+                    className={`p-4 border-b border-slate-100 last:border-0 transition ${notif.is_read ? 'bg-white opacity-60' : 'bg-teal-50/50'}`}
                   >
                     <div className="flex gap-3">
                       <div className="mt-0.5 shrink-0">
@@ -119,12 +119,12 @@ function NotificationDropdown() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-slate-100">{notif.title}</p>
-                        <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{notif.message}</p>
+                        <p className="text-sm font-medium text-slate-900">{notif.title}</p>
+                        <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{notif.message}</p>
                         {!notif.is_read && (
                           <button 
                             onClick={() => markNotificationRead(notif.id)}
-                            className="text-xs font-medium text-indigo-600 mt-2 hover:text-indigo-700"
+                            className="text-xs font-medium text-teal-600 mt-2 hover:text-teal-700"
                           >
                             Mark as read
                           </button>
@@ -149,7 +149,7 @@ function AppHeader() {
 
   return (
     <header 
-      className="print:hidden sticky top-0 z-40 bg-[#111827] border-b border-white/5 shadow-sm"
+      className="print:hidden sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
@@ -159,9 +159,9 @@ function AppHeader() {
             <Pill className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
           <div>
-            <span className="font-bold text-sm sm:text-xl tracking-normal text-slate-50 block sm:hidden leading-tight">JRG Medical Agencies</span>
-            <span className="font-bold text-xs sm:text-xl tracking-normal text-slate-50 hidden sm:block leading-tight">The Jangareddygudem</span>
-            <span className="font-bold text-xs sm:text-xl tracking-normal text-slate-50 hidden sm:block leading-tight -mt-0.5">Medical Agencies</span>
+            <span className="font-bold text-sm sm:text-xl tracking-normal text-slate-900 block sm:hidden leading-tight">JRG Medical Agencies</span>
+            <span className="font-bold text-xs sm:text-xl tracking-normal text-slate-900 hidden sm:block leading-tight">The Jangareddygudem</span>
+            <span className="font-bold text-xs sm:text-xl tracking-normal text-slate-900 hidden sm:block leading-tight -mt-0.5">Medical Agencies</span>
           </div>
         </div>
 
@@ -172,25 +172,25 @@ function AppHeader() {
 
           {/* Page indicator */}
           {isOwner && (
-            <div className="hidden sm:flex items-center gap-2 bg-purple-50 border border-purple-100 text-purple-700 px-3 py-1.5 rounded-md text-sm font-medium">
+            <div className="hidden sm:flex items-center gap-2 bg-teal-50 border border-teal-100 text-teal-700 px-3 py-1.5 rounded-md text-sm font-medium">
               <ShieldCheck className="h-4 w-4" />
               Owner Dashboard
             </div>
           )}
           {isUser && (
-            <div className="hidden sm:flex items-center gap-2 bg-indigo-50 border border-indigo-100 text-indigo-700 px-3 py-1.5 rounded-md text-sm font-medium">
+            <div className="hidden sm:flex items-center gap-2 bg-teal-50 border border-teal-100 text-teal-700 px-3 py-1.5 rounded-md text-sm font-medium">
               <User className="h-4 w-4" />
               Retailer Store
             </div>
           )}
 
           {/* User pill */}
-          <div className="flex items-center gap-2 bg-transparent sm:border sm:border-white/10 rounded-md sm:px-3 sm:py-1.5">
-            <div className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold text-white ${isOwner ? 'bg-purple-500' : 'bg-indigo-500'} shrink-0`}>
+          <div className="flex items-center gap-2 bg-transparent sm:border sm:border-slate-200 rounded-md sm:px-3 sm:py-1.5">
+            <div className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold text-white bg-teal-600 shrink-0`}>
               {currentUser?.name?.charAt(0).toUpperCase() || '?'}
             </div>
             <div className="hidden sm:block">
-              <p className="text-xs font-medium text-slate-100 leading-tight">{currentUser?.name || currentUser?.username}</p>
+              <p className="text-xs font-medium text-slate-900 leading-tight">{currentUser?.name || currentUser?.username}</p>
               <p className="text-[10px] text-slate-500 font-medium capitalize">{currentUser?.role}</p>
             </div>
           </div>
@@ -215,7 +215,7 @@ function AppContent() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-transparent text-slate-100 flex flex-col font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans overflow-x-hidden">
       <AppHeader />
 
       <main className={`flex-grow ${isLoggedIn ? 'max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8' : 'w-full'}`}>
@@ -261,7 +261,7 @@ function AppContent() {
       {/* Footer — only shown when logged in */}
       {isLoggedIn && (
         <footer 
-          className="print:hidden bg-[#111827] border-t border-white/5 py-4 text-center text-xs text-slate-500 font-medium"
+          className="print:hidden bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 font-medium"
         >
           <p>© {new Date().getFullYear()} The Jangareddygudem Medical Agencies. All rights reserved.</p>
         </footer>
