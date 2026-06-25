@@ -87,13 +87,13 @@ function EditProductModal({ product, onClose, onSave }) {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative bg-white dark:bg-[#18181b] rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden"
+        className="relative bg-white dark:bg-[#111827] rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden"
       >
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-200 dark:border-white/10 bg-gradient-to-r from-indigo-600 to-indigo-700">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-white dark:bg-[#18181b]/20 rounded-xl flex items-center justify-center">
+            <div className="w-9 h-9 bg-white dark:bg-[#111827]/20 rounded-xl flex items-center justify-center">
               <Pencil className="h-4.5 w-4.5 text-white" />
             </div>
             <div>
@@ -101,7 +101,7 @@ function EditProductModal({ product, onClose, onSave }) {
               <p className="text-indigo-200 text-xs font-medium truncate max-w-[220px]">{product.name}</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white dark:bg-[#18181b]/10 transition">
+          <button onClick={onClose} className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white dark:bg-[#111827]/10 transition">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -117,14 +117,14 @@ function EditProductModal({ product, onClose, onSave }) {
             </div>
             <div>
               <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider mb-1.5">Brand</label>
-              <select name="brand" value={form.brand} onChange={handleChange} className={`${inputCls} bg-white dark:bg-[#18181b]`}>
-                {brands.map(b => <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" key={b} value={b}>{b}</option>)}
+              <select name="brand" value={form.brand} onChange={handleChange} className={`${inputCls} bg-white dark:bg-[#111827]`}>
+                {brands.map(b => <option className="bg-white dark:bg-[#111827] text-zinc-900 dark:text-zinc-100" key={b} value={b}>{b}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider mb-1.5">Category</label>
-              <select name="category" value={form.category} onChange={handleChange} className={`${inputCls} bg-white dark:bg-[#18181b]`}>
-                {categories.map(c => <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" key={c} value={c}>{c}</option>)}
+              <select name="category" value={form.category} onChange={handleChange} className={`${inputCls} bg-white dark:bg-[#111827]`}>
+                {categories.map(c => <option className="bg-white dark:bg-[#111827] text-zinc-900 dark:text-zinc-100" key={c} value={c}>{c}</option>)}
               </select>
             </div>
           </div>
@@ -232,7 +232,7 @@ function EditProductModal({ product, onClose, onSave }) {
               className={`flex-1 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition ${
                 saved
                   ? 'bg-emerald-500 text-white'
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-500/20'
+                  : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm'
               }`}>
               {saved
                 ? <><CheckCircle className="h-4 w-4" /> Saved!</>
@@ -349,7 +349,7 @@ export default function OwnerPage() {
 
   const statusFlow    = ['processing', 'confirmed', 'delivered'];
   const statusStyles  = {
-    processing: 'bg-[#f4f4f5] dark:bg-[#27272a] text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-white/15',
+    processing: 'bg-[#f4f4f5] dark:bg-[#1F2937] text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-white/15',
     confirmed:  'bg-indigo-100 text-indigo-700 dark:text-indigo-400 border-indigo-200',
     delivered:  'bg-emerald-100 text-emerald-700 dark:text-emerald-400 border-emerald-200',
     cancelled: 'bg-rose-100 text-rose-700 dark:text-rose-400 border-rose-200'
@@ -429,7 +429,7 @@ export default function OwnerPage() {
         className="space-y-8"
       >
         {/* Header */}
-        <div className="bg-white dark:bg-[#18181b] p-8 rounded-3xl shadow-sm border border-zinc-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="bg-white dark:bg-[#111827] p-8 rounded-3xl shadow-sm border border-zinc-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
               <ShieldCheck className="text-purple-600 h-8 w-8" />
@@ -449,7 +449,7 @@ export default function OwnerPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div 
               onClick={() => { setActiveQueueTab('processing'); setView('orders_queue'); }}
-              className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex items-center justify-between group cursor-pointer hover:shadow-md hover:border-amber-200 transition"
+              className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex items-center justify-between group cursor-pointer hover:shadow-md hover:border-amber-200 transition"
             >
               <div className="flex items-center gap-4">
                 <div className="p-4 bg-amber-50 dark:bg-amber-500/20 text-amber-600 rounded-2xl group-hover:scale-105 transition-transform duration-300">
@@ -466,7 +466,7 @@ export default function OwnerPage() {
 
             <div 
               onClick={() => { setActiveQueueTab('confirmed'); setView('orders_queue'); }}
-              className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex items-center justify-between group cursor-pointer hover:shadow-md hover:border-indigo-200 transition"
+              className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex items-center justify-between group cursor-pointer hover:shadow-md hover:border-indigo-200 transition"
             >
               <div className="flex items-center gap-4">
                 <div className="p-4 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 rounded-2xl group-hover:scale-105 transition-transform duration-300">
@@ -489,7 +489,7 @@ export default function OwnerPage() {
             <Tag className="h-5 w-5 text-purple-600" /> Manage Brands
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border-2 border-dashed border-zinc-300 dark:border-white/15 shadow-sm flex flex-col justify-center">
+            <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border-2 border-dashed border-zinc-300 dark:border-white/15 shadow-sm flex flex-col justify-center">
               <h3 className="font-bold text-zinc-800 dark:text-zinc-300 flex items-center gap-2 mb-4">
                 <Plus className="text-purple-500" /> Add New Brand
               </h3>
@@ -520,7 +520,7 @@ export default function OwnerPage() {
                     setView('brand');
                   }
                 }}
-                className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex flex-col justify-between group cursor-pointer hover:shadow-md hover:border-purple-200 transition"
+                className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex flex-col justify-between group cursor-pointer hover:shadow-md hover:border-purple-200 transition"
               >
                 <div>
                   <div className="flex justify-between items-start mb-4">
@@ -565,7 +565,7 @@ export default function OwnerPage() {
                         </button>
                         <button
                           onClick={() => setEditingBrandName(null)}
-                          className="bg-[#f4f4f5] dark:bg-[#27272a] hover:bg-slate-200 text-zinc-600 dark:text-zinc-400 text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+                          className="bg-[#f4f4f5] dark:bg-[#1F2937] hover:bg-slate-200 text-zinc-600 dark:text-zinc-400 text-xs font-semibold px-3 py-1.5 rounded-lg transition"
                         >
                           Cancel
                         </button>
@@ -604,7 +604,7 @@ export default function OwnerPage() {
                 <div 
                   key={user.id} 
                   onClick={() => { setSelectedRetailer(user); setView('retailer'); }}
-                  className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm group cursor-pointer hover:shadow-md hover:border-blue-200 transition"
+                  className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm group cursor-pointer hover:shadow-md hover:border-blue-200 transition"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 text-blue-600 rounded-full flex items-center justify-center">
@@ -623,7 +623,7 @@ export default function OwnerPage() {
               );
             })}
             {registeredUsers.length === 0 && (
-              <div className="col-span-full py-8 text-center border border-dashed border-zinc-300 dark:border-white/15 rounded-2xl bg-white dark:bg-[#18181b] text-zinc-500 dark:text-zinc-500">
+              <div className="col-span-full py-8 text-center border border-dashed border-zinc-300 dark:border-white/15 rounded-2xl bg-white dark:bg-[#111827] text-zinc-500 dark:text-zinc-500">
                 No retailers registered yet.
               </div>
             )}
@@ -652,7 +652,7 @@ export default function OwnerPage() {
           )}
         </AnimatePresence>
 
-        <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-white/10 flex justify-between items-center gap-4">
+        <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-white/10 flex justify-between items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-3">
               <span className="bg-purple-100 text-purple-700 dark:text-purple-400 w-10 h-10 rounded-xl flex items-center justify-center text-xl">{selectedBrand.charAt(0)}</span>
@@ -661,7 +661,7 @@ export default function OwnerPage() {
           </div>
           <button
             onClick={() => setView('hub')}
-            className="bg-[#f4f4f5] dark:bg-[#27272a] hover:bg-slate-200 text-zinc-800 dark:text-zinc-300 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
+            className="bg-[#f4f4f5] dark:bg-[#1F2937] hover:bg-slate-200 text-zinc-800 dark:text-zinc-300 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
           >
             <ArrowLeft className="h-5 w-5" /> Back to Hub
           </button>
@@ -683,7 +683,7 @@ export default function OwnerPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5 h-fit">
+          <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5 h-fit">
             <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
               <Plus className="text-indigo-600" /> Add to {selectedBrand}
             </h2>
@@ -695,8 +695,8 @@ export default function OwnerPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-1">Category</label>
-                  <select name="category" value={newProduct.category} onChange={handleInputChange} className={`${inputCls} bg-white dark:bg-[#18181b]`}>
-                    {categories.map(c => <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" key={c} value={c}>{c}</option>)}
+                  <select name="category" value={newProduct.category} onChange={handleInputChange} className={`${inputCls} bg-white dark:bg-[#111827]`}>
+                    {categories.map(c => <option className="bg-white dark:bg-[#111827] text-zinc-900 dark:text-zinc-100" key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
               </div>
@@ -747,7 +747,7 @@ export default function OwnerPage() {
             </form>
           </div>
 
-          <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm lg:col-span-2 space-y-4">
+          <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm lg:col-span-2 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{selectedBrand} Products</h2>
               <div className="relative w-full sm:w-72">
@@ -757,7 +757,7 @@ export default function OwnerPage() {
                   placeholder="Search products in brand..."
                   value={productSearch}
                   onChange={(e) => setProductSearch(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#18181b]"
+                  className="w-full pl-9 pr-4 py-2 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#111827]"
                 />
               </div>
             </div>
@@ -801,7 +801,7 @@ export default function OwnerPage() {
                           </td>
                           <td className="px-5 py-4 font-semibold text-zinc-800 dark:text-zinc-300">{product.stockQuantity}</td>
                           <td className="px-5 py-4 text-center">
-                            {product.isOfferActive ? <span className="text-xs bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold px-2 py-1 rounded-lg">Active</span> : <span className="text-xs bg-[#f4f4f5] dark:bg-[#27272a] text-zinc-400 font-bold px-2 py-1 rounded-lg">Inactive</span>}
+                            {product.isOfferActive ? <span className="text-xs bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold px-2 py-1 rounded-lg">Active</span> : <span className="text-xs bg-[#f4f4f5] dark:bg-[#1F2937] text-zinc-400 font-bold px-2 py-1 rounded-lg">Inactive</span>}
                           </td>
                           <td className="px-5 py-4 text-center">
                             {product.expiryDate ? <span className="text-xs text-zinc-600 dark:text-zinc-400">{new Date(product.expiryDate).toLocaleDateString()}</span> : <span className="text-xs text-zinc-400">N/A</span>}
@@ -833,7 +833,7 @@ export default function OwnerPage() {
         className="space-y-8"
       >
         {/* Header */}
-        <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-white/10 flex justify-between items-center gap-4 flex-wrap">
+        <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-white/10 flex justify-between items-center gap-4 flex-wrap">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 bg-purple-50 dark:bg-purple-500/10 text-purple-600 rounded-full flex items-center justify-center border-4 border-white shadow-sm">
               <ShoppingBag className="h-7 w-7" />
@@ -845,7 +845,7 @@ export default function OwnerPage() {
           </div>
           <button
             onClick={() => setView('hub')}
-            className="bg-[#f4f4f5] dark:bg-[#27272a] hover:bg-slate-200 text-zinc-800 dark:text-zinc-300 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
+            className="bg-[#f4f4f5] dark:bg-[#1F2937] hover:bg-slate-200 text-zinc-800 dark:text-zinc-300 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
           >
             <ArrowLeft className="h-5 w-5" /> Back to Hub
           </button>
@@ -864,7 +864,7 @@ export default function OwnerPage() {
             <Clock className="h-4 w-4" />
             Pending Confirmation
             <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-              activeQueueTab === 'processing' ? 'bg-amber-100 text-amber-700 dark:text-amber-400' : 'bg-[#f4f4f5] dark:bg-[#27272a] text-zinc-600 dark:text-zinc-400'
+              activeQueueTab === 'processing' ? 'bg-amber-100 text-amber-700 dark:text-amber-400' : 'bg-[#f4f4f5] dark:bg-[#1F2937] text-zinc-600 dark:text-zinc-400'
             }`}>
               {orders.filter(o => o.status === 'processing').length}
             </span>
@@ -881,7 +881,7 @@ export default function OwnerPage() {
             <Truck className="h-4 w-4" />
             Pending Delivery
             <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-              activeQueueTab === 'confirmed' ? 'bg-indigo-100 text-indigo-700 dark:text-indigo-400' : 'bg-[#f4f4f5] dark:bg-[#27272a] text-zinc-600 dark:text-zinc-400'
+              activeQueueTab === 'confirmed' ? 'bg-indigo-100 text-indigo-700 dark:text-indigo-400' : 'bg-[#f4f4f5] dark:bg-[#1F2937] text-zinc-600 dark:text-zinc-400'
             }`}>
               {orders.filter(o => o.status === 'confirmed').length}
             </span>
@@ -889,7 +889,7 @@ export default function OwnerPage() {
         </div>
 
         {/* Orders List */}
-        <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5">
+        <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5">
           {filteredOrders.length === 0 ? (
             <div className="text-center py-16 text-zinc-400 border border-dashed border-zinc-300 dark:border-white/15 rounded-xl">
               No orders found in this status queue.
@@ -933,7 +933,7 @@ export default function OwnerPage() {
                     </div>
 
                     {/* Order details */}
-                    <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5] dark:bg-[#27272a]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
+                    <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5] dark:bg-[#1F2937]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
                       <div className="p-1">
                         <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Billed</p>
                         <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.quantity}</p>
@@ -966,7 +966,7 @@ export default function OwnerPage() {
                     </div>
 
                     {order.deliveryAddress && typeof order.deliveryAddress === 'object' && (
-                      <div className="bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-white/10 rounded-xl p-3 flex gap-3">
+                      <div className="bg-white dark:bg-[#111827] border border-zinc-200 dark:border-white/10 rounded-xl p-3 flex gap-3">
                         <MapPin className="h-4 w-4 text-zinc-400 shrink-0 mt-0.5" />
                         <div>
                           <p className="text-xs font-bold text-zinc-800 dark:text-zinc-300">{order.deliveryAddress?.name} ({order.deliveryAddress?.phone})</p>
@@ -1017,14 +1017,14 @@ export default function OwnerPage() {
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative bg-white dark:bg-[#18181b] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+                className="relative bg-white dark:bg-[#111827] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
               >
               <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-200 dark:border-white/10 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white">
                 <div>
                   <h2 className="text-base font-bold">Record Payment</h2>
                   <p className="text-indigo-100 text-xs">Log a manual payment received from {selectedRetailer.name}</p>
                 </div>
-                <button onClick={() => setShowPaymentModal(false)} className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white dark:bg-[#18181b]/10 transition">
+                <button onClick={() => setShowPaymentModal(false)} className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white dark:bg-[#111827]/10 transition">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -1076,7 +1076,7 @@ export default function OwnerPage() {
                   <button type="button" onClick={() => setShowPaymentModal(false)} className="flex-1 py-2.5 rounded-xl border border-zinc-300 dark:border-white/15 text-zinc-600 dark:text-zinc-400 font-semibold text-sm hover:bg-transparent dark:bg-transparent transition">
                     Cancel
                   </button>
-                  <button type="submit" className="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-500/20 transition">
+                  <button type="submit" className="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-sm transition">
                     Record Payment
                   </button>
                 </div>
@@ -1086,7 +1086,7 @@ export default function OwnerPage() {
         )}
         </AnimatePresence>
 
-        <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-white/10 flex justify-between items-center gap-4 flex-wrap">
+        <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-white/10 flex justify-between items-center gap-4 flex-wrap">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 bg-blue-50 dark:bg-blue-500/10 text-blue-600 rounded-full flex items-center justify-center border-4 border-white shadow-sm">
               <User className="h-7 w-7" />
@@ -1106,13 +1106,13 @@ export default function OwnerPage() {
             </button>
             <button
               onClick={() => setShowPaymentModal(true)}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition shadow-md shadow-emerald-500/20"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition shadow-sm"
             >
               <IndianRupee className="h-5 w-5" /> Record Payment
             </button>
             <button
               onClick={() => setView('hub')}
-              className="bg-[#f4f4f5] dark:bg-[#27272a] hover:bg-slate-200 text-zinc-800 dark:text-zinc-300 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
+              className="bg-[#f4f4f5] dark:bg-[#1F2937] hover:bg-slate-200 text-zinc-800 dark:text-zinc-300 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
             >
               <ArrowLeft className="h-5 w-5" /> Back to Hub
             </button>
@@ -1120,7 +1120,7 @@ export default function OwnerPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-rose-100 dark:border-rose-500/20 shadow-sm flex items-center gap-5">
+          <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-rose-100 dark:border-rose-500/20 shadow-sm flex items-center gap-5">
             <div className="p-4 bg-rose-50 dark:bg-rose-500/20 text-rose-500 rounded-2xl"><IndianRupee className="h-8 w-8" /></div>
             <div>
               <p className="text-rose-600 text-sm font-bold uppercase tracking-wider">Remaining Balance Due</p>
@@ -1128,7 +1128,7 @@ export default function OwnerPage() {
               <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">Outstanding outstanding amount</p>
             </div>
           </div>
-          <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-indigo-100 dark:border-indigo-500/30 shadow-sm flex items-center gap-5">
+          <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-indigo-100 dark:border-indigo-500/30 shadow-sm flex items-center gap-5">
             <div className="p-4 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-500 rounded-2xl"><IndianRupee className="h-8 w-8" /></div>
             <div>
               <p className="text-indigo-600 text-sm font-bold uppercase tracking-wider">Total Amount Paid</p>
@@ -1136,7 +1136,7 @@ export default function OwnerPage() {
               <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">From {retailerPayments.length} logged payments</p>
             </div>
           </div>
-          <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm flex items-center gap-5">
+          <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm flex items-center gap-5">
             <div className="p-4 bg-emerald-50 dark:bg-emerald-500/20 text-emerald-500 rounded-2xl"><CheckCircle className="h-8 w-8" /></div>
             <div>
               <p className="text-emerald-600 text-sm font-bold uppercase tracking-wider">Lifetime Processed</p>
@@ -1147,7 +1147,7 @@ export default function OwnerPage() {
         </div>
 
         {/* Transaction History / Ledger */}
-        <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5">
+        <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
             <IndianRupee className="text-emerald-600" /> Transaction History (Ledger)
           </h2>
@@ -1198,7 +1198,7 @@ export default function OwnerPage() {
           )}
         </div>
 
-        <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5">
+        <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
             <ShoppingBag className="text-indigo-600" /> Order History
           </h2>
@@ -1240,7 +1240,7 @@ export default function OwnerPage() {
                       </div>
                     </div>
                     {/* Order details */}
-                    <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5] dark:bg-[#27272a]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
+                    <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5] dark:bg-[#1F2937]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
                       <div className="p-1">
                         <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Billed</p>
                         <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.quantity}</p>

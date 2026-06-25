@@ -82,7 +82,7 @@ function OrderStatusStepper({ order }) {
             <React.Fragment key={step.key}>
               <div className="flex flex-col items-center">
                 <div className={`w-9 h-9 rounded-full flex items-center justify-center ring-2 transition-all duration-300 ${
-                  isDone ? `${c.bg} ring-transparent shadow-md` : 'bg-[#f4f4f5] dark:bg-[#27272a] ring-slate-200'
+                  isDone ? `${c.bg} ring-transparent shadow-md` : 'bg-zinc-100 dark:bg-[#1F2937] ring-slate-200'
                 }`}>
                   <Icon className={`h-4 w-4 ${isDone ? 'text-white' : 'text-zinc-400'}`} />
                 </div>
@@ -139,7 +139,7 @@ function MyOrders({ userId }) {
   if (myOrders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center gap-4">
-        <div className="w-20 h-20 bg-[#f4f4f5] dark:bg-[#27272a] rounded-3xl flex items-center justify-center">
+        <div className="w-20 h-20 bg-zinc-100 dark:bg-[#1F2937] rounded-3xl flex items-center justify-center">
           <ClipboardList className="h-10 w-10 text-slate-300" />
         </div>
         <div>
@@ -152,12 +152,12 @@ function MyOrders({ userId }) {
 
   const statusBadge = (status) => {
     const map = {
-      processing: 'bg-[#f4f4f5] dark:bg-[#27272a] text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-white/15',
+      processing: 'bg-zinc-100 dark:bg-[#1F2937] text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-white/15',
       confirmed:  'bg-indigo-100 text-indigo-700 dark:text-indigo-400 border-indigo-200',
       delivered:  'bg-emerald-100 text-emerald-700 dark:text-emerald-400 border-emerald-200',
       cancelled:  'bg-rose-100 text-rose-700 dark:text-rose-400 border-rose-200',
     };
-    return map[status] || 'bg-[#f4f4f5] dark:bg-[#27272a] text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-white/15';
+    return map[status] || 'bg-zinc-100 dark:bg-[#1F2937] text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-white/15';
   };
 
   const statusLabel = (status) => {
@@ -174,11 +174,11 @@ function MyOrders({ userId }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">My Orders</h2>
-        <span className="text-xs font-semibold px-3 py-1 bg-[#f4f4f5] dark:bg-[#27272a] text-zinc-600 dark:text-zinc-400 rounded-full">{myOrders.length} order{myOrders.length !== 1 ? 's' : ''}</span>
+        <span className="text-xs font-semibold px-3 py-1 bg-zinc-100 dark:bg-[#1F2937] text-zinc-600 dark:text-zinc-400 rounded-full">{myOrders.length} order{myOrders.length !== 1 ? 's' : ''}</span>
       </div>
 
       {myOrders.map((order) => (
-        <div key={order.id} className="bg-white dark:bg-[#18181b] rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm p-5 space-y-4 hover:shadow-md transition">
+        <div key={order.id} className="bg-white dark:bg-[#111827] rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm p-5 space-y-4 hover:shadow-md transition">
           {/* Order header */}
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -192,7 +192,7 @@ function MyOrders({ userId }) {
           </div>
 
           {/* Order details */}
-          <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5] dark:bg-[#27272a]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
+          <div className="grid grid-cols-3 gap-2 bg-zinc-100 dark:bg-[#1F2937]/40 p-3 rounded-2xl border border-zinc-200 dark:border-white/5 text-center">
             <div className="p-1">
               <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Billed</p>
               <p className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">{order.quantity}</p>
@@ -303,7 +303,7 @@ function AddressModal({ currentUser, onConfirm, onCancel }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-[#18181b]/50 backdrop-blur-sm" 
+        className="absolute inset-0 bg-[#111827]/50 backdrop-blur-sm" 
         onClick={onCancel} 
       />
 
@@ -312,13 +312,13 @@ function AddressModal({ currentUser, onConfirm, onCancel }) {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative bg-white dark:bg-[#18181b] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+        className="relative bg-white dark:bg-[#111827] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
       >
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-200 dark:border-white/10 bg-gradient-to-r from-indigo-600 to-indigo-700">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-white dark:bg-[#18181b]/20 rounded-xl flex items-center justify-center">
+            <div className="w-9 h-9 bg-white dark:bg-[#111827]/20 rounded-xl flex items-center justify-center">
               <MapPin className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -328,7 +328,7 @@ function AddressModal({ currentUser, onConfirm, onCancel }) {
               </p>
             </div>
           </div>
-          <button onClick={onCancel} className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white dark:bg-[#18181b]/10 transition">
+          <button onClick={onCancel} className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white dark:bg-[#111827]/10 transition">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -388,7 +388,7 @@ function AddressModal({ currentUser, onConfirm, onCancel }) {
               Cancel
             </button>
             <button type="submit"
-              className="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-indigo-500/20 transition">
+              className="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition">
               <ArrowRight className="h-4 w-4" /> Confirm & Place Order
             </button>
           </div>
@@ -528,7 +528,7 @@ export default function UserPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-20 right-6 z-50 flex items-center gap-3 bg-[#18181b] text-white px-5 py-4 rounded-2xl shadow-xl border border-slate-800"
+            className="fixed top-20 right-6 z-50 flex items-center gap-3 bg-[#111827] text-white px-5 py-4 rounded-2xl shadow-xl border border-slate-800"
           >
             {toast.type === 'success'
               ? <CheckCircle className="text-emerald-400 h-6 w-6 shrink-0" />
@@ -541,7 +541,7 @@ export default function UserPage() {
       {/* Floating Cart Button */}
       <button
         onClick={() => setIsCartOpen(true)}
-        className="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg shadow-indigo-500/20 flex items-center justify-center transition-all duration-300 hover:scale-105"
+        className="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-sm flex items-center justify-center transition-all duration-300 hover:scale-105"
       >
         <div className="relative">
           <ShoppingCart className="h-6 w-6" />
@@ -554,7 +554,7 @@ export default function UserPage() {
       </button>
 
       {/* Contact Owner Banner */}
-      <div className="bg-white dark:bg-[#18181b] border border-zinc-300 dark:border-white/15 px-5 py-3.5 rounded-2xl flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6 shadow-sm">
+      <div className="bg-white dark:bg-[#111827] border border-zinc-300 dark:border-white/15 px-5 py-3.5 rounded-2xl flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6 shadow-sm">
         <span className="text-sm font-bold text-zinc-800 dark:text-zinc-300">Contact Owner:</span>
         <a href="tel:9440103869" className="flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition bg-indigo-50 dark:bg-indigo-500/20 px-3 py-1.5 rounded-lg border border-indigo-100 dark:border-indigo-500/30">
           <Phone className="h-4 w-4" /> 9440103869
@@ -565,12 +565,12 @@ export default function UserPage() {
       </div>
 
       {/* Tab Bar */}
-      <div className="flex gap-1 bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-white/10 shadow-sm p-1.5 rounded-2xl">
+      <div className="flex gap-1 bg-white dark:bg-[#111827] border border-zinc-200 dark:border-white/10 shadow-sm p-1.5 rounded-2xl">
         <button
           onClick={() => setActiveTab('store')}
           className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
             activeTab === 'store'
-              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+              ? 'bg-indigo-600 text-white shadow-sm'
               : 'text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:text-zinc-100 hover:bg-transparent dark:bg-transparent'
           }`}
         >
@@ -581,7 +581,7 @@ export default function UserPage() {
           onClick={() => setActiveTab('orders')}
           className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
             activeTab === 'orders'
-              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+              ? 'bg-indigo-600 text-white shadow-sm'
               : 'text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:text-zinc-100 hover:bg-transparent dark:bg-transparent'
           }`}
         >
@@ -589,7 +589,7 @@ export default function UserPage() {
           <span><span className="hidden sm:inline">My </span>Orders</span>
           {myOrdersCount > 0 && (
             <span className={`text-[10px] sm:text-xs font-black px-1.5 py-0.5 rounded-full ${
-              activeTab === 'orders' ? 'bg-white dark:bg-[#18181b]/25 text-white' : 'bg-indigo-100 text-indigo-700 dark:text-indigo-400'
+              activeTab === 'orders' ? 'bg-white dark:bg-[#111827]/25 text-white' : 'bg-indigo-100 text-indigo-700 dark:text-indigo-400'
             }`}>
               {myOrdersCount}
             </span>
@@ -599,7 +599,7 @@ export default function UserPage() {
           onClick={() => setActiveTab('ledger')}
           className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
             activeTab === 'ledger'
-              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+              ? 'bg-indigo-600 text-white shadow-sm'
               : 'text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:text-zinc-100 hover:bg-transparent dark:bg-transparent'
           }`}
         >
@@ -624,12 +624,12 @@ export default function UserPage() {
         >
           {/* Hero Banner */}
           {activeOfferProducts.length > 0 ? (
-            <div className="bg-gradient-to-r from-indigo-600 to-blue-700 p-8 rounded-3xl text-white shadow-md relative overflow-hidden">
+            <div className="bg-indigo-700 p-8 rounded-3xl text-white shadow-md relative overflow-hidden">
               <div className="absolute right-0 top-0 opacity-10 translate-x-1/4 -translate-y-1/4">
                 <ShoppingCart className="h-64 w-64" />
               </div>
               <div className="relative z-10 max-w-2xl">
-                <span className="inline-flex items-center gap-1.5 bg-white dark:bg-[#18181b]/20 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-4">
+                <span className="inline-flex items-center gap-1.5 bg-white dark:bg-[#111827]/20 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-4">
                   <Sparkles className="h-3.5 w-3.5" /> Direct Retail Promotions Active
                 </span>
                 <h1 className="text-3xl font-extrabold tracking-tight">Bulk Pharmacy Distribution Deals</h1>
@@ -640,7 +640,7 @@ export default function UserPage() {
                     if (p.offerText) label.push(`Scheme: ${p.offerText}`);
                     if (p.discountPercentage > 0) label.push(`${p.discountPercentage}% Off`);
                     return (
-                      <span key={p.id} className="bg-white dark:bg-[#18181b]/10 text-white text-xs px-3 py-1.5 rounded-lg border border-white/10 font-semibold flex items-center gap-1.5">
+                      <span key={p.id} className="bg-white dark:bg-[#111827]/10 text-white text-xs px-3 py-1.5 rounded-lg border border-white/10 font-semibold flex items-center gap-1.5">
                         <Tag className="h-3.5 w-3.5 text-indigo-300" />
                         {p.name} ({label.join(' | ')})
                       </span>
@@ -650,14 +650,14 @@ export default function UserPage() {
               </div>
             </div>
           ) : (
-            <div className="bg-gradient-to-r from-slate-700 to-slate-800 p-8 rounded-3xl text-white shadow-md">
+            <div className="bg-[#163A63] p-8 rounded-3xl text-white shadow-md">
               <h1 className="text-3xl font-extrabold tracking-tight">Retailer Medical Distribution Portal</h1>
               <p className="text-slate-300 mt-2">Bulk medicine and clinical supply distributions for retail pharmacies.</p>
             </div>
           )}
 
           {/* Search & Filters */}
-          <div className="bg-white dark:bg-[#18181b] p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex flex-col gap-4">
+          <div className="bg-white dark:bg-[#111827] p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex flex-col gap-4">
             <div className="flex justify-between items-center gap-4 flex-wrap">
               <div className="relative flex-1 min-w-[200px]">
                 <Search className="absolute left-3 top-3.5 h-5 w-5 text-zinc-400" />
@@ -673,23 +673,23 @@ export default function UserPage() {
                 <select
                   value={brandFilter}
                   onChange={(e) => setBrandFilter(e.target.value)}
-                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#18181b] cursor-pointer"
+                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#111827] cursor-pointer"
                 >
-                  {uniqueBrands.map(b => <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" key={b} value={b}>{b === 'All' ? 'All Brands' : b}</option>)}
+                  {uniqueBrands.map(b => <option className="bg-white dark:bg-[#111827] text-zinc-900 dark:text-zinc-100" key={b} value={b}>{b === 'All' ? 'All Brands' : b}</option>)}
                 </select>
 
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#18181b] cursor-pointer"
+                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-zinc-800 dark:text-zinc-100 bg-white dark:bg-[#111827] cursor-pointer"
                 >
-                  <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" value="name-asc">A to Z</option>
-                  <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" value="name-desc">Z to A</option>
-                  <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" value="price-asc">Price: Low to High</option>
-                  <option className="bg-white dark:bg-[#18181b] text-zinc-900 dark:text-zinc-100" value="price-desc">Price: High to Low</option>
+                  <option className="bg-white dark:bg-[#111827] text-zinc-900 dark:text-zinc-100" value="name-asc">A to Z</option>
+                  <option className="bg-white dark:bg-[#111827] text-zinc-900 dark:text-zinc-100" value="name-desc">Z to A</option>
+                  <option className="bg-white dark:bg-[#111827] text-zinc-900 dark:text-zinc-100" value="price-asc">Price: Low to High</option>
+                  <option className="bg-white dark:bg-[#111827] text-zinc-900 dark:text-zinc-100" value="price-desc">Price: High to Low</option>
                 </select>
 
-                <label className="flex-1 sm:flex-initial flex items-center justify-center gap-2 cursor-pointer py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent transition select-none bg-white dark:bg-[#18181b]">
+                <label className="flex-1 sm:flex-initial flex items-center justify-center gap-2 cursor-pointer py-2.5 px-4 rounded-xl border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent transition select-none bg-white dark:bg-[#111827]">
                   <input type="checkbox" checked={dealsOnly} onChange={e => setDealsOnly(e.target.checked)}
                     className="w-4 h-4 text-indigo-600 border-zinc-400 dark:border-white/20 rounded focus:ring-indigo-500" />
                   <span className="text-sm font-bold text-zinc-600 dark:text-zinc-400">Deals</span>
@@ -712,7 +712,7 @@ export default function UserPage() {
               <button
                 onClick={() => setCategoryFilter('All')}
                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
-                  categoryFilter === 'All' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white dark:bg-[#18181b] text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent'
+                  categoryFilter === 'All' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white dark:bg-[#111827] text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent'
                 }`}
               >
                 All Categories
@@ -722,7 +722,7 @@ export default function UserPage() {
                   key={cat}
                   onClick={() => setCategoryFilter(cat)}
                   className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
-                    categoryFilter === cat ? 'bg-slate-800 text-white shadow-sm' : 'bg-white dark:bg-[#18181b] text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent'
+                    categoryFilter === cat ? 'bg-slate-800 text-white shadow-sm' : 'bg-white dark:bg-[#111827] text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-white/15 hover:bg-transparent dark:bg-transparent'
                   }`}
                 >
                   {cat}
@@ -734,7 +734,7 @@ export default function UserPage() {
           {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.length === 0 ? (
-              <div className="col-span-full text-center py-16 text-zinc-400 bg-white dark:bg-[#18181b] rounded-2xl border border-dashed border-zinc-300 dark:border-white/15">
+              <div className="col-span-full text-center py-16 text-zinc-400 bg-white dark:bg-[#111827] rounded-2xl border border-dashed border-zinc-300 dark:border-white/15">
                 No products match your search.
               </div>
             ) : (
@@ -751,7 +751,7 @@ export default function UserPage() {
                 const freeQuantity   = totalDispatched - quantityInCart;
 
                 return (
-                  <div key={product.id} className="bg-white dark:bg-[#18181b] rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-md transition duration-200 overflow-hidden flex flex-col justify-between">
+                  <div key={product.id} className="bg-white dark:bg-[#111827] rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm hover:shadow-md transition duration-200 overflow-hidden flex flex-col justify-between">
                     <div className="p-5 pb-2">
                       <div className="flex justify-between items-start gap-2">
                         {hasDiscount ? (
@@ -799,7 +799,7 @@ export default function UserPage() {
                       </div>
                       {quantityInCart > 0 && freeQuantity > 0 && (
                         <div className="mt-3.5 bg-emerald-50 dark:bg-emerald-500/20 border border-emerald-100 dark:border-emerald-500/20/70 p-2.5 rounded-xl text-center">
-                          <p className="text-xs text-emerald-800 font-extrabold flex items-center justify-center gap-1.5 animate-pulse">
+                          <p className="text-xs text-emerald-800 font-extrabold flex items-center justify-center gap-1.5">
                             🎁 DEAL APPLIED: +{freeQuantity} FREE Unit{freeQuantity > 1 ? 's' : ''}
                           </p>
                           <p className="text-[10px] text-zinc-500 dark:text-zinc-500 font-semibold mt-0.5">
@@ -813,12 +813,12 @@ export default function UserPage() {
                       {quantityInCart > 0 ? (
                         <div className="flex items-center justify-between bg-indigo-50 dark:bg-indigo-500/20 border border-indigo-100 dark:border-indigo-500/30 rounded-xl p-1">
                           <button onClick={() => handleUpdateQty(product.id, quantityInCart - 1)}
-                            className="w-10 h-10 bg-white dark:bg-[#18181b] hover:bg-[#f4f4f5] dark:bg-[#27272a] rounded-lg flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-bold transition shadow-sm border border-slate-150">
+                            className="w-10 h-10 bg-white dark:bg-[#111827] hover:bg-zinc-100 dark:hover:bg-[#1F2937] rounded-lg flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-bold transition shadow-sm border border-slate-150">
                             <Minus className="h-4 w-4" />
                           </button>
                           <span className="text-base font-black text-indigo-900 w-10 text-center">{quantityInCart}</span>
                           <button onClick={() => handleUpdateQty(product.id, quantityInCart + 1)}
-                            className="w-10 h-10 bg-white dark:bg-[#18181b] hover:bg-[#f4f4f5] dark:bg-[#27272a] rounded-lg flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-bold transition shadow-sm border border-slate-150">
+                            className="w-10 h-10 bg-white dark:bg-[#111827] hover:bg-zinc-100 dark:hover:bg-[#1F2937] rounded-lg flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-bold transition shadow-sm border border-slate-150">
                             <Plus className="h-4 w-4" />
                           </button>
                         </div>
@@ -837,8 +837,8 @@ export default function UserPage() {
                               }}
                               className={`w-full font-bold py-2.5 px-4 rounded-xl transition duration-200 shadow-sm flex items-center justify-center gap-2 ${
                                 isSubscribed
-                                  ? 'bg-[#f4f4f5] dark:bg-[#27272a] text-zinc-500 dark:text-zinc-500 border border-zinc-300 dark:border-white/15 cursor-default'
-                                  : 'bg-amber-500 hover:bg-amber-600 text-white shadow-md shadow-amber-500/20'
+                                  ? 'bg-zinc-100 dark:bg-[#1F2937] text-zinc-500 dark:text-zinc-500 border border-zinc-300 dark:border-white/15 cursor-default'
+                                  : 'bg-amber-500 hover:bg-amber-600 text-white shadow-sm'
                               }`}
                             >
                               {isSubscribed ? (
@@ -878,7 +878,7 @@ export default function UserPage() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-6"
         >
-          <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-white/10 flex justify-between items-center gap-4">
+          <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-white/10 flex justify-between items-center gap-4">
             <div>
               <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">My Payments</h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">Review your lifetime order totals, recorded payments, and outstanding balances.</p>
@@ -886,7 +886,7 @@ export default function UserPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-rose-100 dark:border-rose-500/20 shadow-sm flex items-center gap-5">
+            <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-rose-100 dark:border-rose-500/20 shadow-sm flex items-center gap-5">
               <div className="p-4 bg-rose-50 dark:bg-rose-500/20 text-rose-500 rounded-2xl"><IndianRupee className="h-8 w-8" /></div>
               <div>
                 <p className="text-rose-600 text-sm font-bold uppercase tracking-wider">Outstanding Balance Due</p>
@@ -894,7 +894,7 @@ export default function UserPage() {
                 <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">Please pay to clear pending balance</p>
               </div>
             </div>
-            <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-indigo-100 dark:border-indigo-500/30 shadow-sm flex items-center gap-5">
+            <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-indigo-100 dark:border-indigo-500/30 shadow-sm flex items-center gap-5">
               <div className="p-4 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-500 rounded-2xl"><IndianRupee className="h-8 w-8" /></div>
               <div>
                 <p className="text-indigo-600 text-sm font-bold uppercase tracking-wider">Total Paid to Date</p>
@@ -902,7 +902,7 @@ export default function UserPage() {
                 <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">Manual payments confirmed by Owner</p>
               </div>
             </div>
-            <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm flex items-center gap-5">
+            <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm flex items-center gap-5">
               <div className="p-4 bg-emerald-50 dark:bg-emerald-500/20 text-emerald-500 rounded-2xl"><CheckCircle className="h-8 w-8" /></div>
               <div>
                 <p className="text-emerald-600 text-sm font-bold uppercase tracking-wider">Total Lifetime Purchases</p>
@@ -912,7 +912,7 @@ export default function UserPage() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#18181b] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5">
+          <div className="bg-white dark:bg-[#111827] p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-5">
             <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
               <IndianRupee className="text-emerald-600" /> Transaction / Payment History
             </h2>
@@ -954,9 +954,9 @@ export default function UserPage() {
       {/* ── CART DRAWER ──────────────────────────────────────── */}
       {isCartOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-[#18181b]/40 backdrop-blur-sm" onClick={() => setIsCartOpen(false)} />
+          <div className="absolute inset-0 bg-[#111827]/40 backdrop-blur-sm" onClick={() => setIsCartOpen(false)} />
           <div className="absolute inset-y-0 right-0 max-w-full flex pl-4 sm:pl-10">
-            <div className="w-screen max-w-md bg-white dark:bg-[#18181b] shadow-2xl flex flex-col">
+            <div className="w-screen max-w-md bg-white dark:bg-[#111827] shadow-2xl flex flex-col">
 
               {/* Drawer Header */}
               <div className="p-6 border-b border-zinc-200 dark:border-white/10 flex items-center justify-between bg-transparent dark:bg-transparent">
@@ -1026,16 +1026,16 @@ export default function UserPage() {
                           <div className="flex justify-between items-center mt-1 pt-1.5 border-t border-zinc-200 dark:border-white/10">
                             <div className="flex items-center gap-2">
                               <button onClick={() => handleUpdateQty(item.id, item.quantity - 1)}
-                                className="w-7 h-7 bg-white dark:bg-[#18181b] hover:bg-[#f4f4f5] dark:bg-[#27272a] rounded-lg border border-zinc-300 dark:border-white/15 flex items-center justify-center text-zinc-600 dark:text-zinc-400 transition">
+                                className="w-7 h-7 bg-white dark:bg-[#111827] hover:bg-zinc-100 dark:hover:bg-[#1F2937] rounded-lg border border-zinc-300 dark:border-white/15 flex items-center justify-center text-zinc-600 dark:text-zinc-400 transition">
                                 <Minus className="h-3 w-3" />
                               </button>
                               <span className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100 w-6 text-center">{item.quantity}</span>
                               <button onClick={() => handleUpdateQty(item.id, item.quantity + 1)}
-                                className="w-7 h-7 bg-white dark:bg-[#18181b] hover:bg-[#f4f4f5] dark:bg-[#27272a] rounded-lg border border-zinc-300 dark:border-white/15 flex items-center justify-center text-zinc-600 dark:text-zinc-400 transition">
+                                className="w-7 h-7 bg-white dark:bg-[#111827] hover:bg-zinc-100 dark:hover:bg-[#1F2937] rounded-lg border border-zinc-300 dark:border-white/15 flex items-center justify-center text-zinc-600 dark:text-zinc-400 transition">
                                 <Plus className="h-3 w-3" />
                               </button>
                               {totalDispatched > item.quantity && (
-                                <span className="text-xs text-zinc-500 dark:text-zinc-500 font-bold bg-[#f4f4f5] dark:bg-[#27272a] px-2 py-1 rounded">
+                                <span className="text-xs text-zinc-500 dark:text-zinc-500 font-bold bg-zinc-100 dark:bg-[#1F2937] px-2 py-1 rounded">
                                   Total: {totalDispatched}
                                 </span>
                               )}
@@ -1079,7 +1079,7 @@ export default function UserPage() {
 
                   <button
                     onClick={handleCheckout}
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-2xl transition shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2"
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-2xl transition shadow-sm flex items-center justify-center gap-2"
                   >
                     <span>Place Distribution Order</span>
                     <ArrowRight className="h-5 w-5" />

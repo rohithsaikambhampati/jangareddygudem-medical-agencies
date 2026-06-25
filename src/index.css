@@ -1,16 +1,111 @@
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
 
+/* ─── Override Tailwind color tokens to match the new B2B Medical palette ─── */
+@theme {
+  /* Font family */
+  --font-sans: 'Inter', 'Manrope', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+
+  /* ─── Primary: Medical Blue ─── */
+  --color-indigo-50:  #EBF0F9;
+  --color-indigo-100: #D0DDEF;
+  --color-indigo-200: #A1BBE0;
+  --color-indigo-300: #7199D0;
+  --color-indigo-400: #4277C1;
+  --color-indigo-500: #1E5AA8;
+  --color-indigo-600: #1E5AA8;
+  --color-indigo-700: #163A63;
+  --color-indigo-800: #112D4E;
+  --color-indigo-900: #0C2039;
+  --color-indigo-950: #071324;
+
+  /* ─── Purple → Deep Navy (owner role accent) ─── */
+  --color-purple-50:  #EEF0F5;
+  --color-purple-100: #D5DAE6;
+  --color-purple-200: #ABB5CD;
+  --color-purple-300: #8190B4;
+  --color-purple-400: #576B9B;
+  --color-purple-500: #163A63;
+  --color-purple-600: #163A63;
+  --color-purple-700: #112D4E;
+  --color-purple-800: #0C2039;
+  --color-purple-900: #071324;
+
+  /* ─── Emerald → Healthcare Green ─── */
+  --color-emerald-50:  #E8F5EC;
+  --color-emerald-100: #C8E6CF;
+  --color-emerald-200: #90CDA0;
+  --color-emerald-300: #59B570;
+  --color-emerald-400: #399C52;
+  --color-emerald-500: #2E8B57;
+  --color-emerald-600: #2E7D32;
+  --color-emerald-700: #256427;
+  --color-emerald-800: #1B4B1D;
+  --color-emerald-900: #123213;
+
+  /* ─── Rose → Error Red ─── */
+  --color-rose-50:  #FDEBED;
+  --color-rose-100: #F9CDD1;
+  --color-rose-200: #F39BA3;
+  --color-rose-300: #ED6975;
+  --color-rose-400: #E34350;
+  --color-rose-500: #D32F2F;
+  --color-rose-600: #C62828;
+  --color-rose-700: #A12121;
+  --color-rose-800: #7D1A1A;
+  --color-rose-900: #591212;
+
+  /* ─── Amber (Warning – keep standard) ─── */
+  --color-amber-50:  #FFF8E1;
+  --color-amber-100: #FFECB3;
+  --color-amber-200: #FFD54F;
+  --color-amber-300: #FFC107;
+  --color-amber-400: #FFB300;
+  --color-amber-500: #F59E0B;
+  --color-amber-600: #F08C00;
+  --color-amber-700: #E67E00;
+
+  /* ─── Zinc/Slate → Clean corporate grays ─── */
+  --color-zinc-50:  #F8FAFC;
+  --color-zinc-100: #F1F5F9;
+  --color-zinc-200: #DCE3EA;
+  --color-zinc-300: #CBD5E1;
+  --color-zinc-400: #94A3B8;
+  --color-zinc-500: #6B7280;
+  --color-zinc-600: #4B5563;
+  --color-zinc-700: #374151;
+  --color-zinc-800: #1F2937;
+  --color-zinc-900: #1F2937;
+  --color-zinc-950: #111827;
+
+  /* ─── Blue (used in notification badges) ─── */
+  --color-blue-50:  #EBF0F9;
+  --color-blue-100: #D0DDEF;
+  --color-blue-200: #A1BBE0;
+  --color-blue-300: #7199D0;
+  --color-blue-400: #4277C1;
+  --color-blue-500: #1E5AA8;
+  --color-blue-600: #1E5AA8;
+  --color-blue-700: #163A63;
+
+  /* ─── Teal → align with Emerald ─── */
+  --color-teal-50:  #E8F5EC;
+  --color-teal-100: #C8E6CF;
+  --color-teal-500: #2E8B57;
+  --color-teal-600: #2E7D32;
+  --color-teal-700: #256427;
+}
+
 html.dark {
   color-scheme: dark;
 }
 
 body {
-  @apply bg-[#fafafa] text-zinc-900 transition-colors duration-200;
+  @apply bg-[#F8FAFC] text-[#6B7280] transition-colors duration-200 font-sans;
 }
 
 html.dark body {
-  @apply bg-[#09090b] text-zinc-100;
+  @apply bg-[#111827] text-zinc-300;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

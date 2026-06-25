@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Activity, ShieldCheck, User, Lock, Eye, EyeOff, UserPlus, LogIn, AlertCircle, ArrowRight, Phone } from 'lucide-react';
+import { Pill, ShieldCheck, User, Lock, Eye, EyeOff, UserPlus, LogIn, AlertCircle, ArrowRight, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { ThemeToggle } from '../App';
 
@@ -53,18 +53,13 @@ export default function LoginPage() {
   const isOwnerMode = mode === 'owner-login';
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#111827] flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
       {/* Theme Toggle */}
       <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />
       </div>
 
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-400/5 dark:bg-indigo-400/5 rounded-full blur-3xl" />
-      </div>
+      {/* Background decoration removed for clean professional look */}
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo / Branding */}
@@ -74,11 +69,11 @@ export default function LoginPage() {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-500 rounded-2xl shadow-lg shadow-indigo-500/20 mb-4 ring-4 ring-indigo-500/10 dark:ring-indigo-500/20">
-            <Activity className="h-8 w-8 text-white animate-pulse" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl shadow-sm mb-4 ring-4 ring-indigo-100 dark:ring-indigo-900">
+            <Pill className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">The Jangareddygudem Medical Agencies</h1>
-          <p className="text-indigo-600 dark:text-indigo-400 text-sm font-bold uppercase tracking-widest mt-1 font-mono">Digital Pharmacy</p>
+          <p className="text-indigo-600 dark:text-indigo-400 text-sm font-bold uppercase tracking-widest mt-1">Digital Pharmacy</p>
           <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2">Medical Agency Distribution Portal</p>
         </motion.div>
 
@@ -87,13 +82,13 @@ export default function LoginPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex gap-1 bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-white/10 p-1 rounded-2xl mb-6 shadow-sm"
+          className="flex gap-1 bg-white dark:bg-[#111827] border border-zinc-200 dark:border-white/10 p-1 rounded-2xl mb-6 shadow-sm"
         >
           <button
             onClick={() => switchMode('user-login')}
             className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
               !isOwnerMode
-                ? 'bg-indigo-500 text-white shadow-md shadow-indigo-500/25'
+                ? 'bg-indigo-500 text-white shadow-sm'
                 : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5'
             }`}
           >
@@ -104,7 +99,7 @@ export default function LoginPage() {
             onClick={() => switchMode('owner-login')}
             className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
               isOwnerMode
-                ? 'bg-purple-500 text-white shadow-md shadow-purple-500/25'
+                ? 'bg-purple-500 text-white shadow-sm'
                 : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5'
             }`}
           >
@@ -118,7 +113,7 @@ export default function LoginPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-white/10 rounded-3xl p-8 shadow-xl"
+          className="bg-white dark:bg-[#111827] border border-zinc-200 dark:border-white/10 rounded-3xl p-8 shadow-xl"
         >
 
           {/* Card Title */}
@@ -248,8 +243,8 @@ export default function LoginPage() {
               disabled={loading}
               className={`w-full py-3.5 px-4 rounded-xl font-bold text-white flex items-center justify-center gap-2.5 transition-all duration-200 shadow-md mt-2 ${
                 isOwnerMode
-                  ? 'bg-purple-600 hover:bg-purple-700 shadow-purple-500/20 disabled:bg-purple-600/50'
-                  : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-500/20 disabled:bg-indigo-600/50'
+                  ? 'bg-purple-600 hover:bg-purple-700 shadow-sm disabled:bg-purple-600/50'
+                  : 'bg-indigo-600 hover:bg-indigo-700 shadow-sm disabled:bg-indigo-600/50'
               } ${loading ? 'cursor-wait' : ''}`}
             >
               {loading ? (

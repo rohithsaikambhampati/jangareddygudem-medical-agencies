@@ -7,7 +7,7 @@ import OwnerPage from './pages/OwnerPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
 import InvoicePage from './pages/InvoicePage';
-import { Activity, ShieldCheck, User, LogOut, ChevronRight, Bell, CheckCircle, Sun, Moon } from 'lucide-react';
+import { Pill, ShieldCheck, User, LogOut, ChevronRight, Bell, CheckCircle, Sun, Moon } from 'lucide-react';
 import './App.css';
 
 // Protected Route — only allows access for certain roles
@@ -93,7 +93,7 @@ function NotificationDropdown() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#18181b] rounded-2xl shadow-xl border border-zinc-200 dark:border-white/10 overflow-hidden z-50"
+            className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#111827] rounded-2xl shadow-xl border border-zinc-200 dark:border-white/10 overflow-hidden z-50"
           >
             <div className="px-4 py-3 border-b border-slate-50 flex items-center justify-between bg-transparent dark:bg-transparent/50">
               <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Notifications</h3>
@@ -110,13 +110,13 @@ function NotificationDropdown() {
                 myNotifications.map((notif) => (
                   <div 
                     key={notif.id} 
-                    className={`p-4 border-b border-zinc-200 dark:border-white/10 last:border-0 transition ${notif.is_read ? 'bg-white dark:bg-[#18181b] opacity-60' : 'bg-indigo-50 dark:bg-indigo-500/20'}`}
+                    className={`p-4 border-b border-zinc-100 dark:border-zinc-800 last:border-0 transition ${notif.is_read ? 'bg-white dark:bg-zinc-900 opacity-60' : 'bg-indigo-50/50 dark:bg-indigo-900/10'}`}
                   >
                     <div className="flex gap-3">
                       <div className="mt-0.5 shrink-0">
                         {notif.type === 'success' ? (
                           <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                            <CheckCircle className="h-4 w-4 text-emerald-600" />
+                            <Pill className="h-4 w-4 text-emerald-600" />
                           </div>
                         ) : (
                           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
@@ -151,8 +151,7 @@ function NotificationDropdown() {
 // Theme Toggle Component
 export function ThemeToggle() {
   const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem('theme') === 'dark' || 
-           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    return localStorage.getItem('theme') === 'dark';
   });
 
   useEffect(() => {
@@ -187,14 +186,14 @@ function AppHeader() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-      className="print:hidden sticky top-0 z-40 bg-white dark:bg-[#18181b] border-b border-zinc-200 dark:border-white/10 shadow-sm backdrop-blur-md bg-white dark:bg-[#18181b]/95"
+      className="print:hidden sticky top-0 z-40 bg-white dark:bg-[#111827] border-b border-zinc-200 dark:border-white/10 shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {/* Logo */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="bg-indigo-600 text-white p-1.5 sm:p-2 rounded-xl shadow-md shadow-indigo-500/20 shrink-0">
-            <Activity className="h-4 w-4 sm:h-5 sm:w-5 animate-pulse" />
+          <div className="bg-indigo-600 text-white p-1.5 sm:p-2 rounded-xl shadow-sm shrink-0">
+            <Pill className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
           <div>
             <span className="font-extrabold text-sm sm:text-xl tracking-tight text-zinc-950 dark:text-white block sm:hidden leading-tight">JRG Medical Agencies</span>
@@ -238,7 +237,7 @@ function AppHeader() {
           <button
             onClick={logout}
             title="Sign out"
-            className="flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-500 hover:text-rose-500 hover:bg-rose-50 dark:bg-rose-500/20 p-1.5 sm:px-3 sm:py-2 rounded-xl transition duration-200 font-semibold border border-transparent hover:border-rose-100 dark:border-rose-500/20"
+            className="flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-1.5 sm:px-3 sm:py-2 rounded-xl transition duration-200 font-semibold border border-transparent hover:border-rose-100"
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Logout</span>
@@ -319,7 +318,7 @@ function AppContent() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="print:hidden bg-white dark:bg-[#18181b] border-t border-zinc-200 dark:border-white/10 py-4 text-center text-xs text-zinc-400 font-medium"
+          className="print:hidden bg-white dark:bg-[#111827] border-t border-zinc-200 dark:border-white/10 py-4 text-center text-xs text-zinc-400 font-medium"
         >
           <p>© {new Date().getFullYear()} The Jangareddygudem Medical Agencies. All rights reserved.</p>
         </motion.footer>
