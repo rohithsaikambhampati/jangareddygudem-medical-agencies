@@ -51,11 +51,11 @@ export default function LoginPage() {
   const isOwnerMode = mode === 'owner-login';
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] flex items-center justify-center p-6 relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-[#0B0F19] flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
       <div className="w-full max-w-md relative z-10">
         {/* Logo / Branding */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 tracking-tight">The Jangareddygudem Medical Agencies</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 tracking-normal">The Jangareddygudem Medical Agencies</h1>
         </div>
 
         {/* Role Selector Tabs */}
@@ -83,14 +83,14 @@ export default function LoginPage() {
         </div>
 
         {/* Login / Register Card */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+        <div className="bg-[#111827] border border-white/5 rounded-md p-5 shadow-sm">
 
           {/* Card Title */}
           <div className="mb-6">
             {isOwnerMode ? (
               <div>
                 <div className="flex items-center gap-2.5 mb-1">
-                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center">
+                  <div className="w-8 h-8 bg-purple-100 rounded-md flex items-center justify-center">
                     <ShieldCheck className="h-4.5 w-4.5 text-purple-600" />
                   </div>
                   <h2 className="text-xl font-medium text-slate-100">Owner Login</h2>
@@ -100,7 +100,7 @@ export default function LoginPage() {
             ) : (
               <div>
                 <div className="flex items-center gap-2.5 mb-1">
-                  <div className="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center">
+                  <div className="w-8 h-8 bg-indigo-100 rounded-md flex items-center justify-center">
                     <User className="h-4.5 w-4.5 text-indigo-600" />
                   </div>
                   <h2 className="text-xl font-medium text-slate-100">
@@ -131,7 +131,7 @@ export default function LoginPage() {
                       onChange={handleChange}
                       placeholder="e.g., City Pharmacy"
                       required
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#0B0F19] border border-white/5 text-slate-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
+                      className="w-full pl-10 pr-4 py-3 rounded-md bg-[#0B0F19] border border-white/5 text-slate-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
                     />
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export default function LoginPage() {
                       onChange={handleChange}
                       placeholder="e.g., 9876543210"
                       required
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#0B0F19] border border-white/5 text-slate-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
+                      className="w-full pl-10 pr-4 py-3 rounded-md bg-[#0B0F19] border border-white/5 text-slate-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
                     />
                   </div>
                 </div>
@@ -168,7 +168,7 @@ export default function LoginPage() {
                   placeholder={isOwnerMode ? 'Enter owner username' : 'Enter username'}
                   required
                   autoComplete="username"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#0B0F19] border border-white/5 text-slate-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
+                  className="w-full pl-10 pr-4 py-3 rounded-md bg-[#0B0F19] border border-white/5 text-slate-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
                 />
               </div>
             </div>
@@ -186,7 +186,7 @@ export default function LoginPage() {
                   placeholder="Enter your password"
                   required
                   autoComplete="current-password"
-                  className="w-full pl-10 pr-12 py-3 rounded-xl bg-[#0B0F19] border border-white/5 text-slate-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
+                  className="w-full pl-10 pr-12 py-3 rounded-md bg-[#0B0F19] border border-white/5 text-slate-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition text-sm"
                 />
                 <button
                   type="button"
@@ -200,7 +200,7 @@ export default function LoginPage() {
 
             {/* Error Message */}
             {error && (
-              <div className="flex items-center gap-2.5 bg-rose-50 border border-rose-200 text-rose-600 px-4 py-3 rounded-xl text-sm font-medium">
+              <div className="flex items-center gap-2.5 bg-rose-50 border border-rose-200 text-rose-600 px-4 py-3 rounded-md text-sm font-medium">
                 <AlertCircle className="h-4.5 w-4.5 shrink-0" />
                 {error}
               </div>
@@ -210,7 +210,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 px-4 rounded-xl font-medium text-white flex items-center justify-center gap-2.5 transition-all duration-200 mt-2 ${
+              className={`w-full py-3 px-4 rounded-md font-medium text-white flex items-center justify-center gap-2.5 transition-all duration-200 mt-2 ${
                 isOwnerMode
                   ? 'bg-purple-600 hover:bg-purple-700 disabled:bg-purple-600/50'
                   : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600/50'

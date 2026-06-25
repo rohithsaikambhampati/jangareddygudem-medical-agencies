@@ -68,10 +68,10 @@ function EditProductModal({ product, onClose, onSave }) {
  }
  };
 
- const inputCls = 'w-full px-3.5 py-2.5 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500/25 focus:border-indigo-500 transition text-sm text-slate-100';
+ const inputCls = 'w-full px-3.5 py-2.5 rounded-md border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500/25 focus:border-indigo-500 transition text-sm text-slate-100';
 
  return (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+ <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
  {/* Backdrop */}
  <div 
  initial={{ opacity: 0 }}
@@ -86,13 +86,13 @@ function EditProductModal({ product, onClose, onSave }) {
  initial={{ opacity: 0, scale: 0.95, y: 20 }}
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
- className="relative bg-[#111827] rounded-xl shadow-2xl w-full max-w-lg overflow-hidden"
+ className="relative bg-[#111827] rounded-md shadow-sm w-full max-w-lg overflow-hidden"
  >
 
  {/* Header */}
  <div className="flex items-center justify-between px-6 py-5 border-b border-white/5 bg-gradient-to-r from-indigo-600 to-indigo-700">
  <div className="flex items-center gap-3">
- <div className="w-9 h-9 bg-[#111827] rounded-xl flex items-center justify-center">
+ <div className="w-9 h-9 bg-[#111827] rounded-md flex items-center justify-center">
  <Pencil className="h-4.5 w-4.5 text-white" />
  </div>
  <div>
@@ -100,16 +100,16 @@ function EditProductModal({ product, onClose, onSave }) {
  <p className="text-indigo-200 text-xs font-medium truncate max-w-[220px]">{product.name}</p>
  </div>
  </div>
- <button onClick={onClose} className="text-white/70 hover:text-white p-1.5 rounded-xl hover:bg-[#111827] transition">
+ <button onClick={onClose} className="text-white/70 hover:text-white p-1.5 rounded-md hover:bg-[#111827] transition">
  <X className="h-5 w-5" />
  </button>
  </div>
 
  {/* Body */}
- <form onSubmit={handleSave} className="p-6 space-y-4">
+ <form onSubmit={handleSave} className="p-4 space-y-4">
 
  {/* Name, Brand, Category */}
- <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
  <div>
  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Product Name</label>
  <input type="text" name="name" value={form.name} onChange={handleChange} className={inputCls} placeholder="e.g., Paracetamol" />
@@ -129,7 +129,7 @@ function EditProductModal({ product, onClose, onSave }) {
  </div>
 
  {/* Price + Stock */}
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Price (₹)</label>
  <div className="relative">
@@ -149,7 +149,7 @@ function EditProductModal({ product, onClose, onSave }) {
  <div className="border-t border-white/5 pt-4">
  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Offer & Discount Settings</p>
 
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
  Discount (%)
@@ -168,7 +168,7 @@ function EditProductModal({ product, onClose, onSave }) {
 
  {/* Offer preview */}
  {form.offerText && (
- <div className="mt-2.5 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center gap-2">
+ <div className="mt-2.5 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 flex items-center gap-2">
  <Tag className="h-4 w-4 text-amber-500 shrink-0" />
  <p className="text-xs font-bold text-amber-800">
  Deal Preview: Buy <span className="text-amber-600">{form.offerText.split('+')[0]?.trim()}</span> → Get <span className="text-amber-600">{form.offerText.split('+')[1]?.trim()}</span> extra free
@@ -179,7 +179,7 @@ function EditProductModal({ product, onClose, onSave }) {
  {/* Activate toggle */}
  <div
  onClick={() => setForm(p => ({ ...p, isOfferActive: !p.isOfferActive }))}
- className={`mt-3 flex items-center justify-between cursor-pointer px-4 py-3 rounded-xl border transition ${
+ className={`mt-3 flex items-center justify-between cursor-pointer px-4 py-3 rounded-md border transition ${
  form.isOfferActive
  ? 'bg-indigo-50 border-indigo-200'
  : 'bg-transparent border-white/10'
@@ -202,7 +202,7 @@ function EditProductModal({ product, onClose, onSave }) {
  </div>
  
  {/* Expiry Date Input */}
- <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
+ <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Batch Number</label>
  <input type="text" name="batch" value={form.batch} onChange={handleChange} className={inputCls} placeholder="e.g. BATCH-001" />
@@ -216,7 +216,7 @@ function EditProductModal({ product, onClose, onSave }) {
 
  {/* Error */}
  {error && (
- <div className="bg-rose-50 border border-rose-200 text-rose-600 text-sm font-semibold px-4 py-2.5 rounded-xl">
+ <div className="bg-rose-50 border border-rose-200 text-rose-600 text-sm font-semibold px-4 py-2.5 rounded-md">
  {error}
  </div>
  )}
@@ -224,14 +224,14 @@ function EditProductModal({ product, onClose, onSave }) {
  {/* Actions */}
  <div className="flex gap-3 pt-2">
  <button type="button" onClick={onClose}
- className="flex-1 py-2.5 rounded-xl border border-white/10 text-slate-400 font-semibold text-sm hover:bg-transparent transition">
+ className="flex-1 py-2.5 rounded-md border border-white/10 text-slate-400 font-semibold text-sm hover:bg-transparent transition">
  Cancel
  </button>
  <button type="submit"
- className={`flex-1 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition ${
+ className={`flex-1 py-2.5 rounded-md font-bold text-sm flex items-center justify-center gap-2 transition ${
  saved
  ? 'bg-emerald-500 text-white'
- : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)]'
+ : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm'
  }`}>
  {saved
  ? <><CheckCircle className="h-4 w-4" /> Saved!</>
@@ -344,7 +344,7 @@ export default function OwnerPage() {
  }
  };
 
- const inputCls = 'w-full px-4 py-2.5 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm';
+ const inputCls = 'w-full px-4 py-2.5 rounded-md border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm';
 
  const statusFlow = ['processing', 'confirmed', 'delivered'];
  const statusStyles = {
@@ -428,9 +428,9 @@ export default function OwnerPage() {
  className="space-y-8"
  >
  {/* Header */}
- <div className="bg-[#111827] p-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+ <div className="bg-[#111827] p-4 rounded-md shadow-sm border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
  <div>
- <h1 className="text-3xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
+ <h1 className="text-3xl font-bold text-slate-100 tracking-normal flex items-center gap-2">
  <ShieldCheck className="text-purple-600 h-8 w-8" />
  Agency Hub
  </h1>
@@ -445,13 +445,13 @@ export default function OwnerPage() {
  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2 mb-4">
  <Package className="h-5 w-5 text-purple-600" /> Order Fulfillment Center
  </h2>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div 
  onClick={() => { setActiveQueueTab('processing'); setView('orders_queue'); }}
- className="bg-[#111827] p-6 rounded-2xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center justify-between group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:border-white/20 hover:border-amber-200 transition"
+ className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm flex items-center justify-between group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:border-white/20 hover:border-amber-200 transition"
  >
- <div className="flex items-center gap-6">
- <div className="p-6 bg-amber-50 text-amber-600 rounded-xl group-hover:scale-105 transition-transform duration-300">
+ <div className="flex items-center gap-4">
+ <div className="p-4 bg-amber-50 text-amber-600 rounded-md group-hover:scale-105 transition-transform duration-300">
  <Clock className="h-8 w-8" />
  </div>
  <div>
@@ -465,10 +465,10 @@ export default function OwnerPage() {
 
  <div 
  onClick={() => { setActiveQueueTab('confirmed'); setView('orders_queue'); }}
- className="bg-[#111827] p-6 rounded-2xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center justify-between group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:border-white/20 hover:border-indigo-200 transition"
+ className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm flex items-center justify-between group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:border-white/20 hover:border-indigo-200 transition"
  >
- <div className="flex items-center gap-6">
- <div className="p-6 bg-indigo-50 text-indigo-600 rounded-xl group-hover:scale-105 transition-transform duration-300">
+ <div className="flex items-center gap-4">
+ <div className="p-4 bg-indigo-50 text-indigo-600 rounded-md group-hover:scale-105 transition-transform duration-300">
  <Truck className="h-8 w-8" />
  </div>
  <div>
@@ -487,8 +487,8 @@ export default function OwnerPage() {
  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2 mb-4">
  <Tag className="h-5 w-5 text-purple-600" /> Manage Brands
  </h2>
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
- <div className="bg-[#111827] p-6 rounded-xl border-2 border-dashed border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col justify-center">
+ <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+ <div className="bg-[#111827] p-4 rounded-md border-2 border-dashed border-white/10 shadow-sm flex flex-col justify-center">
  <h3 className="font-bold text-slate-200 flex items-center gap-2 mb-4">
  <Plus className="text-purple-500" /> Add New Brand
  </h3>
@@ -498,12 +498,12 @@ export default function OwnerPage() {
  value={newBrandName}
  onChange={e => setNewBrandName(e.target.value)}
  placeholder="e.g., PharmaCorp"
- className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition text-sm"
+ className="w-full px-4 py-2.5 rounded-md border border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition text-sm"
  />
  <button
  type="submit"
  disabled={!newBrandName.trim()}
- className="bg-slate-800 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-[#18181b] transition disabled:opacity-50"
+ className="bg-slate-800 text-white font-bold px-5 py-2.5 rounded-md hover:bg-[#18181b] transition disabled:opacity-50"
  >
  Add Brand
  </button>
@@ -519,11 +519,11 @@ export default function OwnerPage() {
  setView('brand');
  }
  }}
- className="bg-[#111827] p-6 rounded-xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col justify-between group cursor-pointer hover:shadow-md hover:border-purple-200 transition"
+ className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm flex flex-col justify-between group cursor-pointer hover:shadow-md hover:border-purple-200 transition"
  >
  <div>
  <div className="flex justify-between items-start mb-4">
- <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center font-bold text-xl">
+ <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-md flex items-center justify-center font-bold text-xl">
  {b.charAt(0)}
  </div>
  {editingBrandName !== b && (
@@ -533,7 +533,7 @@ export default function OwnerPage() {
  setEditingBrandName(b);
  setEditBrandInput(b);
  }}
- className="text-slate-500 hover:text-purple-600 p-1.5 rounded-xl hover:bg-purple-50 opacity-0 group-hover:opacity-100 transition"
+ className="text-slate-500 hover:text-purple-600 p-1.5 rounded-md hover:bg-purple-50 opacity-0 group-hover:opacity-100 transition"
  title="Edit Brand Name"
  >
  <Pencil className="h-4 w-4" />
@@ -546,7 +546,7 @@ export default function OwnerPage() {
  type="text"
  value={editBrandInput}
  onChange={(e) => setEditBrandInput(e.target.value)}
- className="w-full px-3 py-1.5 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition text-sm font-semibold"
+ className="w-full px-3 py-1.5 rounded-md border border-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition text-sm font-semibold"
  placeholder="Brand Name"
  autoFocus
  />
@@ -558,13 +558,13 @@ export default function OwnerPage() {
  }
  setEditingBrandName(null);
  }}
- className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition"
+ className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-3 py-1.5 rounded-md transition"
  >
  Save
  </button>
  <button
  onClick={() => setEditingBrandName(null)}
- className="bg-[#f4f4f5] hover:bg-slate-200 text-slate-400 text-xs font-semibold px-3 py-1.5 rounded-xl transition"
+ className="bg-[#f4f4f5] hover:bg-slate-200 text-slate-400 text-xs font-semibold px-3 py-1.5 rounded-md transition"
  >
  Cancel
  </button>
@@ -579,7 +579,7 @@ export default function OwnerPage() {
  {editingBrandName !== b && (
  <button
  onClick={(e) => { e.stopPropagation(); deleteBrand(b); }}
- className="text-slate-500 hover:text-rose-500 transition p-2 rounded-xl hover:bg-rose-50 opacity-0 group-hover:opacity-100"
+ className="text-slate-500 hover:text-rose-500 transition p-2 rounded-md hover:bg-rose-50 opacity-0 group-hover:opacity-100"
  title="Delete Brand"
  >
  <Trash2 className="h-5 w-5" />
@@ -596,17 +596,17 @@ export default function OwnerPage() {
  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2 mb-4">
  <Users className="h-5 w-5 text-blue-600" /> Registered Retailers
  </h2>
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+ <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
  {registeredUsers.map(user => {
  const userOrders = orders.filter(o => o.userId === user.id);
  return (
  <div 
  key={user.id} 
  onClick={() => { setSelectedRetailer(user); setView('retailer'); }}
- className="bg-[#111827] p-6 rounded-xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] group cursor-pointer hover:shadow-md hover:border-blue-200 transition"
+ className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm group cursor-pointer hover:shadow-md hover:border-blue-200 transition"
  >
  <div className="flex items-center gap-3 mb-4">
- <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 text-blue-600 rounded-full flex items-center justify-center">
+ <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 text-blue-600 rounded-md flex items-center justify-center">
  <User className="h-5 w-5" />
  </div>
  <div>
@@ -615,14 +615,14 @@ export default function OwnerPage() {
  </div>
  </div>
  <div className="flex justify-between items-center text-sm font-semibold">
- <span className="text-slate-400 bg-transparent px-2 py-1 rounded-xl border border-white/5">{userOrders.length} Orders</span>
+ <span className="text-slate-400 bg-transparent px-2 py-1 rounded-md border border-white/5">{userOrders.length} Orders</span>
  <span className="text-blue-600 flex items-center gap-1">View Details <ArrowRight className="h-4 w-4"/></span>
  </div>
  </div>
  );
  })}
  {registeredUsers.length === 0 && (
- <div className="col-span-full py-8 text-center border border-dashed border-white/10 rounded-xl bg-[#111827] text-slate-400">
+ <div className="col-span-full py-8 text-center border border-dashed border-white/10 rounded-md bg-[#111827] text-slate-400">
  No retailers registered yet.
  </div>
  )}
@@ -651,43 +651,43 @@ export default function OwnerPage() {
  )}
  
 
- <div className="bg-[#111827] p-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/5 flex justify-between items-center gap-6">
+ <div className="bg-[#111827] p-4 rounded-md shadow-sm border border-white/5 flex justify-between items-center gap-4">
  <div>
- <h1 className="text-3xl font-bold text-slate-100 tracking-tight flex items-center gap-3">
- <span className="bg-purple-100 text-purple-700 dark:text-purple-400 w-10 h-10 rounded-xl flex items-center justify-center text-xl">{selectedBrand.charAt(0)}</span>
+ <h1 className="text-3xl font-bold text-slate-100 tracking-normal flex items-center gap-3">
+ <span className="bg-purple-100 text-purple-700 dark:text-purple-400 w-10 h-10 rounded-full flex items-center justify-center text-xl">{selectedBrand.charAt(0)}</span>
  {selectedBrand} Inventory
  </h1>
  </div>
  <button
  onClick={() => setView('hub')}
- className="bg-[#f4f4f5] hover:bg-slate-200 text-slate-200 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
+ className="bg-[#f4f4f5] hover:bg-slate-200 text-slate-200 font-bold py-2.5 px-5 rounded-md flex items-center gap-2 transition"
  >
  <ArrowLeft className="h-5 w-5" /> Back to Hub
  </button>
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
- <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden">
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+ <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-md border border-blue-200/50 shadow-sm relative overflow-hidden">
  <p className="text-blue-800 text-sm font-semibold uppercase tracking-wider">Total Products</p>
  <h3 className="text-4xl font-bold text-blue-900 mt-2">{brandProducts.length}</h3>
  </div>
- <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl border border-indigo-200/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden">
+ <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-md border border-indigo-200/50 shadow-sm relative overflow-hidden">
  <p className="text-indigo-800 text-sm font-semibold uppercase tracking-wider">Active Offers</p>
  <h3 className="text-4xl font-bold text-indigo-900 mt-2">{brandActiveOffers}</h3>
  </div>
- <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-xl border border-amber-200/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden">
+ <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-4 rounded-md border border-amber-200/50 shadow-sm relative overflow-hidden">
  <p className="text-amber-800 text-sm font-semibold uppercase tracking-wider">Low Stock Alerts</p>
  <h3 className="text-4xl font-bold text-amber-900 mt-2">{brandLowStock}</h3>
  </div>
  </div>
 
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
- <div className="bg-[#111827] p-6 rounded-xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] space-y-5 h-fit">
+ <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+ <div className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm space-y-5 h-fit">
  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
  <Plus className="text-indigo-600" /> Add to {selectedBrand}
  </h2>
  <form onSubmit={handleSubmit} className="space-y-4">
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-medium text-slate-400 mb-1">Product Name</label>
  <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} className={inputCls} placeholder="e.g., Aspirin 100mg" />
@@ -699,7 +699,7 @@ export default function OwnerPage() {
  </select>
  </div>
  </div>
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-medium text-slate-400 mb-1">Price (₹)</label>
  <div className="relative">
@@ -712,7 +712,7 @@ export default function OwnerPage() {
  <input type="number" name="stockQuantity" value={newProduct.stockQuantity} onChange={handleInputChange} className={inputCls} placeholder="0" />
  </div>
  </div>
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-medium text-slate-400 mb-1">Discount (%)</label>
  <input type="number" min="0" max="100" name="discountPercentage" value={newProduct.discountPercentage} onChange={handleInputChange} className={inputCls} placeholder="0" />
@@ -722,7 +722,7 @@ export default function OwnerPage() {
  <input type="text" name="offerText" value={newProduct.offerText} onChange={handleInputChange} className={inputCls} placeholder="e.g. 10 + 2" />
  </div>
  </div>
- <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
+ <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-medium text-slate-400 mb-1">Batch Number</label>
  <input type="text" name="batch" value={newProduct.batch} onChange={handleInputChange} className={inputCls} placeholder="e.g. BATCH-001" />
@@ -738,16 +738,16 @@ export default function OwnerPage() {
  <label htmlFor="isOfferActive" className="text-sm font-medium text-slate-400 cursor-pointer">Activate Offer / Discount Now</label>
  </div>
  {formError && (
- <div className="text-sm text-rose-500 bg-rose-50 p-3 rounded-xl border border-rose-100">{formError}</div>
+ <div className="text-sm text-rose-500 bg-rose-50 p-3 rounded-md border border-rose-100">{formError}</div>
  )}
- <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex justify-center items-center gap-2">
+ <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-md transition shadow-sm flex justify-center items-center gap-2">
  <Plus className="h-5 w-5" /> Add to Catalog
  </button>
  </form>
  </div>
 
- <div className="bg-[#111827] p-6 rounded-xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] lg:col-span-2 space-y-4">
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+ <div className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm lg:col-span-2 space-y-4">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <h2 className="text-xl font-bold text-slate-100">{selectedBrand} Products</h2>
  <div className="relative w-full sm:w-72">
  <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
@@ -756,11 +756,11 @@ export default function OwnerPage() {
  placeholder="Search products in brand..."
  value={productSearch}
  onChange={(e) => setProductSearch(e.target.value)}
- className="w-full pl-9 pr-4 py-2 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-200 bg-[#111827]"
+ className="w-full pl-9 pr-4 py-2 rounded-md border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition text-sm text-slate-200 bg-[#111827]"
  />
  </div>
  </div>
- <div className="overflow-x-auto rounded-xl border border-white/5">
+ <div className="overflow-x-auto rounded-md border border-white/5">
  <table className="min-w-full divide-y divide-slate-100 text-left text-sm">
  <thead className="bg-transparent text-slate-400 font-semibold text-xs uppercase tracking-wider">
  <tr>
@@ -786,7 +786,7 @@ export default function OwnerPage() {
  <tr key={product.id} onClick={() => setEditingProduct(product)} className="hover:bg-indigo-50 dark:hover:bg-indigo-950/60 transition cursor-pointer">
  <td className="px-5 py-4">
  <div className="font-semibold text-slate-100">{product.name}</div>
- {isLowStock && <span className="text-[10px] text-rose-500 font-bold bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">Low Stock</span>}
+ {isLowStock && <span className="text-[10px] text-rose-500 font-bold bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">Low Stock</span>}
  </td>
  <td className="px-5 py-4 font-mono">
  {hasDiscount ? (
@@ -800,13 +800,13 @@ export default function OwnerPage() {
  </td>
  <td className="px-5 py-4 font-semibold text-slate-200">{product.stockQuantity}</td>
  <td className="px-5 py-4 text-center">
- {product.isOfferActive ? <span className="text-xs bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded-xl">Active</span> : <span className="text-xs bg-[#f4f4f5] text-slate-500 font-bold px-2 py-1 rounded-xl">Inactive</span>}
+ {product.isOfferActive ? <span className="text-xs bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded-md">Active</span> : <span className="text-xs bg-[#f4f4f5] text-slate-500 font-bold px-2 py-1 rounded-md">Inactive</span>}
  </td>
  <td className="px-5 py-4 text-center">
  {product.expiryDate ? <span className="text-xs text-slate-400">{new Date(product.expiryDate).toLocaleDateString()}</span> : <span className="text-xs text-slate-500">N/A</span>}
  </td>
  <td className="px-5 py-4 text-right" onClick={e => e.stopPropagation()}>
- <button onClick={() => deleteProduct(product.id)} className="text-rose-400 hover:text-rose-600 p-1.5 rounded-xl hover:bg-rose-50"><Trash2 className="h-4 w-4" /></button>
+ <button onClick={() => deleteProduct(product.id)} className="text-rose-400 hover:text-rose-600 p-1.5 rounded-md hover:bg-rose-50"><Trash2 className="h-4 w-4" /></button>
  </td>
  </tr>
  );
@@ -832,26 +832,26 @@ export default function OwnerPage() {
  className="space-y-8"
  >
  {/* Header */}
- <div className="bg-[#111827] p-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/5 flex justify-between items-center gap-6 flex-wrap">
- <div className="flex items-center gap-6">
- <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center border-4 border-white shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+ <div className="bg-[#111827] p-4 rounded-md shadow-sm border border-white/5 flex justify-between items-center gap-4 flex-wrap">
+ <div className="flex items-center gap-4">
+ <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-md flex items-center justify-center border-4 border-white shadow-sm">
  <ShoppingBag className="h-7 w-7" />
  </div>
  <div>
- <h1 className="text-3xl font-bold text-slate-100 tracking-tight">Fulfillment Queue</h1>
+ <h1 className="text-3xl font-bold text-slate-100 tracking-normal">Fulfillment Queue</h1>
  <p className="text-slate-400 font-semibold mt-0.5">Manage and track orders across all retailers</p>
  </div>
  </div>
  <button
  onClick={() => setView('hub')}
- className="bg-[#f4f4f5] hover:bg-slate-200 text-slate-200 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
+ className="bg-[#f4f4f5] hover:bg-slate-200 text-slate-200 font-bold py-2.5 px-5 rounded-md flex items-center gap-2 transition"
  >
  <ArrowLeft className="h-5 w-5" /> Back to Hub
  </button>
  </div>
 
  {/* Tab Switcher */}
- <div className="flex border-b border-slate-250 gap-6">
+ <div className="flex border-b border-slate-250 gap-4">
  <button
  onClick={() => setActiveQueueTab('processing')}
  className={`pb-4 text-sm font-bold flex items-center gap-2 transition-all relative ${
@@ -862,7 +862,7 @@ export default function OwnerPage() {
  >
  <Clock className="h-4 w-4" />
  Pending Confirmation
- <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+ <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
  activeQueueTab === 'processing' ? 'bg-amber-100 text-amber-700' : 'bg-[#f4f4f5] text-slate-400'
  }`}>
  {orders.filter(o => o.status === 'processing').length}
@@ -879,7 +879,7 @@ export default function OwnerPage() {
  >
  <Truck className="h-4 w-4" />
  Pending Delivery
- <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+ <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
  activeQueueTab === 'confirmed' ? 'bg-indigo-100 text-indigo-700' : 'bg-[#f4f4f5] text-slate-400'
  }`}>
  {orders.filter(o => o.status === 'confirmed').length}
@@ -888,23 +888,23 @@ export default function OwnerPage() {
  </div>
 
  {/* Orders List */}
- <div className="bg-[#111827] p-6 rounded-xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] space-y-5">
+ <div className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm space-y-5">
  {filteredOrders.length === 0 ? (
- <div className="text-center py-16 text-slate-500 border border-dashed border-white/10 rounded-xl">
+ <div className="text-center py-16 text-slate-500 border border-dashed border-white/10 rounded-md">
  No orders found in this status queue.
  </div>
  ) : (
- <div className="grid grid-cols-1 gap-6">
+ <div className="grid grid-cols-1 gap-4">
  {filteredOrders.map((order) => {
  const safeStatus = order.status || 'processing';
  const currentIdx = statusFlow.indexOf(safeStatus);
  const nextStatus = safeStatus === 'cancelled' ? null : statusFlow[currentIdx + 1];
  return (
- <div key={order.id} className="p-5 bg-transparent border border-white/5 rounded-xl space-y-4 hover:bg-[#f4f4f5] transition">
+ <div key={order.id} className="p-5 bg-transparent border border-white/5 rounded-md space-y-4 hover:bg-[#f4f4f5] transition">
  <div className="flex items-start justify-between gap-3 flex-wrap">
  <div>
  <div className="flex items-center gap-2">
- <span className="text-xs font-bold text-purple-700 dark:text-purple-400 bg-purple-50 border border-purple-100 dark:border-purple-500/20 px-2.5 py-0.5 rounded-xl">
+ <span className="text-xs font-bold text-purple-700 dark:text-purple-400 bg-purple-50 border border-purple-100 dark:border-purple-500/20 px-2.5 py-0.5 rounded-md">
  👤 {order.userName || 'Retailer'}
  </span>
  <span className="text-xs text-slate-500 font-mono">ID: {order.id}</span>
@@ -913,18 +913,18 @@ export default function OwnerPage() {
  <p className="text-xs text-slate-400 mt-0.5">{order.orderDate} {order.orderTime}</p>
  </div>
  <div className="flex items-center gap-2 flex-wrap">
- <span className={`text-xs font-bold px-2.5 py-1 rounded-xl border ${statusStyles[safeStatus]}`}>
+ <span className={`text-xs font-bold px-2.5 py-1 rounded-md border ${statusStyles[safeStatus]}`}>
  {statusDisplayLabel[safeStatus] || safeStatus}
  </span>
  {nextStatus && (
  <button onClick={() => updateOrderStatus(order.id, nextStatus)}
- className={`text-xs font-bold px-3 py-1.5 rounded-xl transition ${nextBtnStyles[nextStatus]}`}>
+ className={`text-xs font-bold px-3 py-1.5 rounded-md transition ${nextBtnStyles[nextStatus]}`}>
  {nextBtnLabel[nextStatus] || 'Update Status'}
  </button>
  )}
  {safeStatus === 'processing' && (
  <button onClick={() => updateOrderStatus(order.id, 'cancelled')}
- className="text-xs font-bold px-3 py-1.5 rounded-xl bg-rose-100 text-rose-700 border border-rose-200 hover:bg-rose-200 transition">
+ className="text-xs font-bold px-3 py-1.5 rounded-md bg-rose-100 text-rose-700 border border-rose-200 hover:bg-rose-200 transition">
  Cancel Order
  </button>
  )}
@@ -932,7 +932,7 @@ export default function OwnerPage() {
  </div>
 
  {/* Order details */}
- <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5]/40 p-3 rounded-xl border border-white/5 dark:border-white/5 text-center">
+ <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5]/40 p-3 rounded-md border border-white/5 dark:border-white/5 text-center">
  <div className="p-1">
  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Billed</p>
  <p className="text-sm sm:text-base font-bold text-slate-100 mt-0.5">{order.quantity}</p>
@@ -944,7 +944,7 @@ export default function OwnerPage() {
  <div className="p-1">
  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Free</p>
  <p className={`text-sm sm:text-base font-bold mt-0.5 ${order.freeUnits > 0 ? 'text-emerald-600 font-bold' : 'text-slate-500'}`}>
- {order.freeUnits > 0 ? `+${order.freeUnits} 🎁` : '0'}
+ {order.freeUnits > 0 ? `+${order.freeUnits}` : '0'}
  </p>
  </div>
  </div>
@@ -957,7 +957,7 @@ export default function OwnerPage() {
  </div>
  {order.status !== 'processing' && order.status !== 'cancelled' && (
  <Link to={`/invoice/${order.id}`} 
- className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+ className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-md flex items-center gap-1.5 transition shadow-sm">
  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
  Invoice
  </Link>
@@ -965,7 +965,7 @@ export default function OwnerPage() {
  </div>
 
  {order.deliveryAddress && typeof order.deliveryAddress === 'object' && (
- <div className="bg-[#111827] border border-white/5 rounded-xl p-3 flex gap-3">
+ <div className="bg-[#111827] border border-white/5 rounded-md p-3 flex gap-3">
  <MapPin className="h-4 w-4 text-slate-500 shrink-0 mt-0.5" />
  <div>
  <p className="text-xs font-bold text-slate-200">{order.deliveryAddress?.name} ({order.deliveryAddress?.phone})</p>
@@ -1004,7 +1004,7 @@ export default function OwnerPage() {
  {/* Record Payment Modal */}
  
  {showPaymentModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+ <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
  <div 
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
@@ -1016,21 +1016,21 @@ export default function OwnerPage() {
  initial={{ opacity: 0, scale: 0.95, y: 20 }}
  animate={{ opacity: 1, scale: 1, y: 0 }}
  exit={{ opacity: 0, scale: 0.95, y: 20 }}
- className="relative bg-[#111827] rounded-xl shadow-2xl w-full max-w-md overflow-hidden"
+ className="relative bg-[#111827] rounded-md shadow-sm w-full max-w-md overflow-hidden"
  >
  <div className="flex items-center justify-between px-6 py-5 border-b border-white/5 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white">
  <div>
  <h2 className="text-base font-bold">Record Payment</h2>
  <p className="text-indigo-100 text-xs">Log a manual payment received from {selectedRetailer.name}</p>
  </div>
- <button onClick={() => setShowPaymentModal(false)} className="text-white/70 hover:text-white p-1.5 rounded-xl hover:bg-[#111827] transition">
+ <button onClick={() => setShowPaymentModal(false)} className="text-white/70 hover:text-white p-1.5 rounded-md hover:bg-[#111827] transition">
  <X className="h-5 w-5" />
  </button>
  </div>
 
- <form onSubmit={handleRecordPayment} className="p-6 space-y-4">
+ <form onSubmit={handleRecordPayment} className="p-4 space-y-4">
  {/* Show current pending balance */}
- <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center justify-between">
+ <div className="bg-amber-50 border border-amber-200 rounded-md px-4 py-3 flex items-center justify-between">
  <span className="text-xs font-bold text-amber-800">Pending Balance Due:</span>
  <span className="text-sm font-bold text-amber-900 font-mono">₹{pendingAmount.toFixed(2)}</span>
  </div>
@@ -1066,16 +1066,16 @@ export default function OwnerPage() {
  </div>
 
  {paymentError && (
- <div className="bg-rose-50 border border-rose-200 text-rose-600 text-xs font-semibold px-4 py-2.5 rounded-xl">
+ <div className="bg-rose-50 border border-rose-200 text-rose-600 text-xs font-semibold px-4 py-2.5 rounded-md">
  {paymentError}
  </div>
  )}
 
  <div className="flex gap-3 pt-2">
- <button type="button" onClick={() => setShowPaymentModal(false)} className="flex-1 py-2.5 rounded-xl border border-white/10 text-slate-400 font-semibold text-sm hover:bg-transparent transition">
+ <button type="button" onClick={() => setShowPaymentModal(false)} className="flex-1 py-2.5 rounded-md border border-white/10 text-slate-400 font-semibold text-sm hover:bg-transparent transition">
  Cancel
  </button>
- <button type="submit" className="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition">
+ <button type="submit" className="flex-1 py-2.5 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-sm transition">
  Record Payment
  </button>
  </div>
@@ -1085,58 +1085,58 @@ export default function OwnerPage() {
  )}
  
 
- <div className="bg-[#111827] p-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/5 flex justify-between items-center gap-6 flex-wrap">
- <div className="flex items-center gap-6">
- <div className="w-14 h-14 bg-blue-50 dark:bg-blue-500/10 text-blue-600 rounded-full flex items-center justify-center border-4 border-white shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+ <div className="bg-[#111827] p-4 rounded-md shadow-sm border border-white/5 flex justify-between items-center gap-4 flex-wrap">
+ <div className="flex items-center gap-4">
+ <div className="w-14 h-14 bg-blue-50 dark:bg-blue-500/10 text-blue-600 rounded-md flex items-center justify-center border-4 border-white shadow-sm">
  <User className="h-7 w-7" />
  </div>
  <div>
- <h1 className="text-3xl font-bold text-slate-100 tracking-tight">{selectedRetailer?.name || 'Retailer'}</h1>
+ <h1 className="text-3xl font-bold text-slate-100 tracking-normal">{selectedRetailer?.name || 'Retailer'}</h1>
  <p className="text-slate-400 font-semibold mt-0.5">@{selectedRetailer?.username} · 📞 {selectedRetailer?.phone}</p>
  </div>
  </div>
  <div className="flex items-center gap-3">
  <button
  onClick={handleDeleteRetailer}
- className="bg-rose-100 hover:bg-rose-200 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-600 font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 transition"
+ className="bg-rose-100 hover:bg-rose-200 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-600 font-bold py-2.5 px-4 rounded-md flex items-center gap-2 transition"
  title="Remove Retailer"
  >
  <Trash2 className="h-5 w-5" />
  </button>
  <button
  onClick={() => setShowPaymentModal(true)}
- className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+ className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-md flex items-center gap-2 transition shadow-sm"
  >
  <IndianRupee className="h-5 w-5" /> Record Payment
  </button>
  <button
  onClick={() => setView('hub')}
- className="bg-[#f4f4f5] hover:bg-slate-200 text-slate-200 font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition"
+ className="bg-[#f4f4f5] hover:bg-slate-200 text-slate-200 font-bold py-2.5 px-5 rounded-md flex items-center gap-2 transition"
  >
  <ArrowLeft className="h-5 w-5" /> Back to Hub
  </button>
  </div>
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
- <div className="bg-[#111827] p-6 rounded-xl border border-rose-100 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center gap-5">
- <div className="p-6 bg-rose-50 text-rose-500 rounded-xl"><IndianRupee className="h-8 w-8" /></div>
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+ <div className="bg-[#111827] p-4 rounded-md border border-rose-100 shadow-sm flex items-center gap-5">
+ <div className="p-4 bg-rose-50 text-rose-500 rounded-md"><IndianRupee className="h-8 w-8" /></div>
  <div>
  <p className="text-rose-600 text-sm font-bold uppercase tracking-wider">Remaining Balance Due</p>
  <p className="text-4xl font-bold text-slate-100 mt-1">₹{pendingAmount.toFixed(2)}</p>
  <p className="text-xs text-slate-400 mt-1">Outstanding outstanding amount</p>
  </div>
  </div>
- <div className="bg-[#111827] p-6 rounded-xl border border-indigo-100 dark:border-indigo-500/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center gap-5">
- <div className="p-6 bg-indigo-50 text-indigo-500 rounded-xl"><IndianRupee className="h-8 w-8" /></div>
+ <div className="bg-[#111827] p-4 rounded-md border border-indigo-100 dark:border-indigo-500/30 shadow-sm flex items-center gap-5">
+ <div className="p-4 bg-indigo-50 text-indigo-500 rounded-md"><IndianRupee className="h-8 w-8" /></div>
  <div>
  <p className="text-indigo-600 text-sm font-bold uppercase tracking-wider">Total Amount Paid</p>
  <p className="text-4xl font-bold text-slate-100 mt-1">₹{totalPaid.toFixed(2)}</p>
  <p className="text-xs text-slate-400 mt-1">From {retailerPayments.length} logged payments</p>
  </div>
  </div>
- <div className="bg-[#111827] p-6 rounded-xl border border-emerald-100 shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center gap-5">
- <div className="p-6 bg-emerald-50 text-emerald-500 rounded-xl"><CheckCircle className="h-8 w-8" /></div>
+ <div className="bg-[#111827] p-4 rounded-md border border-emerald-100 shadow-sm flex items-center gap-5">
+ <div className="p-4 bg-emerald-50 text-emerald-500 rounded-md"><CheckCircle className="h-8 w-8" /></div>
  <div>
  <p className="text-emerald-600 text-sm font-bold uppercase tracking-wider">Lifetime Processed</p>
  <p className="text-4xl font-bold text-slate-100 mt-1">₹{totalLifetime.toFixed(2)}</p>
@@ -1146,16 +1146,16 @@ export default function OwnerPage() {
  </div>
 
  {/* Transaction History / Ledger */}
- <div className="bg-[#111827] p-6 rounded-xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] space-y-5">
+ <div className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm space-y-5">
  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
  <IndianRupee className="text-emerald-600" /> Transaction History (Ledger)
  </h2>
  {retailerPayments.length === 0 ? (
- <div className="text-center py-10 text-slate-500 border border-dashed border-white/10 rounded-xl">
+ <div className="text-center py-10 text-slate-500 border border-dashed border-white/10 rounded-md">
  No payments recorded yet.
  </div>
  ) : (
- <div className="overflow-x-auto rounded-xl border border-white/5">
+ <div className="overflow-x-auto rounded-md border border-white/5">
  <table className="min-w-full divide-y divide-slate-100 text-left text-sm">
  <thead className="bg-transparent text-slate-400 font-semibold text-xs uppercase tracking-wider">
  <tr>
@@ -1197,13 +1197,13 @@ export default function OwnerPage() {
  )}
  </div>
 
- <div className="bg-[#111827] p-6 rounded-xl border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] space-y-5">
+ <div className="bg-[#111827] p-4 rounded-md border border-white/5 shadow-sm space-y-5">
  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
  <ShoppingBag className="text-indigo-600" /> Order History
  </h2>
  
  {retailerOrders.length === 0 ? (
- <div className="text-center py-10 text-slate-500 border border-dashed border-white/10 rounded-xl">
+ <div className="text-center py-10 text-slate-500 border border-dashed border-white/10 rounded-md">
  No orders from this retailer yet.
  </div>
  ) : (
@@ -1213,7 +1213,7 @@ export default function OwnerPage() {
  const currentIdx = statusFlow.indexOf(safeStatus);
  const nextStatus = safeStatus === 'cancelled' ? null : statusFlow[currentIdx + 1];
  return (
- <div key={order.id} className="p-6 bg-transparent border border-white/5 rounded-xl space-y-3 hover:bg-[#f4f4f5] transition">
+ <div key={order.id} className="p-4 bg-transparent border border-white/5 rounded-md space-y-3 hover:bg-[#f4f4f5] transition">
  <div className="flex items-start justify-between gap-3 flex-wrap">
  <div>
  <p className="font-bold text-slate-100">{order.productName}</p>
@@ -1221,25 +1221,25 @@ export default function OwnerPage() {
  <p className="text-xs text-slate-500 font-mono mt-0.5">{order.id}</p>
  </div>
  <div className="flex items-center gap-2 flex-wrap">
- <span className={`text-xs font-bold px-2.5 py-1 rounded-xl border ${statusStyles[safeStatus]}`}>
+ <span className={`text-xs font-bold px-2.5 py-1 rounded-md border ${statusStyles[safeStatus]}`}>
  {statusDisplayLabel[safeStatus] || safeStatus}
  </span>
  {nextStatus && (
  <button onClick={() => updateOrderStatus(order.id, nextStatus)}
- className={`text-xs font-bold px-3 py-1.5 rounded-xl transition ${nextBtnStyles[nextStatus]}`}>
+ className={`text-xs font-bold px-3 py-1.5 rounded-md transition ${nextBtnStyles[nextStatus]}`}>
  {nextBtnLabel[nextStatus] || 'Update Status'}
  </button>
  )}
  {safeStatus === 'processing' && (
  <button onClick={() => updateOrderStatus(order.id, 'cancelled')}
- className="text-xs font-bold px-3 py-1.5 rounded-xl bg-rose-100 text-rose-700 border border-rose-200 hover:bg-rose-200 transition">
+ className="text-xs font-bold px-3 py-1.5 rounded-md bg-rose-100 text-rose-700 border border-rose-200 hover:bg-rose-200 transition">
  Cancel Order
  </button>
  )}
  </div>
  </div>
  {/* Order details */}
- <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5]/40 p-3 rounded-xl border border-white/5 dark:border-white/5 text-center">
+ <div className="grid grid-cols-3 gap-2 bg-[#f4f4f5]/40 p-3 rounded-md border border-white/5 dark:border-white/5 text-center">
  <div className="p-1">
  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Billed</p>
  <p className="text-sm sm:text-base font-bold text-slate-100 mt-0.5">{order.quantity}</p>
@@ -1251,7 +1251,7 @@ export default function OwnerPage() {
  <div className="p-1">
  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Free</p>
  <p className={`text-sm sm:text-base font-bold mt-0.5 ${order.freeUnits > 0 ? 'text-emerald-600 font-bold' : 'text-slate-500'}`}>
- {order.freeUnits > 0 ? `+${order.freeUnits} 🎁` : '0'}
+ {order.freeUnits > 0 ? `+${order.freeUnits}` : '0'}
  </p>
  </div>
  </div>
@@ -1264,7 +1264,7 @@ export default function OwnerPage() {
  </div>
  {order.status !== 'processing' && order.status !== 'cancelled' && (
  <Link to={`/invoice/${order.id}`} 
- className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+ className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-md flex items-center gap-1.5 transition shadow-sm">
  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
  Invoice
  </Link>
@@ -1272,7 +1272,7 @@ export default function OwnerPage() {
  </div>
 
  {order.deliveryAddress && typeof order.deliveryAddress === 'object' && (
- <div className="bg-transparent border border-white/5 rounded-xl p-3 flex gap-3">
+ <div className="bg-transparent border border-white/5 rounded-md p-3 flex gap-3">
  <MapPin className="h-4 w-4 text-slate-500 shrink-0 mt-0.5" />
  <div>
  <p className="text-xs font-bold text-slate-200">{order.deliveryAddress?.name} ({order.deliveryAddress?.phone})</p>

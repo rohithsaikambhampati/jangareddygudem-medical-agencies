@@ -199,10 +199,10 @@ export default function InvoicePage() {
       `}} />
 
       {/* Navigation & Action Bar */}
-      <div className="w-full max-w-[1000px] no-print flex flex-col sm:flex-row items-center justify-between gap-4 p-4 mt-2 sm:mt-4 bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-white/10 rounded-2xl shadow-sm z-20">
+      <div className="w-full max-w-[1000px] no-print flex flex-col sm:flex-row items-center justify-between gap-4 p-4 mt-2 sm:mt-4 bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-white/10 rounded-md shadow-sm z-20">
         <button 
           onClick={() => navigate(-1)}
-          className="w-full sm:w-auto bg-zinc-100 hover:bg-zinc-200 dark:bg-white/5 dark:hover:bg-white/10 text-zinc-800 dark:text-zinc-200 px-4 py-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-sm"
+          className="w-full sm:w-auto bg-zinc-100 hover:bg-zinc-200 dark:bg-white/5 dark:hover:bg-white/10 text-zinc-800 dark:text-zinc-200 px-4 py-2.5 rounded-md font-bold transition flex items-center justify-center gap-1.5 text-sm"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           Back to Portal
@@ -211,14 +211,14 @@ export default function InvoicePage() {
         <div className="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-3">
           <button 
             onClick={handleWhatsAppShare}
-            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-md font-bold shadow-sm transition flex items-center justify-center gap-2 text-sm"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
             Share on WhatsApp
           </button>
           <button 
             onClick={() => window.print()}
-            className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-bold shadow-sm transition flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-md font-bold shadow-sm transition flex items-center justify-center gap-2 text-sm"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
             Print GST Invoice
@@ -228,7 +228,7 @@ export default function InvoicePage() {
 
       {/* Invoice Sheet Wrapper */}
       <div className="w-full overflow-x-auto pb-12 pt-4 px-4 sm:px-0 flex justify-start md:justify-center print:overflow-visible print:p-0 print:m-0">
-        <div className="invoice-sheet w-[1000px] min-w-[1000px] print:w-full print:min-w-0 border border-black relative text-black bg-white shadow-lg print:shadow-none p-0 flex flex-col">
+        <div className="invoice-sheet w-[1000px] min-w-[1000px] print:w-full print:min-w-0 border border-black relative text-black bg-white shadow-sm print:shadow-none p-0 flex flex-col">
           
           {/* HEADER SECTION TABLE */}
           <table className="w-full border-collapse border-l border-r border-t border-black text-[11px] leading-tight" style={{ tableLayout: 'fixed' }}>
@@ -490,7 +490,7 @@ export default function InvoicePage() {
                   <span className="font-bold text-[10.5px] block pb-1">Reciver</span>
                 </td>
                 <td className="p-2 align-bottom text-center" style={{ height: '95px', verticalAlign: 'bottom' }}>
-                  <div className="text-[7.5px] font-bold uppercase tracking-tighter text-zinc-950 text-right block mb-auto" style={{ lineHeight: '1' }}>
+                  <div className="text-[7.5px] font-bold uppercase tracking-normaler text-zinc-950 text-right block mb-auto" style={{ lineHeight: '1' }}>
                     For THE JANAGAREDDIGUDEM MEDICAL AGENCIES
                   </div>
                   <div className="font-bold text-[10px] text-zinc-950 block pt-1.5 mt-12 text-center border-t border-gray-400">
