@@ -78,3 +78,4 @@ Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
 
 ## 🎨 UI/UX Highlights
 The application abandons generic frontend templates in favor of a custom, high-contrast **"Medical Teal" and Slate** Light Theme. It focuses heavily on data density, ensuring large catalogs and tables are readable on both desktop and mobile viewports.
+---
